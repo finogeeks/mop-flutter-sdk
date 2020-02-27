@@ -20,17 +20,17 @@ class _MyAppState extends State<MyApp> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      platformVersion = await Mop.instance.platformVersion;
-      print(platformVersion);
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
+    // String platformVersion;
+    // // Platform messages may fail, so we use a try/catch PlatformException.
+    // try {
+    //   platformVersion = await Mop.instance.platformVersion;
+    //   print(platformVersion);
+    // } on PlatformException {
+    //   platformVersion = 'Failed to get platform version.';
+    // }
     final res = await Mop.instance.initialize(
-        '22LyZEib0gLTQdU3MUauARlLry7JL/2fRpscC9kpGZQA', '1c11d7252c53e0b6',
-        apiServer: 'https://mp.finogeeks.com', apiPrefix: '/api/v1');
+        '22LyZEib0gLTQdU3MUauARjmmp6QmYgjGb3uHueys1oA', '98c49f97a031b555',
+        apiServer: 'https://mp.finogeeks.com', apiPrefix: '/api/v1/');
     print(res);
 
     // If the widget was removed from the tree while the asynchronous platform
