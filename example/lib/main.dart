@@ -20,11 +20,13 @@ class _MyAppState extends State<MyApp> {
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> init() async {
     if (Platform.isIOS) {
+      //com.finogeeks.mopExample
       final res = await Mop.instance.initialize(
           '22LyZEib0gLTQdU3MUauARlLry7JL/2fRpscC9kpGZQA', '1c11d7252c53e0b6',
           apiServer: 'https://mp.finogeeks.com', apiPrefix: '/api/v1/mop');
       print(res);
     } else if (Platform.isAndroid) {
+      //com.finogeeks.mopexample
       final res = await Mop.instance.initialize(
           '22LyZEib0gLTQdU3MUauARjmmp6QmYgjGb3uHueys1oA', '98c49f97a031b555',
           apiServer: 'https://mp.finogeeks.com', apiPrefix: '/api/v1/mop');
