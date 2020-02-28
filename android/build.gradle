@@ -24,8 +24,8 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.0'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.60"
+        classpath 'com.android.tools.build:gradle:3.5.3'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.61"
 
     }
 }
@@ -77,6 +77,6 @@ kapt {
 }
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.finogeeks.lib:finapplet:2.0.75'
+    implementation 'com.finogeeks.lib:finapplet:2.0.77'
 
 }
