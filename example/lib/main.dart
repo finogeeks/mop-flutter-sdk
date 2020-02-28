@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-
-import 'package:flutter/services.dart';
+import 'dart:io';
 import 'package:mop/mop.dart';
 
 void main() => runApp(MyApp());
@@ -15,27 +14,22 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    initPlatformState();
+    init();
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    // String platformVersion;
-    // // Platform messages may fail, so we use a try/catch PlatformException.
-    // try {
-    //   platformVersion = await Mop.instance.platformVersion;
-    //   print(platformVersion);
-    // } on PlatformException {
-    //   platformVersion = 'Failed to get platform version.';
-    // }
-    final res = await Mop.instance.initialize(
-        '22LyZEib0gLTQdU3MUauARjmmp6QmYgjGb3uHueys1oA', '98c49f97a031b555',
-        apiServer: 'https://mp.finogeeks.com', apiPrefix: '/api/v1/');
-    print(res);
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
+  Future<void> init() async {
+    if (Platform.isIOS) {
+      final res = await Mop.instance.initialize(
+          '22LyZEib0gLTQdU3MUauARlLry7JL/2fRpscC9kpGZQA', '1c11d7252c53e0b6',
+          apiServer: 'https://mp.finogeeks.com', apiPrefix: '/api/v1/mop');
+      print(res);
+    } else if (Platform.isAndroid) {
+      final res = await Mop.instance.initialize(
+          '22LyZEib0gLTQdU3MUauARjmmp6QmYgjGb3uHueys1oA', '98c49f97a031b555',
+          apiServer: 'https://mp.finogeeks.com', apiPrefix: '/api/v1/mop');
+      print(res);
+    }
     if (!mounted) return;
   }
 
@@ -44,20 +38,60 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Plugin example app'),
+          title: const Text('凡泰极客小程序 Flutter 插件'),
         ),
         body: Center(
-            child: FlatButton(
-          onPressed: () {
-            // appId: '5e3c147a188211000141e9b1',
-            // path: "/pages/index/index",
-            // query: "key1=value1&key2=value2",
-            // scene: "1001"
-            Mop.instance.openApplet('5e3c147a188211000141e9b1',
-                path: '/pages/index/index', query: 'key1=value1&key2=value2');
-          },
-          child: Text('打开小程序'),
-        )),
+          child: Container(
+            padding: EdgeInsets.only(
+              top: 20,
+            ),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    gradient: LinearGradient(
+                      colors: const [Color(0xFF12767e), Color(0xFF0dabb8)],
+                      stops: const [0.0, 1.0],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
+                  ),
+                  child: FlatButton(
+                    onPressed: () {
+                      Mop.instance.openApplet('5e3c147a188211000141e9b1');
+                    },
+                    child: Text(
+                      '打开示例小程序',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 30),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    gradient: LinearGradient(
+                      colors: const [Color(0xFF12767e), Color(0xFF0dabb8)],
+                      stops: const [0.0, 1.0],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
+                  ),
+                  child: FlatButton(
+                    onPressed: () {
+                      Mop.instance.openApplet('5e4d123647edd60001055df1');
+                    },
+                    child: Text(
+                      '打开官方小程序',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

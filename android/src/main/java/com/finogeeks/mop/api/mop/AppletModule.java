@@ -29,7 +29,6 @@ public class AppletModule extends BaseApi {
 
     @Override
     public void invoke(String event, Map param, ICallback callback) {
-        System.out.println("AppletModule");
         if (param.get("appId") == null) {
             callback.onFail(new HashMap(){
                 {

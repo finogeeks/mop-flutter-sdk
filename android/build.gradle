@@ -13,10 +13,10 @@ buildscript {
         google()
         jcenter()
         maven {
-            url "https://gradle.finogeeks.club/repository/finogeeks/"
+            url "https://gradle.finogeeks.club/repository/applet/"
             credentials {
-                username "xiaoyu"
-                password "xy123456"
+                username "applet"
+                password "123321"
             }
         }
         maven { url "https://jitpack.io" }
@@ -35,10 +35,10 @@ rootProject.allprojects {
         google()
         jcenter()
         maven {
-            url "https://gradle.finogeeks.club/repository/finogeeks/"
+            url "https://gradle.finogeeks.club/repository/applet/"
             credentials {
-                username "xiaoyu"
-                password "xy123456"
+                username "applet"
+                password "123321"
             }
         }
         maven { url "https://jitpack.io" }
@@ -77,7 +77,6 @@ kapt {
 }
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.finogeeks.lib:finapplet:2.0.51'
-    implementation 'org.greenrobot:greendao:3.2.2'
+    implementation 'com.finogeeks.lib:finapplet:2.0.75'
 
 }

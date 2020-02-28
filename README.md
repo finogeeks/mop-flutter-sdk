@@ -1,14 +1,3 @@
-# mop
+# 凡泰极客小程序 Flutter 插件
 
-A new flutter plugin project.
-
-## Getting Started
-
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
-
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+本插件提供在 Flutter 运行环境中运行小程序能力。

@@ -46,6 +46,9 @@ public class BaseModule extends BaseApi {
         }
         if (param.get("apiPrefix") != null) {
             apiPrefix = String.valueOf(param.get("apiPrefix"));
+            if (!apiPrefix.endsWith("/")) {
+                apiPrefix = apiPrefix + "/";
+            }
         }
         FinAppConfig config = new FinAppConfig.Builder()
                 .setAppKey(appkey)

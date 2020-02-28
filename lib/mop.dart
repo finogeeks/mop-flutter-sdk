@@ -65,16 +65,15 @@ class Mop {
   /// [appId] is required.
   /// [path] is miniprogram open path. example /pages/index/index
   /// [query] is miniprogram query parameters. example key1=value1&key2=value2
-  /// [scene] is miniprogram scene string. example 1100
   ///
   ///
   Future<Map> openApplet(final String appId,
-      {final String path, final String query, final String scene}) async {
+      {final String path, final String query}) async {
     Map<String, Object> params;
     if (path != '') {
       params = {
         'appId': appId,
-        'params': {'path': path, 'query': query, 'scene': scene}
+        'params': {'path': path, 'query': query}
       };
     } else {
       params = {'appId': appId};
