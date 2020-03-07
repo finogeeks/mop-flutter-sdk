@@ -1,8 +1,9 @@
 name: mop
 description: A new flutter plugin project.
-version: 0.0.1
-author:
-homepage:
+version: 0.1.1
+authors:
+  - finogeeks <finogeeks.mop@gmail.com>
+homepage: https://github.com/finogeeks/flutter-mop-plugin
 
 environment:
   sdk: '>=2.1.0 <3.0.0'
