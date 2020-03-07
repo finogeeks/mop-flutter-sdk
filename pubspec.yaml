@@ -3,7 +3,7 @@ description: A new flutter plugin project.
 version: 0.2.0
 authors:
   - finogeeks <finogeeks.mop@gmail.com>
-homepage: https://github.com/finogeeks/flutter-mop-plugin
+homepage: https://github.com/finogeeks/mop-flutter-plugin
 
 environment:
   sdk: '>=2.1.0 <3.0.0'
