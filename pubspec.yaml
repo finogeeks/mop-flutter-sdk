@@ -3,6 +3,7 @@ description: A Finogeeks MiniProgram Flutter SDK.
 version: 0.4.0
 authors:
   - finogeeks <finogeeks.mop@gmail.com>
+  - kang34814 <kang34814@gmail.com>
 homepage: https://github.com/finogeeks/mop-flutter-sdk
 
 environment:
