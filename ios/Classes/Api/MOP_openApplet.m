@@ -16,6 +16,7 @@
     UIViewController *currentVC = [MOPTools topViewController];
 
     // 打开小程序
+    if (self.sequence == nil) {
     [[FATClient sharedClient] startRemoteApplet:self.appId startParams:self.params InParentViewController:currentVC completion:^(BOOL result, NSError *error) {
         NSLog(@"result:%d---error:%@", result, error);
         if (result){
@@ -24,5 +25,15 @@
             failure(error.description);
         }
     }];
+    }else{
+        [[FATClient sharedClient] startRemoteApplet:self.appId sequence:self.sequence startParams:self.params InParentViewController:currentVC transitionStyle:FATTranstionStylePush completion:^(BOOL result, NSError *error) {
+            NSLog(@"result:%d---error:%@", result, error);
+            if (result){
+                success(@{});
+            }else {
+                failure(error.description);
+            }
+        }];
+    }
 }
 @end

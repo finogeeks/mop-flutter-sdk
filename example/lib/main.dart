@@ -82,7 +82,7 @@ class _MyAppState extends State<MyApp> {
                   ),
                   child: FlatButton(
                     onPressed: () {
-                      Mop.instance.openApplet('5e4d123647edd60001055df1');
+                      Mop.instance.openApplet('5e4d123647edd60001055df1',sequence: 1);
                     },
                     child: Text(
                       '打开官方小程序',
