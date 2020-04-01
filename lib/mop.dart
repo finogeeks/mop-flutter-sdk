@@ -11,9 +11,11 @@ class Mop {
   EventChannel _mopEventChannel;
   int eventId = 0;
   List<Map<String, dynamic>> _mopEventQueye = <Map<String, dynamic>>[];
+
   factory Mop() {
     return _instance;
   }
+
   Mop._internal() {
     print('mop: _internal');
     // init
@@ -30,6 +32,7 @@ class Mop {
       // failure(value);
     });
   }
+
   static Mop get instance => _instance;
 
   Future<String> get platformVersion async {
@@ -68,7 +71,7 @@ class Mop {
   ///
   ///
   Future<Map> openApplet(final String appId,
-      {final String path, final String query}) async {
+      {final String path, final String query, final int sequence}) async {
     Map<String, Object> params;
     if (path != '') {
       params = {
@@ -78,6 +81,7 @@ class Mop {
     } else {
       params = {'appId': appId};
     }
+    if (sequence != null) params["sequence"] = sequence;
     final Map ret = await _channel.invokeMethod('openApplet', params);
     return ret;
   }

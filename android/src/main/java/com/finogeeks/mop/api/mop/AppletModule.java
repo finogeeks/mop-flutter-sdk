@@ -1,6 +1,7 @@
 package com.finogeeks.mop.api.mop;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.finogeeks.lib.applet.client.FinAppClient;
 import com.finogeeks.mop.api.BaseApi;
@@ -12,6 +13,7 @@ import java.util.Map;
 public class AppletModule extends BaseApi {
     private final static String TAG = AppletModule.class.getSimpleName();
     private Context mContext;
+
     public AppletModule(Context context) {
         super(context);
         mContext = context;
@@ -22,6 +24,7 @@ public class AppletModule extends BaseApi {
         super.onCreate();
 
     }
+
     @Override
     public String[] apis() {
         return new String[]{"openApplet"};
@@ -30,17 +33,22 @@ public class AppletModule extends BaseApi {
     @Override
     public void invoke(String event, Map param, ICallback callback) {
         if (param.get("appId") == null) {
-            callback.onFail(new HashMap(){
+            callback.onFail(new HashMap() {
                 {
-                    put("info","appId不能为空");
+                    put("info", "appId不能为空");
                 }
             });
             return;
         }
         String appId = String.valueOf(param.get("appId"));
-        Map<String,String> params = (Map)param.get("params");
+        Integer sequence = (Integer) param.get("sequence");
+        Map<String, String> params = (Map) param.get("params");
         if (params == null) {
-            FinAppClient.INSTANCE.getAppletApiManager().startApplet(mContext, appId);
+            if (sequence == null) {
+                FinAppClient.INSTANCE.getAppletApiManager().startApplet(mContext, appId);
+            } else {
+                FinAppClient.INSTANCE.getAppletApiManager().startApplet(mContext, appId, sequence, null);
+            }
         } else {
             FinAppClient.INSTANCE.getAppletApiManager().startApplet(mContext, appId, params);
         }

@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MOP_openApplet : MOPBaseApi
 
 @property(nonatomic,copy)NSString* appId;
+@property(nonatomic,copy)NSNumber* sequence;
 @property(nonatomic,copy)NSDictionary* params;
 
 @end
