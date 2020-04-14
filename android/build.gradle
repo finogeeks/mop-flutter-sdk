@@ -13,6 +13,13 @@ buildscript {
         google()
         jcenter()
         maven {
+            url "https://gradle.finogeeks.club/repository/finogeeks/"
+            credentials {
+                username "gradle"
+                password "ftjk@@123321"
+            }
+        }
+        maven {
             url "https://gradle.finogeeks.club/repository/applet/"
             credentials {
                 username "applet"
@@ -34,6 +41,13 @@ rootProject.allprojects {
     repositories {
         google()
         jcenter()
+        maven {
+            url "https://gradle.finogeeks.club/repository/finogeeks/"
+            credentials {
+                username "gradle"
+                password "ftjk@@123321"
+            }
+        }
         maven {
             url "https://gradle.finogeeks.club/repository/applet/"
             credentials {
@@ -77,6 +91,6 @@ kapt {
 }
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.finogeeks.lib:finapplet:+'
+    implementation 'com.finogeeks.lib:finapplet:2.1.9'
 
 }
