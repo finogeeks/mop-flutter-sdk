@@ -20,21 +20,20 @@ class _MyAppState extends State<MyApp> {
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> init() async {
     if (Platform.isIOS) {
-      //com.finogeeks.mopExample
       final res = await Mop.instance.initialize(
-          '22LyZEib0gLTQdU3MUauARlLry7JL/2fRpscC9kpGZQA', '1c11d7252c53e0b6',
+          '22LyZEib0gLTQdU3MUauAZ0pZVbKTWGmNN6Lx8hXhIkA', '74bde5fad53a817c',
           apiServer: 'https://mp.finogeeks.com', apiPrefix: '/api/v1/mop');
       print(res);
     } else if (Platform.isAndroid) {
-      //com.finogeeks.mopexample
       final res = await Mop.instance.initialize(
-          '22LyZEib0gLTQdU3MUauARjmmp6QmYgjGb3uHueys1oA', '98c49f97a031b555',
+          '22LyZEib0gLTQdU3MUauAZ0pZVbKTWGmNN6Lx8hXhIkA', '74bde5fad53a817c',
           apiServer: 'https://mp.finogeeks.com', apiPrefix: '/api/v1/mop');
       print(res);
     }
     if (!mounted) return;
   }
 
+  // 5e637a18cbfae4000170fa7a
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -50,6 +49,7 @@ class _MyAppState extends State<MyApp> {
             child: Column(
               children: <Widget>[
                 Container(
+                  width: 140,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                     gradient: LinearGradient(
@@ -61,16 +61,18 @@ class _MyAppState extends State<MyApp> {
                   ),
                   child: FlatButton(
                     onPressed: () {
-                      Mop.instance.openApplet('5e3c147a188211000141e9b1');
+                      Mop.instance.openApplet('5ea03fa563cb900001d73863',
+                          path: 'pages/index/index', query: '');
                     },
                     child: Text(
-                      '打开示例小程序',
+                      '打开画图小程序',
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ),
                 SizedBox(height: 30),
                 Container(
+                  width: 140,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                     gradient: LinearGradient(
@@ -82,10 +84,32 @@ class _MyAppState extends State<MyApp> {
                   ),
                   child: FlatButton(
                     onPressed: () {
-                      Mop.instance.openApplet('5e4d123647edd60001055df1',sequence: 1);
+                      Mop.instance.openApplet('5ea0401463cb900001d73865');
                     },
                     child: Text(
                       '打开官方小程序',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 30),
+                Container(
+                  width: 140,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    gradient: LinearGradient(
+                      colors: const [Color(0xFF12767e), Color(0xFF0dabb8)],
+                      stops: const [0.0, 1.0],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
+                  ),
+                  child: FlatButton(
+                    onPressed: () {
+                      Mop.instance.openApplet('5ea0412663cb900001d73867');
+                    },
+                    child: Text(
+                      '我的对账单',
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
