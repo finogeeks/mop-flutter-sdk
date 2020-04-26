@@ -1,9 +1,6 @@
 name: mop
 description: A Finogeeks MiniProgram Flutter SDK.
-version: 0.5.0
-authors:
-  - finogeeks <finogeeks.mop@gmail.com>
-  - kang34814 <kang34814@gmail.com>
+version: 0.6.0
 homepage: https://github.com/finogeeks/mop-flutter-sdk
 
 environment:

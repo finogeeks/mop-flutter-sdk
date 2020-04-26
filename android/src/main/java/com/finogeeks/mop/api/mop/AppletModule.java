@@ -50,6 +50,7 @@ public class AppletModule extends BaseApi {
                 FinAppClient.INSTANCE.getAppletApiManager().startApplet(mContext, appId, sequence, null);
             }
         } else {
+            Log.d("MopPlugin", "openApplet:params:" + param);
             FinAppClient.INSTANCE.getAppletApiManager().startApplet(mContext, appId, params);
         }
         callback.onSuccess(new HashMap());
