@@ -27,19 +27,26 @@
 
 
 @implementation MopPlugin
+
+static MopPlugin *_instance;
+
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
   FlutterMethodChannel* channel = [FlutterMethodChannel
       methodChannelWithName:@"mop"
             binaryMessenger:[registrar messenger]];
-  MopPlugin* instance = [[MopPlugin alloc] init];
-  [registrar addMethodCallDelegate:instance channel:channel];
+    _instance = [[MopPlugin alloc] init];
+    [registrar addMethodCallDelegate:_instance channel:channel];
+    _instance.methodChannel = channel;
 
-  FlutterEventChannel *mopEventChannel = [FlutterEventChannel eventChannelWithName:@"plugins.mop.finogeeks.com/mop_event" binaryMessenger:[registrar messenger]];
-  instance.mopEventStreamHandler = [[MopEventStream alloc] init];
-  [mopEventChannel setStreamHandler:instance.mopEventStreamHandler];
-
-
+    FlutterEventChannel *mopEventChannel = [FlutterEventChannel eventChannelWithName:@"plugins.mop.finogeeks.com/mop_event" binaryMessenger:[registrar messenger]];
+    _instance.mopEventStreamHandler = [[MopEventStream alloc] init];
+    [mopEventChannel setStreamHandler:_instance.mopEventStreamHandler];
 }
+
++ (instancetype)instance{
+    return _instance;
+}
+
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
   if ([@"getPlatformVersion" isEqualToString:call.method]) {

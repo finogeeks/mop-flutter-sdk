@@ -3,8 +3,11 @@ package com.finogeeks.mop.api;
 import android.app.Activity;
 import android.text.TextUtils;
 
+import com.finogeeks.mop.api.mop.AppletHandlerModule;
+import com.finogeeks.mop.api.mop.AppletManageModule;
 import com.finogeeks.mop.api.mop.AppletModule;
 import com.finogeeks.mop.api.mop.BaseModule;
+import com.finogeeks.mop.api.mop.ExtensionApiModule;
 import com.finogeeks.mop.interfaces.Event;
 import com.finogeeks.mop.interfaces.IApi;
 
@@ -29,6 +32,7 @@ public class ApisManager {
         mActivity = activity;
         initSdkApi(activity);
     }
+
     /**
      * api功能调用
      *
@@ -42,6 +46,7 @@ public class ApisManager {
         return null;
 
     }
+
     /**
      * api功能调用
      *
@@ -59,7 +64,9 @@ public class ApisManager {
     private void initSdkApi(Activity activity) {
         add(new BaseModule(activity));
         add(new AppletModule(activity));
-
+        add(new AppletManageModule(activity));
+        add(new AppletHandlerModule(activity));
+        add(new ExtensionApiModule(activity));
     }
 
     private void add(IApi api) {

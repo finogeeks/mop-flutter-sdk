@@ -1,11 +1,12 @@
 package com.finogeeks.mop.service;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 
 import com.finogeeks.mop.MopEventStream;
 import com.finogeeks.mop.api.ApisManager;
+
+import io.flutter.plugin.common.MethodChannel;
 
 public class MopPluginService {
     private final static String TAG = MopPluginService.class.getSimpleName();
@@ -17,6 +18,7 @@ public class MopPluginService {
 
     private Context mContext;
     private Activity mActivity;
+    private MethodChannel mMethodChannel;
 
     MopPluginService() {
     }
@@ -32,20 +34,33 @@ public class MopPluginService {
         return _instance;
     }
 
-    public ApisManager getApisManager() { return this.apisManager;}
-    public MopEventStream getMopEventStream() {return this.mopEventStream;}
-    public void initialize(Activity activity, MopEventStream mopEventStream) {
+    public ApisManager getApisManager() {
+        return this.apisManager;
+    }
+
+    public MopEventStream getMopEventStream() {
+        return this.mopEventStream;
+    }
+
+    public void initialize(Activity activity, MopEventStream mopEventStream, MethodChannel methodChannel) {
         this.mopEventStream = mopEventStream;
         this.mContext = activity.getApplicationContext();
         this.apisManager = new ApisManager(activity);
         this.mActivity = activity;
+        this.mMethodChannel = methodChannel;
 
 
     }
+
     public Context getContext() {
         return mContext;
     }
+
     public Activity getActivity() {
         return mActivity;
+    }
+
+    public MethodChannel getMethodChannel() {
+        return mMethodChannel;
     }
 }

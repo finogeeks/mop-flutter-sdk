@@ -1,9 +1,13 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/services.dart';
+import 'package:mop/api.dart';
 
 typedef MopEventCallback = void Function(dynamic event);
 typedef MopEventErrorCallback = void Function(dynamic event);
+
+typedef ExtensionApiHandler = Future Function(dynamic params);
 
 class Mop {
   static final Mop _instance = new Mop._internal();
@@ -11,6 +15,8 @@ class Mop {
   EventChannel _mopEventChannel;
   int eventId = 0;
   List<Map<String, dynamic>> _mopEventQueye = <Map<String, dynamic>>[];
+
+  Map<String, ExtensionApiHandler> _extensionApis = {};
 
   factory Mop() {
     return _instance;
@@ -20,6 +26,7 @@ class Mop {
     print('mop: _internal');
     // init
     _channel = new MethodChannel('mop');
+    _channel.setMethodCallHandler(_handlePlatformMethodCall);
     _mopEventChannel = new EventChannel('plugins.mop.finogeeks.com/mop_event');
     _mopEventChannel.receiveBroadcastStream().listen((dynamic value) {
       print('matrix: receiveBroadcastStream $value');
@@ -38,6 +45,17 @@ class Mop {
   Future<String> get platformVersion async {
     final String version = await _channel.invokeMethod('getPlatformVersion');
     return version;
+  }
+
+  Future<dynamic> _handlePlatformMethodCall(MethodCall call) async {
+    print("_handlePlatformMethodCall: method:${call.method}");
+    if (call.method.startsWith("extensionApi:")) {
+      final name = call.method.substring("extensionApi:".length);
+      final handler = _extensionApis[name];
+      if (handler != null) {
+        return await handler(call.arguments);
+      }
+    }
   }
 
   ///
@@ -72,17 +90,71 @@ class Mop {
   ///
   Future<Map> openApplet(final String appId,
       {final String path, final String query, final int sequence}) async {
-    Map<String, Object> params;
-    if (path != '') {
-      params = {
-        'appId': appId,
-        'params': {'path': path, 'query': query}
-      };
-    } else {
-      params = {'appId': appId};
-    }
+    Map<String, Object> params = {'appId': appId};
+    Map param = {};
+    if (path != null) param["path"] = path;
+    if (query != null) param["query"] = query;
+    if (param.length > 0) params["params"] = param;
     if (sequence != null) params["sequence"] = sequence;
     final Map ret = await _channel.invokeMethod('openApplet', params);
     return ret;
+  }
+
+  ///
+  ///  get current using applet
+  ///  获取当前正在使用的小程序信息
+  ///  {appId,name,icon,description,version,thumbnail}
+  ///
+  ///
+  Future<Map<String, dynamic>> currentApplet() async {
+    final ret = await _channel.invokeMapMethod("currentApplet");
+    return Map<String, dynamic>.from(ret);
+  }
+
+  ///
+  /// close all running applets
+  /// 关闭当前打开的所有小程序
+  ///
+  Future closeAllApplets() async {
+    return await _channel.invokeMethod("closeAllApplets");
+  }
+
+  ///
+  /// clear applets cache
+  /// 清除缓存的小程序
+  ///
+  Future clearApplets() async {
+    return await _channel.invokeMethod("clearApplets");
+  }
+
+  ///
+  /// register handler to provide custom info or behaviour
+  /// 注册小程序事件处理
+  ///
+  void registerAppletHandler(AppletHandler handler) {
+    _extensionApis["forwardApplet"] = (params) async {
+      handler.forwardApplet(Map<String, dynamic>.from(params["appletInfo"]));
+    };
+    _extensionApis["getUserInfo"] = (params) {
+      return handler.getUserInfo();
+    };
+    _extensionApis["getCustomMenus"] = (params) async {
+      final res = await handler.getCustomMenus(params["appId"]);
+      res?.map((e) => e.toJson());
+      return res;
+    };
+    _extensionApis["onCustomMenuClick"] = (params) {
+      return handler.onCustomMenuClick(params["appId"], params["menuId"]);
+    };
+    _channel.invokeMethod("registerAppletHandler");
+  }
+
+  ///
+  /// register extension api
+  /// 注册拓展api
+  ///
+  void registerExtensionApi(String name, ExtensionApiHandler handler) {
+    _extensionApis[name] = handler;
+    _channel.invokeMethod("registerExtensionApi", {"name": name});
   }
 }

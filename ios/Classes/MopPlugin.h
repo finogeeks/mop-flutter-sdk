@@ -6,5 +6,7 @@
 
 @interface MopPlugin : NSObject <FlutterPlugin>
 @property MopEventStream *mopEventStreamHandler;
+@property FlutterMethodChannel *methodChannel;
 
++ (instancetype) instance;
 @end
