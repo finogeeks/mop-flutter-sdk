@@ -15,8 +15,7 @@
 - (void)setupApiWithSuccess:(void (^)(NSDictionary<NSString *,id> * _Nonnull))success failure:(void (^)(id _Nullable))failure cancel:(void (^)(void))cancel
 {
     NSLog(@"MOP_registerAppletHandler");
-    [[FATClient sharedClient] setDelegate:[[MOPAppletDelegate alloc] init]];
-
+    [FATClient sharedClient].delegate = [MOPAppletDelegate instance];
 }
 
 @end

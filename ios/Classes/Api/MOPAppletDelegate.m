@@ -10,11 +10,21 @@
 
 @implementation MOPAppletDelegate
 
++ (instancetype)instance
+{
+    static MOPAppletDelegate *_instance;
+    static dispatch_once_t once;
+    dispatch_once(&once, ^{
+        _instance = [[self alloc] init];
+    });
+    return _instance;
+}
+
 - (void)forwardAppletWithInfo:(NSDictionary *)contentInfo completion:(void (^)(FATExtensionCode, NSDictionary *))completion
 {
     NSLog(@"forwardAppletWithInfo:%@",contentInfo);
     FlutterMethodChannel *channel = [[MopPlugin instance] methodChannel];
-    [channel invokeMethod:@"extensionApi:forwardApplet" arguments:contentInfo result:^(id  _Nullable result) {
+    [channel invokeMethod:@"extensionApi:forwardApplet" arguments:@{@"appletInfo":contentInfo} result:^(id  _Nullable result) {
         if([result isKindOfClass:[FlutterError class]]|| [result isKindOfClass:[FlutterMethodNotImplemented class] ])
         {
             completion(FATExtensionCodeFailure,nil);
