@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.finogeeks.lib.applet.client.FinAppClient;
 import com.finogeeks.lib.applet.page.view.moremenu.MoreMenuItem;
+import com.finogeeks.lib.applet.rest.model.GrayAppletVersionConfig;
 import com.finogeeks.lib.applet.sdk.api.IAppletHandler;
 import com.finogeeks.mop.api.BaseApi;
 import com.finogeeks.mop.interfaces.ICallback;
@@ -44,6 +45,13 @@ public class AppletHandlerModule extends BaseApi {
         Log.d("AppletHandlerModule", "registerAppletHandler");
         MethodChannel channel = MopPluginService.getInstance().getMethodChannel();
         FinAppClient.INSTANCE.getAppletApiManager().setAppletHandler(new IAppletHandler() {
+
+            @Nullable
+            @Override
+            public List<GrayAppletVersionConfig> getGrayAppletVersionConfigs(@NotNull String s) {
+                return null;
+            }
+
             @Override
             public void shareAppMessage(@NotNull String s, @Nullable Bitmap bitmap, @NotNull IAppletCallback iAppletCallback) {
                 Log.d("MopPlugin", "shareAppMessage:" + s);

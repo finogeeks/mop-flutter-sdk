@@ -56,6 +56,7 @@ public class BaseModule extends BaseApi {
                 .setApiUrl(apiServer)
                 .setApiPrefix(apiPrefix)
                 .setGlideWithJWT(false)
+                .setEncryptionType("SM")
                 .build();
         // SDK初始化结果回调，用于接收SDK初始化状态
         FinCallback<Object> cb = new FinCallback<Object>() {
@@ -78,7 +79,6 @@ public class BaseModule extends BaseApi {
             }
         };
         FinAppClient.INSTANCE.init(MopPluginService.getInstance().getActivity().getApplication(), config, cb);
-
 
 
     }
