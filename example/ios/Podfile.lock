@@ -1,29 +1,29 @@
 PODS:
-  - FinApplet (2.1.5)
+  - FinApplet (2.1.23)
   - Flutter (1.0.0)
   - mop (0.1.0):
-    - FinApplet (= 2.1.5)
+    - FinApplet (= 2.1.23)
     - Flutter
 
 DEPENDENCIES:
-  - Flutter (from `.symlinks/flutter/ios-release`)
+  - Flutter (from `.symlinks/flutter/ios`)
   - mop (from `.symlinks/plugins/mop/ios`)
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  https://git.finogeeks.club/finoapp-ios/FinPods:
     - FinApplet
 
 EXTERNAL SOURCES:
   Flutter:
-    :path: ".symlinks/flutter/ios-release"
+    :path: ".symlinks/flutter/ios"
   mop:
     :path: ".symlinks/plugins/mop/ios"
 
 SPEC CHECKSUMS:
-  FinApplet: adb43373a01ff90832969b1534d40c08344063f6
+  FinApplet: 07bc56d96ae61b2be792d018ad6e5ed552ab12a2
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  mop: c0e0dfb65c6a482e47f0fffc9a6576d88e7636b5
+  mop: 58cfcfae42ce2110fe981ed8ff65587d27855030
 
-PODFILE CHECKSUM: b66559db98de00d11e349a06f9e603856ed75d6e
+PODFILE CHECKSUM: fa591ea0d89752dd0191ae3f82c83db034678e82
 
 COCOAPODS: 1.9.1

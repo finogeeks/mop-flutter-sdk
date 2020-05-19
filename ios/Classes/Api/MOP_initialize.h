@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,copy)NSString* secret;
 @property(nonatomic,copy)NSString* apiServer;
 @property(nonatomic,copy)NSString* apiPrefix;
+@property(nonatomic,copy)NSString* cryptType;
 @end
 
 NS_ASSUME_NONNULL_END

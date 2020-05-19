@@ -1,6 +1,7 @@
 package com.finogeeks.mop.api.mop;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.finogeeks.lib.applet.client.FinAppClient;
@@ -25,6 +26,7 @@ public class BaseModule extends BaseApi {
         super.onCreate();
 
     }
+
     @Override
     public String[] apis() {
         return new String[]{"initialize"};
@@ -41,6 +43,10 @@ public class BaseModule extends BaseApi {
         String secret = String.valueOf(param.get("secret"));
         String apiServer = "https://mp.finogeeks.com";
         String apiPrefix = "/api/v1/mop/";
+        String cryptType = (String) param.get("cryptType");
+        if (cryptType == null || cryptType.isEmpty()) {
+            cryptType = "MD5";
+        }
         if (param.get("apiServer") != null) {
             apiServer = String.valueOf(param.get("apiServer"));
         }
@@ -56,7 +62,7 @@ public class BaseModule extends BaseApi {
                 .setApiUrl(apiServer)
                 .setApiPrefix(apiPrefix)
                 .setGlideWithJWT(false)
-                .setEncryptionType("SM")
+                .setEncryptionType(cryptType)
                 .build();
         // SDK初始化结果回调，用于接收SDK初始化状态
         FinCallback<Object> cb = new FinCallback<Object>() {

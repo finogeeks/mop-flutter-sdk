@@ -25,6 +25,14 @@
     FATConfig *config = [FATConfig configWithAppSecret:self.secret appKey:self.appkey];
     config.apiServer = [self.apiServer copy];
     config.apiPrefix = [self.apiPrefix copy];
+    if([self.cryptType isEqualToString: @"SM"])
+    {
+        config.cryptType = FATApiCryptTypeSM;
+    }
+    else
+    {
+        config.cryptType = FATApiCryptTypeMD5;
+    }
     NSError* error = nil;
     [[FATClient sharedClient] initWithConfig:config error:&error];
     if (error) {

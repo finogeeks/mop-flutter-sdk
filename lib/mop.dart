@@ -66,15 +66,17 @@ class Mop {
   /// [secret] is required. it can be getted from mp.finogeeks.com
   /// [apiServer] is optional. the mop server address. default is https://mp.finogeek.com
   /// [apiPrefix] is optional. the mop server prefix. default is /api/v1/mop
+  /// [cryptType] is optional. cryptType, should be MD5/SM
   ///
   ///
   Future<Map> initialize(String appkey, String secret,
-      {String apiServer, String apiPrefix}) async {
+      {String apiServer, String apiPrefix, String cryptType}) async {
     final Map ret = await _channel.invokeMethod('initialize', {
       'appkey': appkey,
       'secret': secret,
       'apiServer': apiServer,
-      'apiPrefix': apiPrefix
+      'apiPrefix': apiPrefix,
+      'cryptType': cryptType
     });
     return ret;
   }
