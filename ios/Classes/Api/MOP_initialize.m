@@ -33,6 +33,7 @@
     {
         config.cryptType = FATApiCryptTypeMD5;
     }
+    config.autoAdaptDarkMode = YES;
     NSError* error = nil;
     [[FATClient sharedClient] initWithConfig:config error:&error];
     if (error) {
