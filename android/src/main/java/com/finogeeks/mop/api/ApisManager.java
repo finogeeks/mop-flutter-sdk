@@ -8,6 +8,7 @@ import com.finogeeks.mop.api.mop.AppletManageModule;
 import com.finogeeks.mop.api.mop.AppletModule;
 import com.finogeeks.mop.api.mop.BaseModule;
 import com.finogeeks.mop.api.mop.ExtensionApiModule;
+import com.finogeeks.mop.api.mop.VersionModule;
 import com.finogeeks.mop.interfaces.Event;
 import com.finogeeks.mop.interfaces.IApi;
 
@@ -67,6 +68,7 @@ public class ApisManager {
         add(new AppletManageModule(activity));
         add(new AppletHandlerModule(activity));
         add(new ExtensionApiModule(activity));
+        add(new VersionModule(activity));
     }
 
     private void add(IApi api) {

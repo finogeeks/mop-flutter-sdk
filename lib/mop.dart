@@ -130,6 +130,15 @@ class Mop {
   }
 
   ///
+  /// 获取运行时版本号
+  ///
+  Future<String> sdkVersion() async {
+    return await _channel
+        .invokeMapMethod("sdkVersion")
+        .then((value) => value["data"]);
+  }
+
+  ///
   /// register handler to provide custom info or behaviour
   /// 注册小程序事件处理
   ///
