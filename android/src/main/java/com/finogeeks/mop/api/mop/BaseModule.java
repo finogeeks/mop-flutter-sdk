@@ -56,6 +56,10 @@ public class BaseModule extends BaseApi {
                 apiPrefix = apiPrefix + "/";
             }
         }
+        Boolean disablePermission = (Boolean) param.get("disablePermission");
+        if (disablePermission == null) {
+            disablePermission = false;
+        }
         FinAppConfig config = new FinAppConfig.Builder()
                 .setAppKey(appkey)
                 .setAppSecret(secret)
@@ -63,6 +67,7 @@ public class BaseModule extends BaseApi {
                 .setApiPrefix(apiPrefix)
                 .setGlideWithJWT(false)
                 .setEncryptionType(cryptType)
+                .setDisableRequestPermissions(disablePermission)
                 .build();
         // SDK初始化结果回调，用于接收SDK初始化状态
         FinCallback<Object> cb = new FinCallback<Object>() {

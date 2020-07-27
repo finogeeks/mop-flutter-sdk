@@ -33,7 +33,10 @@
     {
         config.cryptType = FATApiCryptTypeMD5;
     }
+    
+    NSLog(@"disablePermission:%d",self.disablePermission);
     config.autoAdaptDarkMode = YES;
+    config.disableAuthorize = self.disablePermission;
     NSError* error = nil;
     [[FATClient sharedClient] initWithConfig:config error:&error];
     if (error) {

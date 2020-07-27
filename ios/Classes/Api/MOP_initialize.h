@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,copy)NSString* apiServer;
 @property(nonatomic,copy)NSString* apiPrefix;
 @property(nonatomic,copy)NSString* cryptType;
+@property (nonatomic, assign) BOOL disablePermission;
 @end
 
 NS_ASSUME_NONNULL_END
