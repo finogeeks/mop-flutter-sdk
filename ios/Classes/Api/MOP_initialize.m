@@ -35,10 +35,11 @@
     }
     
     NSLog(@"disablePermission:%d",self.disablePermission);
-    config.autoAdaptDarkMode = YES;
     config.disableAuthorize = self.disablePermission;
     NSError* error = nil;
-    [[FATClient sharedClient] initWithConfig:config error:&error];
+    FATUIConfig *uiconfig = [[FATUIConfig alloc]init];
+    uiconfig.autoAdaptDarkMode = YES;
+    [[FATClient sharedClient] initWithConfig:config uiConfig:uiconfig error:&error];
     if (error) {
         failure(@"初始化失败");
         return;
