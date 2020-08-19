@@ -48,6 +48,14 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    packagingOptions {
+        // libsdkcore.so是被加固过的，不能被压缩，否则加载动态库时会报错
+        doNotStrip "*/x86/libsdkcore.so"
+        doNotStrip "*/x86_64/libsdkcore.so"
+        doNotStrip "*/armeabi-v7a/libsdkcore.so"
+        doNotStrip "*/arm64-v8a/libsdkcore.so"
+    }
 }
 
 flutter {
