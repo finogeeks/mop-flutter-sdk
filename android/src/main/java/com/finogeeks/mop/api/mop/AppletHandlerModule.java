@@ -162,6 +162,11 @@ public class AppletHandlerModule extends BaseApi {
                     channel.invokeMethod("extensionApi:onCustomMenuClick", params);
                 });
             }
+
+            @Override
+            public void onNavigationBarCloseButtonClicked(@NotNull String s) {
+
+            }
         });
         callback.onSuccess(null);
     }
