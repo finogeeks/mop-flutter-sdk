@@ -44,7 +44,7 @@ public class AppletManageModule extends BaseApi {
                 callback.onSuccess(null);
             }
         } else if (event.equals("closeAllApplets")) {
-            FinAppClient.INSTANCE.finishAllRunningApplets();
+            FinAppClient.INSTANCE.getAppletApiManager().finishAllRunningApplets();
             callback.onSuccess(null);
         } else if (event.equals("clearApplets")) {
             FinAppClient.INSTANCE.getAppletApiManager().clearApplets();
