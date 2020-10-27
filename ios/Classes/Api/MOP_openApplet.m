@@ -26,7 +26,7 @@
         }
     }];
     }else{
-        [[FATClient sharedClient] startRemoteApplet:self.appId sequence:self.sequence startParams:self.params InParentViewController:currentVC transitionStyle:FATTranstionStyleUp completion:^(BOOL result, NSError *error) {
+        [[FATClient sharedClient] startRemoteApplet:self.appId startParams:nil InParentViewController:currentVC completion:^(BOOL result, NSError *error) {
             NSLog(@"result:%d---error:%@", result, error);
             if (result){
                 success(@{});
@@ -34,6 +34,7 @@
                 failure(error.description);
             }
         }];
+        
     }
 }
 @end
