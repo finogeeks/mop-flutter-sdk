@@ -148,7 +148,7 @@ class Mop {
   ///
   void registerAppletHandler(AppletHandler handler) {
     _extensionApis["forwardApplet"] = (params) async {
-      handler.forwardApplet(Map<String, dynamic>.from(params["appletInfo"]));
+      handler.forwardApplet(Map<String, dynamic>.from(params));
     };
     _extensionApis["getUserInfo"] = (params) {
       return handler.getUserInfo();

@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 class CustomMenu {
   int menuId;
   String image;
