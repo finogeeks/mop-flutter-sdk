@@ -1,5 +1,6 @@
 package com.finogeeks.mop.api.mop;
 
+import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
