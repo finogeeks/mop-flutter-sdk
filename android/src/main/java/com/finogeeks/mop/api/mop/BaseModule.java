@@ -70,12 +70,14 @@ public class BaseModule extends BaseApi {
                 .setEncryptionType(cryptType)
                 .setDisableRequestPermissions(disablePermission)
                 .build();
+
+        final Application application = MopPluginService.getInstance().getActivity().getApplication();
         // SDK初始化结果回调，用于接收SDK初始化状态
         FinCallback<Object> cb = new FinCallback<Object>() {
             @Override
             public void onSuccess(Object result) {
                 // SDK初始化成功
-                FinPluginClient.pluginManager.registerPlugins(application);
+                FinPluginClient.INSTANCE.getPluginManager().registerPlugins(application);
                 callback.onSuccess(null);
             }
 
@@ -91,7 +93,7 @@ public class BaseModule extends BaseApi {
 
             }
         };
-        FinAppClient.INSTANCE.init(MopPluginService.getInstance().getActivity().getApplication(), config, cb);
+        FinAppClient.INSTANCE.init(application, config, cb);
 
 
     }
