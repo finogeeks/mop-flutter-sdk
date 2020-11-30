@@ -9,6 +9,7 @@ import com.finogeeks.lib.applet.client.FinAppConfig;
 import com.finogeeks.lib.applet.interfaces.FinCallback;
 import com.finogeeks.mop.api.BaseApi;
 import com.finogeeks.mop.interfaces.ICallback;
+import com.finogeeks.mop.plugins.client.FinPluginClient;
 import com.finogeeks.mop.service.MopPluginService;
 
 import java.util.HashMap;
@@ -74,6 +75,7 @@ public class BaseModule extends BaseApi {
             @Override
             public void onSuccess(Object result) {
                 // SDK初始化成功
+                FinPluginClient.pluginManager.registerPlugins(application);
                 callback.onSuccess(null);
             }
 
