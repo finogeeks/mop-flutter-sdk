@@ -85,15 +85,16 @@ class Mop {
     return ret;
   }
 
-  ///
-  ///
   /// open the miniprogram [appId] from the  mop server.
   /// 打开小程序
   /// [appId] is required.
   /// [path] is miniprogram open path. example /pages/index/index
   /// [query] is miniprogram query parameters. example key1=value1&key2=value2
-  ///
-  ///
+  /// [sequence] is miniprogram sequence. example 0,1.2.3,4,5...
+  /// [apiServer] is optional. the mop server address. default is https://mp.finogeek.com
+  /// [apiPrefix] is optional. the mop server prefix. default is /api/v1/mop
+  /// [fingerprint] is optional. the mop sdk fingerprint. is nullable
+  /// [cryptType] is optional. cryptType, should be MD5/SM
   Future<Map> openApplet(
     final String appId, {
     final String path,
