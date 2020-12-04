@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.finogeeks.lib.applet.BuildConfig;
 import com.finogeeks.lib.applet.client.FinAppClient;
 import com.finogeeks.lib.applet.client.FinAppConfig;
 import com.finogeeks.lib.applet.interfaces.FinCallback;
@@ -63,12 +64,12 @@ public class BaseModule extends BaseApi {
             disablePermission = false;
         }
         FinAppConfig config = new FinAppConfig.Builder()
-                .setAppKey(appkey)
-                .setAppSecret(secret)
+                .setSdkKey(appkey)
+                .setSdkSecret(secret)
                 .setApiUrl(apiServer)
                 .setApiPrefix(apiPrefix)
-                .setGlideWithJWT(false)
                 .setEncryptionType(cryptType)
+                .setDebugMode(BuildConfig.DEBUG)
                 .setDisableRequestPermissions(disablePermission)
                 .build();
 
@@ -95,7 +96,5 @@ public class BaseModule extends BaseApi {
             }
         };
         FinAppClient.INSTANCE.init(application, config, cb);
-
-
     }
 }
