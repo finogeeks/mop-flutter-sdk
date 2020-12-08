@@ -1,14 +1,17 @@
 package com.finogeeks.mop.api.mop;
 
+import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.finogeeks.lib.applet.BuildConfig;
 import com.finogeeks.lib.applet.client.FinAppClient;
 import com.finogeeks.lib.applet.client.FinAppConfig;
 import com.finogeeks.lib.applet.interfaces.FinCallback;
 import com.finogeeks.mop.api.BaseApi;
 import com.finogeeks.mop.interfaces.ICallback;
+import com.finogeeks.mop.plugins.client.FinPluginClient;
 import com.finogeeks.mop.service.MopPluginService;
 
 import java.util.HashMap;
@@ -61,19 +64,22 @@ public class BaseModule extends BaseApi {
             disablePermission = false;
         }
         FinAppConfig config = new FinAppConfig.Builder()
-                .setAppKey(appkey)
-                .setAppSecret(secret)
+                .setSdkKey(appkey)
+                .setSdkSecret(secret)
                 .setApiUrl(apiServer)
                 .setApiPrefix(apiPrefix)
-                .setGlideWithJWT(false)
                 .setEncryptionType(cryptType)
+                .setDebugMode(BuildConfig.DEBUG)
                 .setDisableRequestPermissions(disablePermission)
                 .build();
+
+        final Application application = MopPluginService.getInstance().getActivity().getApplication();
         // SDK初始化结果回调，用于接收SDK初始化状态
         FinCallback<Object> cb = new FinCallback<Object>() {
             @Override
             public void onSuccess(Object result) {
                 // SDK初始化成功
+                FinPluginClient.INSTANCE.getPluginManager().registerPlugins(application);
                 callback.onSuccess(null);
             }
 
@@ -89,8 +95,6 @@ public class BaseModule extends BaseApi {
 
             }
         };
-        FinAppClient.INSTANCE.init(MopPluginService.getInstance().getActivity().getApplication(), config, cb);
-
-
+        FinAppClient.INSTANCE.init(application, config, cb);
     }
 }
