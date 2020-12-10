@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.Log;
 
 import com.finogeeks.lib.applet.client.FinAppClient;
+import com.finogeeks.lib.applet.client.FinAppConfig;
+import com.finogeeks.lib.applet.client.FinAppInfo;
 import com.finogeeks.mop.api.BaseApi;
 import com.finogeeks.mop.interfaces.ICallback;
 
@@ -22,7 +24,6 @@ public class AppletModule extends BaseApi {
     @Override
     public void onCreate() {
         super.onCreate();
-
     }
 
     @Override
@@ -40,6 +41,7 @@ public class AppletModule extends BaseApi {
             });
             return;
         }
+        Log.d("MopPlugin", "openApplet:params:" + param);
         String appId = String.valueOf(param.get("appId"));
         Integer sequence = (Integer) param.get("sequence");
         Map<String, String> params = (Map) param.get("params");
@@ -50,9 +52,43 @@ public class AppletModule extends BaseApi {
                 FinAppClient.INSTANCE.getAppletApiManager().startApplet(mContext, appId, sequence, null);
             }
         } else {
-            Log.d("MopPlugin", "openApplet:params:" + param);
             FinAppClient.INSTANCE.getAppletApiManager().startApplet(mContext, appId, params);
         }
+//        String apiServer = (String) param.get("apiServer");
+//        String apiPrefix = (String) param.get("apiPrefix");
+//        if (apiServer == null || apiServer.isEmpty() || apiPrefix == null || apiPrefix.isEmpty()) {
+//            if (params == null) {
+//                if (sequence == null) {
+//                    FinAppClient.INSTANCE.getAppletApiManager().startApplet(mContext, appId);
+//                } else {
+//                    FinAppClient.INSTANCE.getAppletApiManager().startApplet(mContext, appId, sequence, null);
+//                }
+//            } else {
+//                FinAppClient.INSTANCE.getAppletApiManager().startApplet(mContext, appId, params);
+//            }
+//        } else {
+//            String fingerprint = (String) param.get("fingerprint");
+//            if (fingerprint == null) {
+//                fingerprint = "";
+//            }
+//            String cryptType = (String) param.get("cryptType");
+//            if (cryptType == null || cryptType.isEmpty()) {
+//                cryptType = FinAppConfig.ENCRYPTION_TYPE_MD5;
+//            }
+//            FinAppletStoreConfig finAppletStoreConfig = new FinAppletStoreConfig(apiServer, apiPrefix, fingerprint, cryptType);
+//            FinAppInfo.StartParams startParams = null;
+//            if (params != null) {
+//                String pageURL = params.get("path");
+//                String launchParams = params.get("query");
+//                String scene = params.get("scene");
+//                startParams = new FinAppInfo.StartParams(pageURL, launchParams, scene);
+//            }
+//            Log.d("MopPlugin", "openApplet:finAppletStoreConfig:" + finAppletStoreConfig.toString());
+//            Log.d("MopPlugin", "openApplet:appId:" + appId);
+//            Log.d("MopPlugin", "openApplet:sequence:" + sequence);
+//            Log.d("MopPlugin", "openApplet:startParams:" + startParams);
+//            FinAppClient.INSTANCE.getAppletApiManager().startApplet(mContext, finAppletStoreConfig, appId, sequence, startParams);
+//        }
         callback.onSuccess(new HashMap());
     }
 }

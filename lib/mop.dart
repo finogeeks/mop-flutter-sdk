@@ -85,23 +85,36 @@ class Mop {
     return ret;
   }
 
-  ///
-  ///
   /// open the miniprogram [appId] from the  mop server.
   /// 打开小程序
   /// [appId] is required.
   /// [path] is miniprogram open path. example /pages/index/index
   /// [query] is miniprogram query parameters. example key1=value1&key2=value2
-  ///
-  ///
-  Future<Map> openApplet(final String appId,
-      {final String path, final String query, final int sequence}) async {
+  /// [sequence] is miniprogram sequence. example 0,1.2.3,4,5...
+  /// [apiServer] is optional. the mop server address. default is https://mp.finogeek.com
+  /// [apiPrefix] is optional. the mop server prefix. default is /api/v1/mop
+  /// [fingerprint] is optional. the mop sdk fingerprint. is nullable
+  /// [cryptType] is optional. cryptType, should be MD5/SM
+  Future<Map> openApplet(
+    final String appId, {
+    final String path,
+    final String query,
+    final int sequence,
+    final String apiServer,
+    final String apiPrefix,
+    final String fingerprint,
+    final String cryptType,
+  }) async {
     Map<String, Object> params = {'appId': appId};
     Map param = {};
     if (path != null) param["path"] = path;
     if (query != null) param["query"] = query;
     if (param.length > 0) params["params"] = param;
     if (sequence != null) params["sequence"] = sequence;
+    if (apiServer != null) params["apiServer"] = apiServer;
+    if (apiPrefix != null) params["apiPrefix"] = apiPrefix;
+    if (fingerprint != null) params["fingerprint"] = fingerprint;
+    if (cryptType != null) params["cryptType"] = cryptType;
     final Map ret = await _channel.invokeMethod('openApplet', params);
     return ret;
   }
