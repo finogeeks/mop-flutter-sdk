@@ -4,8 +4,6 @@ import android.content.Context;
 import android.util.Log;
 
 import com.finogeeks.lib.applet.client.FinAppClient;
-import com.finogeeks.lib.applet.client.FinAppConfig;
-import com.finogeeks.lib.applet.client.FinAppInfo;
 import com.finogeeks.mop.api.BaseApi;
 import com.finogeeks.mop.interfaces.ICallback;
 
