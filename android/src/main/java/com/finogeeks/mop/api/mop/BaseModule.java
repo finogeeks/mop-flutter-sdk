@@ -1,24 +1,16 @@
 package com.finogeeks.mop.api.mop;
 
-import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 
 import com.finogeeks.lib.applet.BuildConfig;
 import com.finogeeks.lib.applet.client.FinAppClient;
 import com.finogeeks.lib.applet.client.FinAppConfig;
-import com.finogeeks.lib.applet.client.FinAppProcessClient;
 import com.finogeeks.lib.applet.interfaces.FinCallback;
-import com.finogeeks.lib.applet.interfaces.IApi;
 import com.finogeeks.mop.api.BaseApi;
 import com.finogeeks.mop.interfaces.ICallback;
-import com.finogeeks.mop.plugins.client.FinPluginClient;
 import com.finogeeks.mop.service.MopPluginService;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 import java.util.Map;
 
 public class BaseModule extends BaseApi {
@@ -43,20 +35,7 @@ public class BaseModule extends BaseApi {
     public void invoke(String event, Map param, final ICallback callback) {
 
         if (FinAppClient.INSTANCE.isFinAppProcess(super.getContext())) {
-            // 扩展SDK的API都注册到小程序进程
-            FinAppProcessClient.INSTANCE.setCallback(new FinAppProcessClient.Callback() {
-                @Nullable
-                @Override
-                public List<IApi> getRegisterExtensionApis(@NotNull Activity activity) {
-                    return FinPluginClient.INSTANCE.getPluginManager().getPlugins(activity);
-                }
-
-                @Nullable
-                @Override
-                public List<IApi> getRegisterExtensionWebApis(@NotNull Activity activity) {
-                    return null;
-                }
-            });
+            // 小程序进程不执行任何初始化操作
             return;
         }
         String appkey = String.valueOf(param.get("appkey"));
