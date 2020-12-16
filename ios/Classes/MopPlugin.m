@@ -41,6 +41,12 @@ static MopPlugin *_instance;
     FlutterEventChannel *mopEventChannel = [FlutterEventChannel eventChannelWithName:@"plugins.mop.finogeeks.com/mop_event" binaryMessenger:[registrar messenger]];
     _instance.mopEventStreamHandler = [[MopEventStream alloc] init];
     [mopEventChannel setStreamHandler:_instance.mopEventStreamHandler];
+    
+    FlutterMethodChannel* shareChannel = [FlutterMethodChannel
+        methodChannelWithName:@"plugins.finosprite.finogeeks.com/share"
+              binaryMessenger:[registrar messenger]];
+    [registrar addMethodCallDelegate:_instance channel:shareChannel];
+    _instance.shareMethodChannel = shareChannel;
 }
 
 + (instancetype)instance{
