@@ -7,6 +7,7 @@
 
 #import "MOP_initialize.h"
 #import <FinApplet/FinApplet.h>
+#import <FinAppletExt/FinAppletExt.h>
 
 @implementation MOP_initialize
 
@@ -44,6 +45,7 @@
         failure(@"初始化失败");
         return;
     }
+    [[FATExtClient sharedClient] fat_prepareExtensionApis];
     success(@{});
     
     
