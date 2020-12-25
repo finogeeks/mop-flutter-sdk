@@ -17,7 +17,7 @@ A new flutter plugin project.
   s.dependency 'Flutter'
   s.ios.deployment_target = '8.0'
 
-  s.dependency 'FinApplet' , '2.13.61'
-  s.dependency 'FinAppletExt' , '2.13.61'
+  s.dependency 'FinApplet' , '2.13.71'
+  s.dependency 'FinAppletExt' , '2.13.71'
 end
 
