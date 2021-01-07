@@ -159,7 +159,7 @@ public class AppletHandlerModule extends BaseApi {
             }
 
             @Override
-            public void onRegisteredMoreMenuItemClicked(@NotNull String s, int i) {
+            public void onRegisteredMoreMenuItemClicked(@NotNull String s,String path, int i) {
                 Map<String, Object> params = new HashMap<>();
                 params.put("appId", s);
                 params.put("menuId", i);
