@@ -35,6 +35,7 @@ static MopPlugin *_instance;
       methodChannelWithName:@"mop"
             binaryMessenger:[registrar messenger]];
     _instance = [[MopPlugin alloc] init];
+    [registrar addApplicationDelegate:_instance];
     [registrar addMethodCallDelegate:_instance channel:channel];
     _instance.methodChannel = channel;
 
@@ -83,6 +84,10 @@ static MopPlugin *_instance;
           result(FlutterMethodNotImplemented);
       }
   }
+}
+
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *, id> *)options {
+    return [[FATClient sharedClient] handleOpenURL:url];
 }
 
 @end
