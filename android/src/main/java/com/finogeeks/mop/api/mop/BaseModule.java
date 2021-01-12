@@ -40,7 +40,7 @@ public class BaseModule extends BaseApi {
         }
         String appkey = String.valueOf(param.get("appkey"));
         String secret = String.valueOf(param.get("secret"));
-        String apiServer = "https://mp.finogeeks.com";
+        String apiServer = "https://api.finclip.com";
         String apiPrefix = "/api/v1/mop/";
         String cryptType = (String) param.get("cryptType");
         if (cryptType == null || cryptType.isEmpty()) {
