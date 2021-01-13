@@ -18,7 +18,7 @@
         return;
     }
     if (!self.apiServer || [self.apiServer isEqualToString:@""]) {
-        self.apiServer = @"https://mp.finogeeks.com";
+        self.apiServer = @"https://api.finclip.com";
     }
     if (!self.apiPrefix|| [self.apiPrefix isEqualToString:@""]) {
         self.apiPrefix = @"/api/v1/mop";

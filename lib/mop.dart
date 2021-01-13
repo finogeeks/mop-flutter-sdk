@@ -62,8 +62,8 @@ class Mop {
   ///
   /// initialize mop miniprogram engine.
   /// 初始化小程序
-  /// [appkey] is required. it can be getted from mp.finogeeks.com
-  /// [secret] is required. it can be getted from mp.finogeeks.com
+  /// [appkey] is required. it can be getted from api.finclip.com
+  /// [secret] is required. it can be getted from api.finclip.com
   /// [apiServer] is optional. the mop server address. default is https://mp.finogeek.com
   /// [apiPrefix] is optional. the mop server prefix. default is /api/v1/mop
   /// [cryptType] is optional. cryptType, should be MD5/SM

@@ -38,13 +38,13 @@ class _MyAppState extends State<MyApp> {
       //com.finogeeks.mopExample
       final res = await Mop.instance.initialize(
           '22LyZEib0gLTQdU3MUauARlLry7JL/2fRpscC9kpGZQA', '1c11d7252c53e0b6',
-          apiServer: 'https://mp.finogeeks.com', apiPrefix: '/api/v1/mop');
+          apiServer: 'https://api.finclip.com', apiPrefix: '/api/v1/mop');
       print(res);
     } else if (Platform.isAndroid) {
       //com.finogeeks.mopexample
       final res = await Mop.instance.initialize(
           '22LyZEib0gLTQdU3MUauARjmmp6QmYgjGb3uHueys1oA', '98c49f97a031b555',
-          apiServer: 'https://mp.finogeeks.com', apiPrefix: '/api/v1/mop');
+          apiServer: 'https://api.finclip.com', apiPrefix: '/api/v1/mop');
       print(res);
     }
     if (!mounted) return;
@@ -127,8 +127,8 @@ class _MyAppState extends State<MyApp> {
   ///
   /// initialize mop miniprogram engine.
   /// 初始化小程序
-  /// [appkey] is required. it can be getted from mp.finogeeks.com
-  /// [secret] is required. it can be getted from mp.finogeeks.com
+  /// [appkey] is required. it can be getted from api.finclip.com
+  /// [secret] is required. it can be getted from api.finclip.com
   /// [apiServer] is optional. the mop server address. default is https://mp.finogeek.com
   /// [apiPrefix] is optional. the mop server prefix. default is /api/v1/mop
   ///
@@ -142,7 +142,7 @@ class _MyAppState extends State<MyApp> {
 ```
 final res = await Mop.instance.initialize(
           '22LyZEib0gLTQdU3MUauARlLry7JL/2fRpscC9kpGZQA', '1c11d7252c53e0b6',
-          apiServer: 'https://mp.finogeeks.com', apiPrefix: '/api/v1/mop');
+          apiServer: 'https://api.finclip.com', apiPrefix: '/api/v1/mop');
 ```
 
 2. 打开小程序

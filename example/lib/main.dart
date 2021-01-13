@@ -22,12 +22,12 @@ class _MyAppState extends State<MyApp> {
     if (Platform.isIOS) {
       final res = await Mop.instance.initialize(
           '22LyZEib0gLTQdU3MUauAZ0pZVbKTWGmNN6Lx8hXhIkA', '74bde5fad53a817c',
-          apiServer: 'https://mp.finogeeks.com', apiPrefix: '/api/v1/mop');
+          apiServer: 'https://api.finclip.com', apiPrefix: '/api/v1/mop');
       print(res);
     } else if (Platform.isAndroid) {
       final res = await Mop.instance.initialize(
           '22LyZEib0gLTQdU3MUauAZ0pZVbKTWGmNN6Lx8hXhIkA', '74bde5fad53a817c',
-          apiServer: 'https://mp.finogeeks.com', apiPrefix: '/api/v1/mop');
+          apiServer: 'https://api.finclip.com', apiPrefix: '/api/v1/mop');
       print(res);
     }
     if (!mounted) return;
