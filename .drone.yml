@@ -1,0 +1,12 @@
+clone:
+  git:
+    image: plugins/git
+    tags: true
+pipeline:
+  build:
+    image: docker.finogeeks.club/build/ubuntu-scp
+    pull: true
+    commands:
+      - bash trigger.sh
+    when:
+      event: tag
