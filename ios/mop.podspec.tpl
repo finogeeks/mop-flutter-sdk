@@ -4,13 +4,13 @@
 Pod::Spec.new do |s|
   s.name             = 'mop'
   s.version          = '0.1.0'
-  s.summary          = 'A new flutter plugin project.'
+  s.summary          = 'finclip miniprogram flutter sdk'
   s.description      = <<-DESC
-A new flutter plugin project.
+A finclip miniprogram flutter sdk.
                        DESC
-  s.homepage         = 'http://example.com'
+  s.homepage         = 'https://www.finclip.com'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'Your Company' => 'email@example.com' }
+  s.author           = { 'finogeeks' => 'contact@finogeeks.com' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
