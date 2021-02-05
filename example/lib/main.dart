@@ -21,7 +21,6 @@ class _MyAppState extends State<MyApp> {
   Future<void> init() async {
     if (Platform.isIOS) {
       final res = await Mop.instance.initialize(
-<<<<<<< HEAD
           '22LyZEib0gLTQdU3MUauAZ0pZVbKTWGmNN6Lx8hXhIkA', '74bde5fad53a817c',
           apiServer: 'https://api.finclip.com', apiPrefix: '/api/v1/mop');
       print(res);
@@ -29,15 +28,6 @@ class _MyAppState extends State<MyApp> {
       final res = await Mop.instance.initialize(
           '22LyZEib0gLTQdU3MUauAZ0pZVbKTWGmNN6Lx8hXhIkA', '74bde5fad53a817c',
           apiServer: 'https://api.finclip.com', apiPrefix: '/api/v1/mop');
-=======
-          '22LyZEib0gLTQdU3MUauATaGrbb4xsJ87TEDJExdNRsA', 'c7a85a043973223b',
-          apiServer: 'https://mp.finogeeks.com', apiPrefix: '/api/v1/mop');
-      print(res);
-    } else if (Platform.isAndroid) {
-      final res = await Mop.instance.initialize(
-          '22LyZEib0gLTQdU3MUauATaGrbb4xsJ87TEDJExdNRsA', 'c7a85a043973223b',
-          apiServer: 'https://mp.finogeeks.com', apiPrefix: '/api/v1/mop');
->>>>>>> 273af8333b2af783766fd287d56301f4c8a9933b
       print(res);
     }
     if (!mounted) return;
