@@ -55,14 +55,14 @@ public class AppletHandlerModule extends BaseApi {
 
             @Override
             public void shareAppMessage(@NotNull String s, @Nullable Bitmap bitmap, @NotNull IAppletCallback iAppletCallback) {
-                Log.d("MopPlugin", "shareAppMessage:" + s+" bitmap:"+bitmap);
+                Log.d("MopPlugin", "shareAppMessage:" + s + " bitmap:" + bitmap);
                 Map<String, Object> params = new HashMap<>();
                 params.put("appletInfo", GsonUtil.gson.fromJson(s, new TypeToken<Map<String, Object>>() {
                 }.getType()));
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 byte[] data = baos.toByteArray();
-                params.put("bitmap",data);
+                params.put("bitmap", data);
                 handler.post(() -> {
                     channel.invokeMethod("extensionApi:forwardApplet", params, new MethodChannel.Result() {
                         @Override
@@ -159,10 +159,11 @@ public class AppletHandlerModule extends BaseApi {
             }
 
             @Override
-            public void onRegisteredMoreMenuItemClicked(@NotNull String s,String path, int i) {
+            public void onRegisteredMoreMenuItemClicked(@NotNull String appId, @NotNull String path, @NotNull String menuItemId, @Nullable String appInfo, @Nullable Bitmap bitmap, @NotNull IAppletCallback iAppletCallback) {
+
                 Map<String, Object> params = new HashMap<>();
-                params.put("appId", s);
-                params.put("menuId", i);
+                params.put("appId", appId);
+                params.put("menuId", menuItemId);
                 handler.post(() -> {
                     channel.invokeMethod("extensionApi:onCustomMenuClick", params);
                 });
