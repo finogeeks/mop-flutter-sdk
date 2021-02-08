@@ -15,15 +15,15 @@ buildscript {
         maven {
             url "https://gradle.finogeeks.club/repository/finogeeks/"
             credentials {
-                username "gradle"
-                password "ftjk@@123321"
+                username "finclip"
+                password "Abcd@@1234"
             }
         }
         maven {
             url "https://gradle.finogeeks.club/repository/applet/"
             credentials {
-                username "applet"
-                password "123321"
+                username "finclip"
+                password "Abcd@@1234"
             }
         }
         maven { url "https://jitpack.io" }
@@ -44,15 +44,15 @@ rootProject.allprojects {
         maven {
             url "https://gradle.finogeeks.club/repository/finogeeks/"
             credentials {
-                username "gradle"
-                password "ftjk@@123321"
+                username "finclip"
+                password "Abcd@@1234"
             }
         }
         maven {
             url "https://gradle.finogeeks.club/repository/applet/"
             credentials {
-                username "applet"
-                password "123321"
+                username "finclip"
+                password "Abcd@@1234"
             }
         }
         maven { url "https://jitpack.io" }
@@ -91,6 +91,6 @@ kapt {
 }
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.finogeeks.lib:finapplet:2.14.18'
-    implementation 'com.finogeeks.mop:plugins:2.14.1'
+    implementation 'com.finogeeks.lib:finapplet:2.15.0'
+    implementation 'com.finogeeks.mop:plugins:2.15.0'
 }
