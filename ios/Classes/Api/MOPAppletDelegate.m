@@ -76,7 +76,7 @@
 }
 
 - (void)clickCustomItemMenuWithInfo:(NSDictionary *)contentInfo completion:(void (^)(FATExtensionCode code, NSDictionary *result))completion {
-    
+    NSLog(@"%@", contentInfo);
 }
 
 @end
