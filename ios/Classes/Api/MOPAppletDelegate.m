@@ -7,6 +7,7 @@
 
 #import "MOPAppletDelegate.h"
 #import "MopPlugin.h"
+#import "MopCustomMenuModel.h"
 
 @implementation MOPAppletDelegate
 
@@ -46,13 +47,35 @@
     return userInfo;
 }
 
-- (NSArray<id<FATAppletMenuProtocol>> *)customMenusInMoreItemAtPath:(NSString *)path
-{
-    return nil;
+- (NSArray<id<FATAppletMenuProtocol>> *)customMenusInApplet:(FATAppletInfo *)appletInfo atPath:(NSString *)path {
+    MopCustomMenuModel *favModel1 = [[MopCustomMenuModel alloc] init];
+    favModel1.menuId = @"WXShareAPPFriends";
+    favModel1.menuTitle = @"微信好友";
+    favModel1.menuIconImage = [UIImage imageNamed:@"mini_menu_chat"];
+    favModel1.menuType = FATAppletMenuStyleOnMiniProgram;
+    
+    MopCustomMenuModel *favModel2 = [[MopCustomMenuModel alloc] init];
+    favModel2.menuId = @"ShareSinaWeibo";
+    favModel2.menuTitle = @"新浪微博";
+    favModel2.menuIconImage = [UIImage imageNamed:@"mini_menu_chat"];
+    favModel2.menuType = FATAppletMenuStyleOnMiniProgram;
+    
+    MopCustomMenuModel *favModel3 = [[MopCustomMenuModel alloc] init];
+    favModel3.menuId = @"Restart";
+    favModel3.menuTitle = @"重启";
+    favModel3.menuIconImage = [UIImage imageNamed:@"minipro_list_setting"];
+    favModel3.menuType = FATAppletMenuStyleCommon;
+    
+    MopCustomMenuModel *favModel4 = [[MopCustomMenuModel alloc] init];
+    favModel4.menuId = @"ShareQQFriends";
+    favModel4.menuTitle = @"QQ好友";
+    favModel4.menuIconImage = [UIImage imageNamed:@"minipro_list_setting"];
+    favModel4.menuType = FATAppletMenuStyleOnMiniProgram;
+    
+    return @[favModel1, favModel2, favModel3, favModel4];
 }
 
-- (void)customMenu:(id<FATAppletMenuProtocol>)customMenu didClickAtPath:(NSString *)path
-{
+- (void)clickCustomItemMenuWithInfo:(NSDictionary *)contentInfo completion:(void (^)(FATExtensionCode code, NSDictionary *result))completion {
     
 }
 
