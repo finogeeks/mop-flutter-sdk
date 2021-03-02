@@ -168,11 +168,21 @@ class Mop {
     };
     _extensionApis["getCustomMenus"] = (params) async {
       final res = await handler.getCustomMenus(params["appId"]);
-      res?.map((e) => e.toJson());
-      return res;
+      List<Map<String, dynamic>> list = [];
+      res?.forEach((element) {
+        Map<String, dynamic> map = Map();
+        map["menuId"] = element.menuId;
+        map["image"] = element.image;
+        map["title"] = element.title;
+        map["type"] = element.type;
+        list.add(map);
+      });
+      print("registerAppletHandler getCustomMenus list $list");
+      return list;
     };
     _extensionApis["onCustomMenuClick"] = (params) {
-      return handler.onCustomMenuClick(params["appId"], params["menuId"]);
+      return handler.onCustomMenuClick(
+          params["appId"], params["path"], params["menuId"], params["appInfo"]);
     };
     _channel.invokeMethod("registerAppletHandler");
   }

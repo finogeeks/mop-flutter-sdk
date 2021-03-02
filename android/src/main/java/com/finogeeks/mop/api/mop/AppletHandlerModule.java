@@ -7,7 +7,9 @@ import android.os.Looper;
 import android.util.Log;
 
 import com.finogeeks.lib.applet.client.FinAppClient;
+import com.finogeeks.lib.applet.client.FinAppTrace;
 import com.finogeeks.lib.applet.page.view.moremenu.MoreMenuItem;
+import com.finogeeks.lib.applet.page.view.moremenu.MoreMenuType;
 import com.finogeeks.lib.applet.rest.model.GrayAppletVersionConfig;
 import com.finogeeks.lib.applet.sdk.api.IAppletHandler;
 import com.finogeeks.mop.api.BaseApi;
@@ -131,9 +133,17 @@ public class AppletHandlerModule extends BaseApi {
                         @Override
                         public void success(Object result) {
                             List<Map<String, Object>> ret = (List<Map<String, Object>>) result;
+                            FinAppTrace.d(TAG, "getRegisteredMoreMenuItems success : " + ret + " size : " + ret.size());
                             if (ret != null) {
                                 for (Map<String, Object> map : ret) {
-                                    moreMenuItems.add(new MoreMenuItem((Integer) map.get("menuId"), 0, (String) map.get("title"), true));
+                                    String type = (String) map.get("type");
+                                    MoreMenuType moreMenuType;
+                                    if ("common".equals(type)) {
+                                        moreMenuType = MoreMenuType.COMMON;
+                                    } else {
+                                        moreMenuType = MoreMenuType.ON_MINI_PROGRAM;
+                                    }
+                                    moreMenuItems.add(new MoreMenuItem((String) map.get("menuId"), (String) map.get("title"), moreMenuType));
                                 }
                             }
                             latch.countDown();
@@ -141,11 +151,13 @@ public class AppletHandlerModule extends BaseApi {
 
                         @Override
                         public void error(String errorCode, String errorMessage, Object errorDetails) {
+                            FinAppTrace.e(TAG, "getRegisteredMoreMenuItems errorCode : " + errorCode + " errorMessage : " + errorMessage);
                             latch.countDown();
                         }
 
                         @Override
                         public void notImplemented() {
+                            FinAppTrace.d(TAG, "getRegisteredMoreMenuItems notImplemented");
                             latch.countDown();
                         }
                     });
@@ -155,6 +167,7 @@ public class AppletHandlerModule extends BaseApi {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                FinAppTrace.d(TAG, "getRegisteredMoreMenuItems moreMenuItems : " + moreMenuItems + " size : " + moreMenuItems.size());
                 return moreMenuItems;
             }
 
@@ -163,10 +176,13 @@ public class AppletHandlerModule extends BaseApi {
 
                 Map<String, Object> params = new HashMap<>();
                 params.put("appId", appId);
+                params.put("path", path);
                 params.put("menuId", menuItemId);
+                params.put("appInfo", appInfo);
                 handler.post(() -> {
                     channel.invokeMethod("extensionApi:onCustomMenuClick", params);
                 });
+                callback.onSuccess(null);
             }
 
             @Override

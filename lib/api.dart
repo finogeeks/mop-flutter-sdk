@@ -1,12 +1,15 @@
 import 'dart:typed_data';
 
 class CustomMenu {
-  int menuId;
+  String menuId;
   String image;
   String title;
+  String type;
+
+  CustomMenu(this.menuId, this.image, this.title, this.type);
 
   Map<String, dynamic> toJson() =>
-      {"menuId": menuId, "image": image, "title": title};
+      {'menuId': menuId, 'image': image, 'title': title, 'type': type};
 }
 
 abstract class AppletHandler {
@@ -31,5 +34,6 @@ abstract class AppletHandler {
   Future<List<CustomMenu>> getCustomMenus(String appId);
 
   ///自定义菜单点击处理
-  Future onCustomMenuClick(String appId, int menuId);
+  Future onCustomMenuClick(
+      String appId, String path, String menuId, String appInfo);
 }
