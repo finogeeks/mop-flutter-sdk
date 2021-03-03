@@ -41,42 +41,65 @@
     NSLog(@"getUserInfoWithAppletInfo");
     __block NSDictionary *userInfo;
     FlutterMethodChannel *channel = [[MopPlugin instance] methodChannel];
-    [channel invokeMethod:@"extensionApi:getUserInfo" arguments:nil result:^(id  _Nullable result) {
-          userInfo = result;
+    [channel invokeMethod:@"extensionApi:getUserInfo" arguments:nil result:^(id _Nullable result) {
+        CFRunLoopStop(CFRunLoopGetMain());
+        userInfo = result;
     }];
+    CFRunLoopRun();
     return userInfo;
 }
 
 - (NSArray<id<FATAppletMenuProtocol>> *)customMenusInApplet:(FATAppletInfo *)appletInfo atPath:(NSString *)path {
-    MopCustomMenuModel *favModel1 = [[MopCustomMenuModel alloc] init];
-    favModel1.menuId = @"WXShareAPPFriends";
-    favModel1.menuTitle = @"微信好友";
-    favModel1.menuIconImage = [UIImage imageNamed:@"mini_menu_chat"];
-    favModel1.menuType = FATAppletMenuStyleOnMiniProgram;
+    NSLog(@"customMenusInApplet");
+    __block NSArray *list;
+    FlutterMethodChannel *channel = [[MopPlugin instance] methodChannel];
+    [channel invokeMethod:@"extensionApi:getCustomMenus" arguments:@{@"appId": appletInfo.appId} result:^(id _Nullable result) {
+        CFRunLoopStop(CFRunLoopGetMain());
+        list = result;
+    }];
+    CFRunLoopRun();
     
-    MopCustomMenuModel *favModel2 = [[MopCustomMenuModel alloc] init];
-    favModel2.menuId = @"ShareSinaWeibo";
-    favModel2.menuTitle = @"新浪微博";
-    favModel2.menuIconImage = [UIImage imageNamed:@"mini_menu_chat"];
-    favModel2.menuType = FATAppletMenuStyleOnMiniProgram;
+    NSMutableArray *models = [NSMutableArray array];
+    for (NSDictionary<NSString *, NSString *> *data in list) {
+        MopCustomMenuModel *model = [[MopCustomMenuModel alloc] init];
+        model.menuId = data[@"menuId"];
+        model.menuTitle = data[@"title"];
+        model.menuIconImage = [UIImage imageNamed:data[@"image"]];
+        NSString *typeString = data[@"type"];
+        if (typeString) {
+            FATAppletMenuStyle style = [typeString isEqualToString:@"onMiniProgram"] ? FATAppletMenuStyleOnMiniProgram : FATAppletMenuStyleCommon;
+            model.menuType = style;
+        }
+        [models addObject:model];
+    }
     
-    MopCustomMenuModel *favModel3 = [[MopCustomMenuModel alloc] init];
-    favModel3.menuId = @"Restart";
-    favModel3.menuTitle = @"重启";
-    favModel3.menuIconImage = [UIImage imageNamed:@"minipro_list_setting"];
-    favModel3.menuType = FATAppletMenuStyleCommon;
-    
-    MopCustomMenuModel *favModel4 = [[MopCustomMenuModel alloc] init];
-    favModel4.menuId = @"ShareQQFriends";
-    favModel4.menuTitle = @"QQ好友";
-    favModel4.menuIconImage = [UIImage imageNamed:@"minipro_list_setting"];
-    favModel4.menuType = FATAppletMenuStyleOnMiniProgram;
-    
-    return @[favModel1, favModel2, favModel3, favModel4];
+    return models;
+}
+
+- (void)customMenu:(id<FATAppletMenuProtocol>)customMenu inApplet:(FATAppletInfo *)appletInfo didClickAtPath:(NSString *)path {
+    NSDictionary *arguments = @{
+        @"appId": appletInfo.appId,
+        @"path": path,
+        @"menuId": customMenu.menuId,
+        @"appInfo": appletInfo.description
+    };
+    FlutterMethodChannel *channel = [[MopPlugin instance] methodChannel];
+    [channel invokeMethod:@"extensionApi:onCustomMenuClick" arguments:arguments result:^(id _Nullable result) {
+        
+    }];
 }
 
 - (void)clickCustomItemMenuWithInfo:(NSDictionary *)contentInfo completion:(void (^)(FATExtensionCode code, NSDictionary *result))completion {
-    NSLog(@"%@", contentInfo);
+    NSDictionary *arguments = @{
+        @"appId": contentInfo[@"appId"],
+        @"path": contentInfo[@"path"],
+        @"menuId": contentInfo[@"menuId"],
+        @"appInfo": [NSString stringWithFormat:@"{'title': '%@', 'description': '%@', 'imageUrl': '%@'}", contentInfo[@"title"], contentInfo[@"description"], contentInfo[@"imageUrl"]]
+    };
+    FlutterMethodChannel *channel = [[MopPlugin instance] methodChannel];
+    [channel invokeMethod:@"extensionApi:onCustomMenuClick" arguments:arguments result:^(id _Nullable result) {
+        
+    }];
 }
 
 @end
