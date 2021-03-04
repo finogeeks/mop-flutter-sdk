@@ -133,7 +133,7 @@ public class AppletHandlerModule extends BaseApi {
                         @Override
                         public void success(Object result) {
                             List<Map<String, Object>> ret = (List<Map<String, Object>>) result;
-                            FinAppTrace.d(TAG, "getRegisteredMoreMenuItems success : " + ret + " size : " + ret.size());
+                            FinAppTrace.d(TAG, "getCustomMenus success : " + ret + " size : " + ret.size());
                             if (ret != null) {
                                 for (Map<String, Object> map : ret) {
                                     String type = (String) map.get("type");
@@ -151,13 +151,13 @@ public class AppletHandlerModule extends BaseApi {
 
                         @Override
                         public void error(String errorCode, String errorMessage, Object errorDetails) {
-                            FinAppTrace.e(TAG, "getRegisteredMoreMenuItems errorCode : " + errorCode + " errorMessage : " + errorMessage);
+                            FinAppTrace.e(TAG, "getCustomMenus errorCode : " + errorCode + " errorMessage : " + errorMessage);
                             latch.countDown();
                         }
 
                         @Override
                         public void notImplemented() {
-                            FinAppTrace.d(TAG, "getRegisteredMoreMenuItems notImplemented");
+                            FinAppTrace.d(TAG, "getCustomMenus notImplemented");
                             latch.countDown();
                         }
                     });
@@ -173,14 +173,31 @@ public class AppletHandlerModule extends BaseApi {
 
             @Override
             public void onRegisteredMoreMenuItemClicked(@NotNull String appId, @NotNull String path, @NotNull String menuItemId, @Nullable String appInfo, @Nullable Bitmap bitmap, @NotNull IAppletCallback iAppletCallback) {
-
                 Map<String, Object> params = new HashMap<>();
                 params.put("appId", appId);
                 params.put("path", path);
                 params.put("menuId", menuItemId);
                 params.put("appInfo", appInfo);
                 handler.post(() -> {
-                    channel.invokeMethod("extensionApi:onCustomMenuClick", params);
+                    channel.invokeMethod("extensionApi:onCustomMenuClick", params, new MethodChannel.Result() {
+                        @Override
+                        public void success(Object result) {
+                            FinAppTrace.d(TAG, "onCustomMenuClick success");
+                            iAppletCallback.onSuccess(null);
+                        }
+
+                        @Override
+                        public void error(String errorCode, String errorMessage, Object errorDetails) {
+                            FinAppTrace.e(TAG, "onCustomMenuClick errorCode : " + errorCode + " errorMessage : " + errorMessage);
+                            iAppletCallback.onFailure();
+                        }
+
+                        @Override
+                        public void notImplemented() {
+                            FinAppTrace.d(TAG, "onCustomMenuClick notImplemented");
+                            iAppletCallback.onFailure();
+                        }
+                    });
                 });
             }
 
