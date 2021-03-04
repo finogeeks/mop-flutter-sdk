@@ -34,6 +34,6 @@ abstract class AppletHandler {
   Future<List<CustomMenu>> getCustomMenus(String appId);
 
   ///自定义菜单点击处理
-  Future onCustomMenuClick(
+  Future<void> onCustomMenuClick(
       String appId, String path, String menuId, String appInfo);
 }

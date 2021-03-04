@@ -182,7 +182,6 @@ public class AppletHandlerModule extends BaseApi {
                 handler.post(() -> {
                     channel.invokeMethod("extensionApi:onCustomMenuClick", params);
                 });
-                callback.onSuccess(null);
             }
 
             @Override

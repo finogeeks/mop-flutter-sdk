@@ -180,7 +180,7 @@ class Mop {
       print("registerAppletHandler getCustomMenus list $list");
       return list;
     };
-    _extensionApis["onCustomMenuClick"] = (params) {
+    _extensionApis["onCustomMenuClick"] = (params) async {
       return handler.onCustomMenuClick(
           params["appId"], params["path"], params["menuId"], params["appInfo"]);
     };
