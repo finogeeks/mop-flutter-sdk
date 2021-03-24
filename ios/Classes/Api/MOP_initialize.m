@@ -40,7 +40,7 @@
     NSError* error = nil;
     FATUIConfig *uiconfig = [[FATUIConfig alloc]init];
     uiconfig.autoAdaptDarkMode = YES;
-    uiconfig.moreMenuStyle = FATMoreViewStyleNormal;
+    // uiconfig.moreMenuStyle = FATMoreViewStyleNormal;
     [[FATClient sharedClient] initWithConfig:config uiConfig:uiconfig error:&error];
     if (error) {
         failure(@"初始化失败");
