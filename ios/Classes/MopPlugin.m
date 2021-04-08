@@ -96,8 +96,8 @@ static MopPlugin *_instance;
     if ([userActivity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb]) {
         NSURL *url = userActivity.webpageURL;
         NSLog(@"url = %@",url.absoluteString);
+        return [[FATClient sharedClient] handleOpenUniversalLinkURL:url];
     }
-    
     return YES;
 }
 
