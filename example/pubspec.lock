@@ -87,7 +87,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "2.20.13"
+    version: "2.24.1"
   path:
     dependency: transitive
     description:
