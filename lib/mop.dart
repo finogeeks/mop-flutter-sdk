@@ -195,4 +195,13 @@ class Mop {
     _extensionApis[name] = handler;
     _channel.invokeMethod("registerExtensionApi", {"name": name});
   }
+
+  /// 获取国密加密
+  Future<String> getSMSign(String plainText) async {
+    var result =
+        await _channel.invokeMapMethod("smsign", {'plainText': plainText});
+    var data = result['data']['data'];
+    print(data);
+    return data;
+  }
 }
