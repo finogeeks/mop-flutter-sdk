@@ -59,12 +59,17 @@ public class BaseModule extends BaseApi {
         if (disablePermission == null) {
             disablePermission = false;
         }
+        String userId = null;
+        if (param.get("userId") != null) {
+            userId = (String) param.get("userId");
+        }
         FinAppConfig config = new FinAppConfig.Builder()
                 .setSdkKey(appkey)
                 .setSdkSecret(secret)
                 .setApiUrl(apiServer)
                 .setApiPrefix(apiPrefix)
                 .setEncryptionType(cryptType)
+                .setUserId(userId)
                 .setDebugMode(BuildConfig.DEBUG)
                 .setDisableRequestPermissions(disablePermission)
                 .build();
