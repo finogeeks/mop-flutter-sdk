@@ -34,7 +34,7 @@
     {
         config.cryptType = FATApiCryptTypeMD5;
     }
-    config.userId = [self.userId copy];
+    config.currentUserId = [self.userId copy];
     
     NSLog(@"disablePermission:%d",self.disablePermission);
     config.disableAuthorize = self.disablePermission;
