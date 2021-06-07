@@ -158,6 +158,13 @@ class Mop {
   }
 
   ///
+  /// （扫码后）解密-鉴权-打开小程序
+  ///
+  Future scanOpenApplet(String info) async {
+    return await _channel.invokeMapMethod("scanOpenApplet");
+  }
+
+  ///
   /// register handler to provide custom info or behaviour
   /// 注册小程序事件处理
   ///
