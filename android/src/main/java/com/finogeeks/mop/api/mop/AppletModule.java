@@ -1,9 +1,11 @@
 package com.finogeeks.mop.api.mop;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.finogeeks.lib.applet.client.FinAppClient;
+import com.finogeeks.lib.applet.sdk.model.StartAppletDecryptRequest;
 import com.finogeeks.mop.api.BaseApi;
 import com.finogeeks.mop.interfaces.ICallback;
 
@@ -26,11 +28,19 @@ public class AppletModule extends BaseApi {
 
     @Override
     public String[] apis() {
-        return new String[]{"openApplet"};
+        return new String[]{"openApplet", "scanOpenApplet"};
     }
 
     @Override
     public void invoke(String event, Map param, ICallback callback) {
+        if ("openApplet".equals(event)) {
+            openApplet(param, callback);
+        } else if ("scanOpenApplet".equals(event)) {
+            scanOpenApplet(param, callback);
+        }
+    }
+
+    private void openApplet(Map param, ICallback callback) {
         if (param.get("appId") == null) {
             callback.onFail(new HashMap() {
                 {
@@ -87,6 +97,20 @@ public class AppletModule extends BaseApi {
 //            Log.d("MopPlugin", "openApplet:startParams:" + startParams);
 //            FinAppClient.INSTANCE.getAppletApiManager().startApplet(mContext, finAppletStoreConfig, appId, sequence, startParams);
 //        }
+        callback.onSuccess(new HashMap());
+    }
+
+    private void scanOpenApplet(Map param, ICallback callback) {
+        String info = String.valueOf(param.get("info"));
+        if (TextUtils.isEmpty(info)) {
+            callback.onFail(new HashMap() {
+                {
+                    put("info", "info不能为" + info);
+                }
+            });
+            return;
+        }
+        FinAppClient.INSTANCE.getAppletApiManager().startApplet(mContext, new StartAppletDecryptRequest(info));
         callback.onSuccess(new HashMap());
     }
 }
