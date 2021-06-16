@@ -15,8 +15,8 @@
     NSLog(@"MOP_scanOpenApplet：%@", self.info);
     FATAppletDecryptRequest *req = [[FATAppletDecryptRequest alloc] init];
     req.info = self.info;
-    UIViewController *currentVC = [MOPTools topViewController];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        UIViewController *currentVC = [MOPTools topViewController];
         [[FATClient sharedClient] startAppletWithDecryptRequest:req InParentViewController:currentVC completion:^(BOOL result, FATError *error) {
             NSLog(@"打开小程序:%@", error);
         } closeCompletion:^{
