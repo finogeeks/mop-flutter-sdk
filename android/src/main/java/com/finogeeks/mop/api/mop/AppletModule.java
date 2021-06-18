@@ -102,14 +102,6 @@ public class AppletModule extends BaseApi {
 
     private void scanOpenApplet(Map param, ICallback callback) {
         String info = String.valueOf(param.get("info"));
-        if (TextUtils.isEmpty(info)) {
-            callback.onFail(new HashMap() {
-                {
-                    put("info", "info不能为" + info);
-                }
-            });
-            return;
-        }
         FinAppClient.INSTANCE.getAppletApiManager().startApplet(mContext, new StartAppletDecryptRequest(info));
         callback.onSuccess(new HashMap());
     }
