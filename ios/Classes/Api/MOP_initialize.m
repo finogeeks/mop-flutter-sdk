@@ -48,6 +48,7 @@
         return;
     }
     [[FATExtClient sharedClient] fat_prepareExtensionApis];
+    [[FATClient sharedClient] setEnableLog:YES];
     success(@{});
     
     
