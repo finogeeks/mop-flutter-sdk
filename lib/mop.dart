@@ -9,19 +9,6 @@ typedef MopEventErrorCallback = void Function(dynamic event);
 
 typedef ExtensionApiHandler = Future Function(dynamic params);
 
-class ServerConfig {
-  String appkey;
-  String secret;
-  String apiServer;
-  String apiPrefix;
-  String cryptType;
-
-  ServerConfig(this.appkey, this.secret, this.apiServer, this.apiPrefix, this.cryptType);
-
-  Map<String, dynamic> toJson() =>
-      {'appkey': appkey, 'secret': secret, 'apiServer': apiServer, 'apiPrefix': apiPrefix, 'cryptType':cryptType};
-}
-
 class Mop {
   static final Mop _instance = new Mop._internal();
   MethodChannel _channel;
@@ -87,8 +74,7 @@ class Mop {
       String apiPrefix,
       String cryptType,
       bool disablePermission,
-      String userId,
-      List<ServerConfig> serverConfigs}) async {
+      String userId}) async {
     final Map ret = await _channel.invokeMethod('initialize', {
       'appkey': appkey,
       'secret': secret,
@@ -96,8 +82,7 @@ class Mop {
       'apiPrefix': apiPrefix,
       'cryptType': cryptType,
       'disablePermission': disablePermission,
-      'userId': userId,
-      'serverConfigs',serverConfigs.map((e) => e.toJson())
+      'userId': userId
     });
     return ret;
   }
