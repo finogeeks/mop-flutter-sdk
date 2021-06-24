@@ -5,11 +5,11 @@
 //  Created by EDY on 2021/6/22.
 //
 
-#import "MOP_parseWXQrCode.h"
+#import "MOP_parseAppletInfoFromWXQrCode.h"
 #import "MOPTools.h"
 #import <FinApplet/FinApplet.h>
 
-@implementation MOP_parseWXQrCode
+@implementation MOP_parseAppletInfoFromWXQrCode
 
 - (void)setupApiWithSuccess:(void (^)(NSDictionary<NSString *,id> * _Nonnull))success failure:(void (^)(id _Nullable))failure cancel:(void (^)(void))cancel {
     NSLog(@"MOP_parseWXQrCode：%@", self.qrCode);

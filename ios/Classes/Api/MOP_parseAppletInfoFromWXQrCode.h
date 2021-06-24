@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MOP_parseWXQrCode : MOPBaseApi
+@interface MOP_parseAppletInfoFromWXQrCode : MOPBaseApi
 @property(nonatomic,copy)NSString* qrCode; //二维码url
 @property(nonatomic,copy)NSString* apiServer; //服务器地址
 @end

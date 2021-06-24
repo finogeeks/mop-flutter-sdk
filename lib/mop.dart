@@ -164,11 +164,11 @@ class Mop {
     Map<String, Object> params = {'info': info};
     return await _channel.invokeMapMethod("scanOpenApplet", params);
   }
-  
 
-  Future<Map<String, dynamic>> parseWXQrcode(String qrCode,String apiServer) async {
-    final ret =
-        await _channel.invokeMapMethod("parseWXQrCode", {"wxQrCode": qrCode,"apiServer":apiServer});
+  Future<Map<String, dynamic>> parseAppletInfoFromWXQrCode(
+      String qrCode, String apiServer) async {
+    final ret = await _channel.invokeMapMethod("parseAppletInfoFromWXQrCode",
+        {"qrCode": qrCode, "apiServer": apiServer});
     return Map<String, dynamic>.from(ret);
   }
 
