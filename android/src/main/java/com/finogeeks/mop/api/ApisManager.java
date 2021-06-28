@@ -10,6 +10,7 @@ import com.finogeeks.mop.api.mop.BaseModule;
 import com.finogeeks.mop.api.mop.ExtensionApiModule;
 import com.finogeeks.mop.api.mop.VersionModule;
 import com.finogeeks.mop.api.mop.SmSignModule;
+import com.finogeeks.mop.api.mop.WXQrCodeModule;
 import com.finogeeks.mop.interfaces.Event;
 import com.finogeeks.mop.interfaces.IApi;
 
@@ -71,6 +72,7 @@ public class ApisManager {
         add(new ExtensionApiModule(activity));
         add(new VersionModule(activity));
         add(new SmSignModule(activity));
+        add(new WXQrCodeModule(activity));
     }
 
     private void add(IApi api) {

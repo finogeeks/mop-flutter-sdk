@@ -165,6 +165,9 @@ class Mop {
     return await _channel.invokeMapMethod("scanOpenApplet", params);
   }
 
+  ///
+  /// 根据微信QrCode信息解析小程序信息
+  ///
   Future<Map<String, dynamic>> parseAppletInfoFromWXQrCode(
       String qrCode, String apiServer) async {
     final ret = await _channel.invokeMapMethod("parseAppletInfoFromWXQrCode",
