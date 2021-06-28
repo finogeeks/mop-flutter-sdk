@@ -59,7 +59,7 @@ public class BaseModule extends BaseApi {
         if (disablePermission == null) {
             disablePermission = false;
         }
-        String userId = null;
+        String userId = "";
         if (param.get("userId") != null) {
             userId = (String) param.get("userId");
         }
