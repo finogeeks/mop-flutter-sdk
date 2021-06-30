@@ -3,7 +3,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'mop'
-  s.version          = '0.1.0'
+  s.version          = '0.1.1'
   s.summary          = 'finclip miniprogram flutter sdk'
   s.description      = <<-DESC
 A finclip miniprogram flutter sdk.
