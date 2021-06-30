@@ -166,6 +166,16 @@ class Mop {
   }
 
   ///
+  /// 根据微信QrCode信息解析小程序信息
+  ///
+  Future<Map<String, dynamic>> parseAppletInfoFromWXQrCode(
+      String qrCode, String apiServer) async {
+    final ret = await _channel.invokeMapMethod("parseAppletInfoFromWXQrCode",
+        {"qrCode": qrCode, "apiServer": apiServer});
+    return Map<String, dynamic>.from(ret);
+  }
+
+  ///
   /// register handler to provide custom info or behaviour
   /// 注册小程序事件处理
   ///

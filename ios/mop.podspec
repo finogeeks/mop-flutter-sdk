@@ -3,7 +3,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'mop'
-  s.version          = '0.1.0'
+  s.version          = '0.1.1'
   s.summary          = 'finclip miniprogram flutter sdk'
   s.description      = <<-DESC
 A finclip miniprogram flutter sdk.
@@ -17,7 +17,7 @@ A finclip miniprogram flutter sdk.
   s.dependency 'Flutter'
   s.ios.deployment_target = '9.0'
 
-  s.dependency 'FinApplet' , '2.30.1'
-  s.dependency 'FinAppletExt' , '2.30.1'
+  s.dependency 'FinApplet' , '2.31.0-alpha20210630v04'
+  s.dependency 'FinAppletExt' , '2.31.0-alpha20210630v04'
 end
 
