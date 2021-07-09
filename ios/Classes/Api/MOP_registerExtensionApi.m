@@ -21,11 +21,14 @@
         NSLog(@"%@",param);
         NSString* api = [@"extensionApi:" stringByAppendingString:self.name];
         [channel invokeMethod:api arguments:param result:^(id  _Nullable result) {
-            if([result isKindOfClass:[FlutterError class]]|| [result isKindOfClass:[FlutterMethodNotImplemented class] ])
+            NSLog(@"extensionApi reslut:%@",result);
+            if([result isKindOfClass:[FlutterError class]] || result == FlutterMethodNotImplemented)
             {
+                NSLog(@"extensionApi reslut:fail");
                 callback(FATExtensionCodeFailure,nil);
             }else
             {
+                NSLog(@"extensionApi callback:%@",result);
                 callback(FATExtensionCodeSuccess,result);
             }
         }];
