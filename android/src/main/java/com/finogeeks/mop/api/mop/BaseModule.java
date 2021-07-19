@@ -6,14 +6,11 @@ import android.content.Context;
 import com.finogeeks.lib.applet.BuildConfig;
 import com.finogeeks.lib.applet.client.FinAppClient;
 import com.finogeeks.lib.applet.client.FinAppConfig;
-import com.finogeeks.lib.applet.client.FinStoreConfig;
 import com.finogeeks.lib.applet.interfaces.FinCallback;
 import com.finogeeks.mop.api.BaseApi;
 import com.finogeeks.mop.interfaces.ICallback;
 import com.finogeeks.mop.service.MopPluginService;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class BaseModule extends BaseApi {
@@ -66,21 +63,14 @@ public class BaseModule extends BaseApi {
         if (param.get("userId") != null) {
             userId = (String) param.get("userId");
         }
-
-        Boolean needEncrypt = (Boolean) param.get("needEncrypt");
-        if (needEncrypt == null) needEncrypt = false;
-        Boolean debug = (Boolean) param.get("debug");
-        if (debug == null) debug = false;
-
         FinAppConfig config = new FinAppConfig.Builder()
                 .setSdkKey(appkey)
                 .setSdkSecret(secret)
                 .setApiUrl(apiServer)
                 .setApiPrefix(apiPrefix)
                 .setEncryptionType(cryptType)
-                .setNeedEncrypt(needEncrypt)
                 .setUserId(userId)
-                .setDebugMode(debug)
+                .setDebugMode(BuildConfig.DEBUG)
                 .setDisableRequestPermissions(disablePermission)
                 .build();
 

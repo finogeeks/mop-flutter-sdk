@@ -74,9 +74,7 @@ class Mop {
       String apiPrefix,
       String cryptType,
       bool disablePermission,
-      String userId,
-      bool needEncrypt = false,
-      bool debug = false}) async {
+      String userId}) async {
     final Map ret = await _channel.invokeMethod('initialize', {
       'appkey': appkey,
       'secret': secret,
@@ -84,9 +82,7 @@ class Mop {
       'apiPrefix': apiPrefix,
       'cryptType': cryptType,
       'disablePermission': disablePermission,
-      'userId': userId,
-      "needEncrypt": needEncrypt,
-      "debug": debug
+      'userId': userId
     });
     return ret;
   }
