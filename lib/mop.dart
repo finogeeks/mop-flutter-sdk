@@ -106,6 +106,7 @@ class Mop {
     final String apiPrefix,
     final String fingerprint,
     final String cryptType,
+    final String scene,
   }) async {
     Map<String, Object> params = {'appId': appId};
     Map param = {};
@@ -117,6 +118,7 @@ class Mop {
     if (apiPrefix != null) params["apiPrefix"] = apiPrefix;
     if (fingerprint != null) params["fingerprint"] = fingerprint;
     if (cryptType != null) params["cryptType"] = cryptType;
+    if (scene != null) param["scene"] = scene;
     final Map ret = await _channel.invokeMethod('openApplet', params);
     return ret;
   }
