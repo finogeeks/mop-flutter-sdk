@@ -78,7 +78,6 @@ public class BaseModule extends BaseApi {
                 .setApiUrl(apiServer)
                 .setApiPrefix(apiPrefix)
                 .setEncryptionType(cryptType)
-                .setNeedEncrypt(needEncrypt)
                 .setUserId(userId)
                 .setDebugMode(debug)
                 .setDisableRequestPermissions(disablePermission)
