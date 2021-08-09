@@ -67,8 +67,8 @@ public class BaseModule extends BaseApi {
             userId = (String) param.get("userId");
         }
 
-        Boolean needEncrypt = (Boolean) param.get("needEncrypt");
-        if (needEncrypt == null) needEncrypt = false;
+        Boolean encryptServerData = (Boolean) param.get("encryptServerData");
+        if (encryptServerData == null) encryptServerData = false;
         Boolean debug = (Boolean) param.get("debug");
         if (debug == null) debug = false;
 
@@ -78,6 +78,7 @@ public class BaseModule extends BaseApi {
                 .setApiUrl(apiServer)
                 .setApiPrefix(apiPrefix)
                 .setEncryptionType(cryptType)
+                .setEncryptServerData(encryptServerData)
                 .setUserId(userId)
                 .setDebugMode(debug)
                 .setDisableRequestPermissions(disablePermission)
