@@ -35,7 +35,10 @@
         config.cryptType = FATApiCryptTypeMD5;
     }
     config.currentUserId = [self.userId copy];
-    
+    // encryptServerData
+    NSLog(@"encryptServerData:%d",self.encryptServerData);
+    config.encryptServerData = self.encryptServerData;
+
     NSLog(@"disablePermission:%d",self.disablePermission);
     config.disableAuthorize = self.disablePermission;
     NSError* error = nil;
