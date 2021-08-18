@@ -70,11 +70,11 @@ class Mop {
   /// [disablePermission] is optional.
   ///
   Future<Map> initialize(String appkey, String secret,
-      {required String apiServer,
-      required String apiPrefix,
-      required String cryptType,
-      required bool disablePermission,
-      required String userId,
+      { String? apiServer,
+       String? apiPrefix,
+       String? cryptType,
+       bool? disablePermission,
+       String? userId,
       bool encryptServerData = false,
       bool debug = false}) async {
     final Map ret = await _channel.invokeMethod('initialize', {
@@ -103,26 +103,26 @@ class Mop {
   /// [cryptType] is optional. cryptType, should be MD5/SM
   Future<Map> openApplet(
     final String appId, {
-    required final String path,
-    required final String query,
-    required final int sequence,
-    required final String apiServer,
-    required final String apiPrefix,
-    required final String fingerprint,
-    required final String cryptType,
-    required final String scene,
+     final String? path,
+     final String? query,
+     final int? sequence,
+     final String? apiServer,
+     final String? apiPrefix,
+     final String? fingerprint,
+     final String? cryptType,
+     final String? scene,
   }) async {
     Map<String, Object> params = {'appId': appId};
     Map param = {};
     param["path"] = path;
     param["query"] = query;
     if (param.length > 0) params["params"] = param;
-    params["sequence"] = sequence;
-    params["apiServer"] = apiServer;
-    params["apiPrefix"] = apiPrefix;
-    params["fingerprint"] = fingerprint;
-    params["cryptType"] = cryptType;
-    param["scene"] = scene;
+    if (sequence != null) params["sequence"] = sequence;
+    if (apiServer != null) params["apiServer"] = apiServer;
+    if (apiPrefix != null) params["apiPrefix"] = apiPrefix;
+    if (fingerprint != null) params["fingerprint"] = fingerprint;
+    if (cryptType != null) params["cryptType"] = cryptType;
+    if (scene != null) param["scene"] = scene;
     final Map ret = await _channel.invokeMethod('openApplet', params);
     return ret;
   }
