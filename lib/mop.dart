@@ -193,9 +193,9 @@ class Mop {
       return handler.getUserInfo();
     };
     _extensionApis["getCustomMenus"] = (params) async {
-      final res = await handler.getCustomMenus(params["appId"]);
+     final res = await handler.getCustomMenus(params["appId"]);
       List<Map<String, dynamic>> list = [];
-      res?.forEach((element) {
+      res.forEach((element) {
         Map<String, dynamic> map = Map();
         map["menuId"] = element.menuId;
         map["image"] = element.image;
