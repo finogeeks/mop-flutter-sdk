@@ -267,5 +267,6 @@ module.exports = {
 
 ## Debug
 ```text
+## for ios
 ENABLE_BITCODE false
 ```
