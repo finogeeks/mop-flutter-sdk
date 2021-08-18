@@ -11,9 +11,9 @@ typedef ExtensionApiHandler = Future Function(dynamic params);
 
 class Mop {
   static final Mop _instance = new Mop._internal();
-  MethodChannel _channel;
-  EventChannel _mopEventChannel;
-  int eventId = 0;
+  late MethodChannel _channel;
+  late EventChannel _mopEventChannel;
+  late int eventId = 0;
   List<Map<String, dynamic>> _mopEventQueye = <Map<String, dynamic>>[];
 
   Map<String, ExtensionApiHandler> _extensionApis = {};
@@ -22,7 +22,7 @@ class Mop {
     return _instance;
   }
 
-  Mop._internal() {
+   Mop._internal() {
     print('mop: _internal');
     // init
     _channel = new MethodChannel('mop');
@@ -70,11 +70,11 @@ class Mop {
   /// [disablePermission] is optional.
   ///
   Future<Map> initialize(String appkey, String secret,
-      {String apiServer,
-      String apiPrefix,
-      String cryptType,
-      bool disablePermission,
-      String userId,
+      {required String apiServer,
+      required String apiPrefix,
+      required String cryptType,
+      required bool disablePermission,
+      required String userId,
       bool encryptServerData = false,
       bool debug = false}) async {
     final Map ret = await _channel.invokeMethod('initialize', {
@@ -103,26 +103,26 @@ class Mop {
   /// [cryptType] is optional. cryptType, should be MD5/SM
   Future<Map> openApplet(
     final String appId, {
-    final String path,
-    final String query,
-    final int sequence,
-    final String apiServer,
-    final String apiPrefix,
-    final String fingerprint,
-    final String cryptType,
-    final String scene,
+    required final String path,
+    required final String query,
+    required final int sequence,
+    required final String apiServer,
+    required final String apiPrefix,
+    required final String fingerprint,
+    required final String cryptType,
+    required final String scene,
   }) async {
     Map<String, Object> params = {'appId': appId};
     Map param = {};
-    if (path != null) param["path"] = path;
-    if (query != null) param["query"] = query;
+    param["path"] = path;
+    param["query"] = query;
     if (param.length > 0) params["params"] = param;
-    if (sequence != null) params["sequence"] = sequence;
-    if (apiServer != null) params["apiServer"] = apiServer;
-    if (apiPrefix != null) params["apiPrefix"] = apiPrefix;
-    if (fingerprint != null) params["fingerprint"] = fingerprint;
-    if (cryptType != null) params["cryptType"] = cryptType;
-    if (scene != null) param["scene"] = scene;
+    params["sequence"] = sequence;
+    params["apiServer"] = apiServer;
+    params["apiPrefix"] = apiPrefix;
+    params["fingerprint"] = fingerprint;
+    params["cryptType"] = cryptType;
+    param["scene"] = scene;
     final Map ret = await _channel.invokeMethod('openApplet', params);
     return ret;
   }
@@ -135,7 +135,7 @@ class Mop {
   ///
   Future<Map<String, dynamic>> currentApplet() async {
     final ret = await _channel.invokeMapMethod("currentApplet");
-    return Map<String, dynamic>.from(ret);
+    return Map<String, dynamic>.from(ret!);
   }
 
   ///
@@ -160,7 +160,7 @@ class Mop {
   Future<String> sdkVersion() async {
     return await _channel
         .invokeMapMethod("sdkVersion")
-        .then((value) => value["data"]);
+        .then((value) => value?["data"]);
   }
 
   ///
@@ -178,7 +178,7 @@ class Mop {
       String qrCode, String apiServer) async {
     final ret = await _channel.invokeMapMethod("parseAppletInfoFromWXQrCode",
         {"qrCode": qrCode, "apiServer": apiServer});
-    return Map<String, dynamic>.from(ret);
+    return Map<String, dynamic>.from(ret!);
   }
 
   ///
@@ -226,7 +226,7 @@ class Mop {
   Future<String> getSMSign(String plainText) async {
     var result =
         await _channel.invokeMapMethod("smsign", {'plainText': plainText});
-    var data = result['data']['data'];
+    var data = result?['data']['data'];
     print(data);
     return data;
   }
