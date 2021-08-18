@@ -264,3 +264,8 @@ module.exports = {
   ]
 }
 ```
+
+## Debug
+```text
+ENABLE_BITCODE false
+```
