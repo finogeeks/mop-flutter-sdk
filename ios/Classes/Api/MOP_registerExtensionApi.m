@@ -22,15 +22,28 @@
         NSString* api = [@"extensionApi:" stringByAppendingString:self.name];
         [channel invokeMethod:api arguments:param result:^(id  _Nullable result) {
             NSLog(@"extensionApi reslut:%@",result);
+            // 先判断是否flutter发生错误
             BOOL isFlutterError = [result isKindOfClass:[FlutterError class]] || result == FlutterMethodNotImplemented;
-            BOOL hasError = [[result allKeys] containsObject:@"errMsg"];
-            if (isFlutterError || hasError) {
+            if (isFlutterError) {
                 NSLog(@"extensionApi reslut:fail");
                 callback(FATExtensionCodeFailure,nil);
-            } else {
-                NSLog(@"extensionApi callback:%@",result);
-                callback(FATExtensionCodeSuccess,result);
+                return;
             }
+            // 再判断回调是否为失败
+            BOOL hasError = [[result allKeys] containsObject:@"errMsg"];
+            if (hasError) {
+                NSString *errMsg = result[@"errMsg"];
+                NSString *errPrefix = [NSString stringWithFormat:@"%@:fail", self.name];
+                BOOL isFail = [errMsg hasPrefix:errPrefix];
+                if (isFail) {
+                    NSLog(@"extensionApi reslut:fail");
+                    callback(FATExtensionCodeFailure,nil);
+                    return;
+                }
+            }
+            // 其他的按成功处理
+            NSLog(@"extensionApi callback:%@",result);
+            callback(FATExtensionCodeSuccess,result);
         }];
     }];
     success(@{});
