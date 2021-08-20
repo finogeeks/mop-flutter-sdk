@@ -22,12 +22,12 @@
         NSString* api = [@"extensionApi:" stringByAppendingString:self.name];
         [channel invokeMethod:api arguments:param result:^(id  _Nullable result) {
             NSLog(@"extensionApi reslut:%@",result);
-            if([result isKindOfClass:[FlutterError class]] || result == FlutterMethodNotImplemented)
-            {
+            BOOL isFlutterError = [result isKindOfClass:[FlutterError class]] || result == FlutterMethodNotImplemented;
+            BOOL hasError = [[result allKeys] containsObject:@"errMsg"];
+            if (isFlutterError || hasError) {
                 NSLog(@"extensionApi reslut:fail");
                 callback(FATExtensionCodeFailure,nil);
-            }else
-            {
+            } else {
                 NSLog(@"extensionApi callback:%@",result);
                 callback(FATExtensionCodeSuccess,result);
             }
