@@ -76,7 +76,8 @@ class Mop {
       bool disablePermission,
       String userId,
       bool encryptServerData = false,
-      bool debug = false}) async {
+      bool debug = false,
+      bool bindAppletWithMainProcess = false}) async {
     final Map ret = await _channel.invokeMethod('initialize', {
       'appkey': appkey,
       'secret': secret,
@@ -86,7 +87,8 @@ class Mop {
       'disablePermission': disablePermission,
       'userId': userId,
       "encryptServerData": encryptServerData,
-      "debug": debug
+      "debug": debug,
+      "bindAppletWithMainProcess": bindAppletWithMainProcess
     });
     return ret;
   }

@@ -71,6 +71,8 @@ public class BaseModule extends BaseApi {
         if (encryptServerData == null) encryptServerData = false;
         Boolean debug = (Boolean) param.get("debug");
         if (debug == null) debug = false;
+        Boolean bindAppletWithMainProcess = (Boolean) param.get("bindAppletWithMainProcess");
+        if (bindAppletWithMainProcess == null) bindAppletWithMainProcess = false;
 
         FinAppConfig config = new FinAppConfig.Builder()
                 .setSdkKey(appkey)
@@ -82,6 +84,7 @@ public class BaseModule extends BaseApi {
                 .setUserId(userId)
                 .setDebugMode(debug)
                 .setDisableRequestPermissions(disablePermission)
+                .setBindAppletWithMainProcess(bindAppletWithMainProcess)
                 .build();
 
         final Application application = MopPluginService.getInstance().getActivity().getApplication();
