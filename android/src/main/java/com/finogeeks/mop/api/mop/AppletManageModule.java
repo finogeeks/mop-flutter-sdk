@@ -19,7 +19,7 @@ public class AppletManageModule extends BaseApi {
 
     @Override
     public String[] apis() {
-        return new String[]{"currentApplet", "closeAllApplets", "clearApplets"};
+        return new String[]{"currentApplet", "closeAllApplets", "clearApplets", "removeUsedApplet"};
     }
 
     @Override
@@ -49,6 +49,14 @@ public class AppletManageModule extends BaseApi {
         } else if (event.equals("clearApplets")) {
             FinAppClient.INSTANCE.getAppletApiManager().clearApplets();
             callback.onSuccess(null);
+        } else if (event.equals("removeUsedApplet")) {
+            if (param.containsKey("appId") && param.get("appId") instanceof String) {
+                String appId = (String) param.get("appId");
+                FinAppClient.INSTANCE.getAppletApiManager().removeUsedApplet(appId);
+                callback.onSuccess(null);
+            } else {
+                callback.onFail(null);
+            }
         }
     }
 }

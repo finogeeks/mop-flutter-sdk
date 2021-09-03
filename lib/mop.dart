@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter/services.dart';
 import 'package:mop/api.dart';
@@ -154,6 +153,12 @@ class Mop {
   ///
   Future clearApplets() async {
     return await _channel.invokeMethod("clearApplets");
+  }
+
+  /// 清除指定的小程序本体缓存
+  Future removeUsedApplet(String appId) async {
+    Map<String, Object> params = {'appId': appId};
+    return await _channel.invokeMethod("removeUsedApplet", params);
   }
 
   ///
