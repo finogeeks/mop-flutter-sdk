@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:mop/api.dart';
 
@@ -9,26 +10,29 @@ typedef MopEventErrorCallback = void Function(dynamic event);
 typedef ExtensionApiHandler = Future Function(dynamic params);
 
 class Mop {
-  static final Mop _instance = new Mop._internal();
-  MethodChannel _channel;
-  EventChannel _mopEventChannel;
-  int eventId = 0;
-  List<Map<String, dynamic>> _mopEventQueye = <Map<String, dynamic>>[];
+  static final Mop _instance = Mop._internal();
 
-  Map<String, ExtensionApiHandler> _extensionApis = {};
+  late MethodChannel _channel;
+  late EventChannel _mopEventChannel;
+
+  int eventId = 0;
+
+  final List<Map<String, dynamic>> _mopEventQueye = <Map<String, dynamic>>[];
+
+  final Map<String, ExtensionApiHandler> _extensionApis = {};
 
   factory Mop() {
     return _instance;
   }
 
   Mop._internal() {
-    print('mop: _internal');
+    debugPrint('mop: _internal');
     // init
-    _channel = new MethodChannel('mop');
+    _channel = const MethodChannel('mop');
     _channel.setMethodCallHandler(_handlePlatformMethodCall);
-    _mopEventChannel = new EventChannel('plugins.mop.finogeeks.com/mop_event');
+    _mopEventChannel = const EventChannel('plugins.mop.finogeeks.com/mop_event');
     _mopEventChannel.receiveBroadcastStream().listen((dynamic value) {
-      print('matrix: receiveBroadcastStream $value');
+      debugPrint('matrix: receiveBroadcastStream $value');
       for (Map m in _mopEventQueye) {
         if (m['event'] == value['event']) {
           m['MopEventCallback'](value['body']);
@@ -47,7 +51,7 @@ class Mop {
   }
 
   Future<dynamic> _handlePlatformMethodCall(MethodCall call) async {
-    print("_handlePlatformMethodCall: method:${call.method}");
+    debugPrint("_handlePlatformMethodCall: method:${call.method}");
     if (call.method.startsWith("extensionApi:")) {
       final name = call.method.substring("extensionApi:".length);
       final handler = _extensionApis[name];
@@ -69,11 +73,11 @@ class Mop {
   /// [disablePermission] is optional.
   ///
   Future<Map> initialize(String appkey, String secret,
-      {String apiServer,
-      String apiPrefix,
-      String cryptType,
-      bool disablePermission,
-      String userId,
+      {String? apiServer,
+      String? apiPrefix,
+      String? cryptType,
+      bool? disablePermission,
+      String? userId,
       bool encryptServerData = false,
       bool debug = false,
       bool bindAppletWithMainProcess = false}) async {
@@ -104,20 +108,20 @@ class Mop {
   /// [cryptType] is optional. cryptType, should be MD5/SM
   Future<Map> openApplet(
     final String appId, {
-    final String path,
-    final String query,
-    final int sequence,
-    final String apiServer,
-    final String apiPrefix,
-    final String fingerprint,
-    final String cryptType,
-    final String scene,
+    final String? path,
+    final String? query,
+    final int? sequence,
+    final String? apiServer,
+    final String? apiPrefix,
+    final String? fingerprint,
+    final String? cryptType,
+    final String? scene,
   }) async {
     Map<String, Object> params = {'appId': appId};
     Map param = {};
     if (path != null) param["path"] = path;
     if (query != null) param["query"] = query;
-    if (param.length > 0) params["params"] = param;
+    if (param.isNotEmpty) params["params"] = param;
     if (sequence != null) params["sequence"] = sequence;
     if (apiServer != null) params["apiServer"] = apiServer;
     if (apiPrefix != null) params["apiPrefix"] = apiPrefix;
@@ -136,7 +140,7 @@ class Mop {
   ///
   Future<Map<String, dynamic>> currentApplet() async {
     final ret = await _channel.invokeMapMethod("currentApplet");
-    return Map<String, dynamic>.from(ret);
+    return Map<String, dynamic>.from(ret!);
   }
 
   ///
@@ -165,9 +169,7 @@ class Mop {
   /// 获取运行时版本号
   ///
   Future<String> sdkVersion() async {
-    return await _channel
-        .invokeMapMethod("sdkVersion")
-        .then((value) => value["data"]);
+    return await _channel.invokeMapMethod("sdkVersion").then((value) => value!["data"]);
   }
 
   ///
@@ -181,11 +183,9 @@ class Mop {
   ///
   /// 根据微信QrCode信息解析小程序信息
   ///
-  Future<Map<String, dynamic>> parseAppletInfoFromWXQrCode(
-      String qrCode, String apiServer) async {
-    final ret = await _channel.invokeMapMethod("parseAppletInfoFromWXQrCode",
-        {"qrCode": qrCode, "apiServer": apiServer});
-    return Map<String, dynamic>.from(ret);
+  Future<Map<String, dynamic>> parseAppletInfoFromWXQrCode(String qrCode, String apiServer) async {
+    final ret = await _channel.invokeMapMethod("parseAppletInfoFromWXQrCode", {"qrCode": qrCode, "apiServer": apiServer});
+    return Map<String, dynamic>.from(ret!);
   }
 
   ///
@@ -202,20 +202,19 @@ class Mop {
     _extensionApis["getCustomMenus"] = (params) async {
       final res = await handler.getCustomMenus(params["appId"]);
       List<Map<String, dynamic>> list = [];
-      res?.forEach((element) {
+      for (var element in res) {
         Map<String, dynamic> map = Map();
         map["menuId"] = element.menuId;
         map["image"] = element.image;
         map["title"] = element.title;
         map["type"] = element.type;
         list.add(map);
-      });
-      print("registerAppletHandler getCustomMenus list $list");
+      }
+      debugPrint("registerAppletHandler getCustomMenus list $list");
       return list;
     };
     _extensionApis["onCustomMenuClick"] = (params) async {
-      return handler.onCustomMenuClick(
-          params["appId"], params["path"], params["menuId"], params["appInfo"]);
+      return handler.onCustomMenuClick(params["appId"], params["path"], params["menuId"], params["appInfo"]);
     };
     _channel.invokeMethod("registerAppletHandler");
   }
@@ -231,10 +230,9 @@ class Mop {
 
   /// 获取国密加密
   Future<String> getSMSign(String plainText) async {
-    var result =
-        await _channel.invokeMapMethod("smsign", {'plainText': plainText});
-    var data = result['data']['data'];
-    print(data);
+    var result = await _channel.invokeMapMethod("smsign", {'plainText': plainText});
+    var data = result!['data']['data'];
+    debugPrint(data);
     return data;
   }
 }

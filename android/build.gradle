@@ -1,39 +1,14 @@
-
-apply plugin: 'com.android.library'
-
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'kotlin-android-extensions'
-
 group 'com.finogeeks.mop'
 version '1.0'
 
 buildscript {
     repositories {
         google()
-        jcenter()
-        maven {
-            url "https://gradle.finogeeks.club/repository/finogeeks/"
-            credentials {
-                username "finclip"
-                password "Abcd@@1234"
-            }
-        }
-        maven {
-            url "https://gradle.finogeeks.club/repository/applet/"
-            credentials {
-                username "finclip"
-                password "Abcd@@1234"
-            }
-        }
-        maven { url "https://jitpack.io" }
-
+        mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.3'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.61"
-
+        classpath 'com.android.tools.build:gradle:4.1.0'
     }
 }
 
@@ -60,14 +35,20 @@ rootProject.allprojects {
     }
 }
 
+apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 28
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     defaultConfig {
         minSdkVersion 21
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -75,22 +56,10 @@ android {
         }
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    lintOptions {
-        disable 'InvalidPackage'
-    }
 }
 
-kapt {
-    arguments {
-        arg("moduleName", project.getName())
-    }
-}
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.finogeeks.lib:finapplet:2.34.1'
-    implementation 'com.finogeeks.mop:plugins:2.34.1'
+    implementation 'com.finogeeks.lib:finapplet:+'
+    implementation 'com.finogeeks.mop:plugins:+'
 }
