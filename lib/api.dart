@@ -36,4 +36,7 @@ abstract class AppletHandler {
   ///自定义菜单点击处理
   Future<void> onCustomMenuClick(
       String appId, String path, String menuId, String appInfo);
+
+  //打开小程序
+  Future<void> appletDidOpen(String appId);
 }

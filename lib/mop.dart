@@ -54,6 +54,8 @@ class Mop {
       if (handler != null) {
         return await handler(call.arguments);
       }
+    } else if (call.method.startsWith("extensionApi:")) {
+      
     }
   }
 
@@ -216,6 +218,9 @@ class Mop {
     _extensionApis["onCustomMenuClick"] = (params) async {
       return handler.onCustomMenuClick(
           params["appId"], params["path"], params["menuId"], params["appInfo"]);
+    };
+    _extensionApis["appletDidOpen"] = (params) async {
+      return handler.appletDidOpen(params["appId"]);
     };
     _channel.invokeMethod("registerAppletHandler");
   }

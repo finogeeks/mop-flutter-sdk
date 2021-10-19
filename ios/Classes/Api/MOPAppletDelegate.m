@@ -102,4 +102,15 @@
     }];
 }
 
+- (void)applet:(NSString *)appletId didOpenCompletion:(NSError *)error {
+    if (!appletId) {
+        return;
+    }
+    NSDictionary *params = @{@"appId":appletId};
+    FlutterMethodChannel *channel = [[MopPlugin instance] methodChannel];
+    [channel invokeMethod:@"extensionApi:appletDidOpen" arguments:params result:^(id _Nullable result) {
+        
+    }];
+}
+
 @end
