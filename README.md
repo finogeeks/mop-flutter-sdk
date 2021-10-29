@@ -1,18 +1,40 @@
-# 凡泰极客小程序 Flutter 插件
+<p align="center">
+    <a href="https://www.finclip.com?from=github">
+    <img width="auto" src="https://www.finclip.com/mop/document/images/logo.png">
+    </a>
+</p>
 
-本插件提供在 Flutter 运行环境中运行小程序能力。
+<p align="center"> 
+    <strong>FinClip Flutter SDK</strong></br>
+<p>
+<p align="center"> 
+        本项目提供在 Flutter 环境中运行小程序的能力
+<p>
 
-## 集成
+<p align="center"> 
+	👉 <a href="https://www.finclip.com?from=github">https://www.finclip.com/</a> 👈
+</p>
 
-在项目pubspec.yaml文件中添加依赖
+-----
+## 🤔 FinClip 是什么?
 
-```
+有没有**想过**，开发好的微信小程序能放在自己的 APP 里直接运行，只需要开发一次小程序，就能在不同的应用中打开它，是不是很不可思议？
+
+有没有**试过**，在自己的 APP 中引入一个 SDK ，应用中不仅可以打开小程序，还能自定义小程序接口，修改小程序样式，是不是觉得更不可思议？
+
+这就是 FinClip ，就是有这么多不可思议！
+
+## ⚙️ Flutter 集成
+
+在项目 `pubspec.yaml` 文件中添加依赖
+
+```yaml
 mop: latest.version
 ```
 
-## 示例
+## 🖥 示例
 
-```
+```flutter
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:io';
@@ -34,7 +56,7 @@ class _MyAppState extends State<MyApp> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> init() async {
-    if (Platform.isIOS) {
+    if (Platform.isiOS) {
       //com.finogeeks.mopExample
       final res = await Mop.instance.initialize(
           '22LyZEib0gLTQdU3MUauARlLry7JL/2fRpscC9kpGZQA', '1c11d7252c53e0b6',
@@ -115,15 +137,13 @@ class _MyAppState extends State<MyApp> {
 }
 ```
 
-## 接口文档
+## 📋  接口文档
 
-1. 初始化小程序
-
-在使用sdk提供的api之前必须要初始化sdk，初始化sdk的接口为
+### 1. 初始化小程序
+   
+   在使用 SDK 提供的 API 之前必须要初始化 SDK ，初始化 SDK 的接口如下
 
 ```
-
-  ///
   ///
   /// initialize mop miniprogram engine.
   /// 初始化小程序
@@ -137,18 +157,16 @@ class _MyAppState extends State<MyApp> {
       {String apiServer, String apiPrefix})
 ```
 
-使用示例:
-
+使用示例：
 ```
 final res = await Mop.instance.initialize(
           '22LyZEib0gLTQdU3MUauARlLry7JL/2fRpscC9kpGZQA', '1c11d7252c53e0b6',
           apiServer: 'https://api.finclip.com', apiPrefix: '/api/v1/mop');
 ```
 
-2. 打开小程序
+### 2. 打开小程序
 
 ```
-  ///
   ///
   /// open the miniprogram [appId] from the  mop server.
   /// 打开小程序
@@ -161,9 +179,9 @@ final res = await Mop.instance.initialize(
       {final String path, final String query, final int sequence})
 ```
 
-3. 获取当前正在使用的小程序信息
+### 3. 获取当前正在使用的小程序信息
 
-当前小程序信息包括的字段有appId,name,icon,description,version,thumbnail
+当前小程序信息包括的字段有 `appId`, `name`, `icon`, `description`, `version`, `thumbnail`
 
 ```
   ///
@@ -175,7 +193,7 @@ final res = await Mop.instance.initialize(
   Future<Map<String, dynamic>> currentApplet()
 ```
 
-4. 关闭当前打开的所有小程序
+### 4. 关闭当前打开的所有小程序
 
 ```
   ///
@@ -185,10 +203,9 @@ final res = await Mop.instance.initialize(
   Future closeAllApplets()
 ```
 
-5. 清除缓存的小程序
+### 5. 清除缓存的小程序
 
 清除缓存的小程序，当再次打开时，会重新下载小程序
-
 ```
   ///
   /// clear applets cache
@@ -197,7 +214,7 @@ final res = await Mop.instance.initialize(
   Future clearApplets() 
 ```
 
-6. 注册小程序事件处理
+### 6. 注册小程序事件处理
 
 当小程序内触发指定事件时，会通知到使用者，比如小程序被转发，小程序需要获取用户信息，注册处理器来做出对应的响应
 
@@ -210,7 +227,6 @@ final res = await Mop.instance.initialize(
 ```
 
 处理器的结构
-
 ```
 abstract class AppletHandler {
   ///
@@ -238,19 +254,19 @@ abstract class AppletHandler {
 }
 ```
 
-7. 注册拓展api
+### 7. 注册拓展 API
 
-如果，我们的小程序SDK API不满足您的需求，您可以注册自定义的小程序API，然后就可以在小程序内调用自已定义的API了。
+如果，我们的小程序 SDK API 不满足您的需求，您可以注册自定义的小程序API，然后就可以在小程序内调用自已定义的 API 了。
 
-···
+```
   ///
   /// register extension api
   /// 注册拓展api
   ///
   void registerExtensionApi(String name, ExtensionApiHandler handler)
-···
+```
 
-ios需要在小程序根目录创建FinChatConf.js文件，配置实例如下
+iOS 需要在小程序根目录创建 `FinChatConf.js` 文件，配置实例如下
 
 ```
 module.exports = {
@@ -264,3 +280,22 @@ module.exports = {
   ]
 }
 ```
+
+## 🔗 常用链接
+以下内容是您在 FinClip 进行开发与体验时，常见的问题与指引信息
+
+- [FinClip 官网](https://www.finclip.com/#/home)
+- [示例小程序](https://www.finclip.com/#/market)
+- [文档中心](https://www.finclip.com/mop/document/)
+- [SDK 部署指南](https://www.finclip.com/mop/document/introduce/quickStart/intergration-guide.html)
+- [小程序代码结构](https://www.finclip.com/mop/document/develop/guide/structure.html)
+- [iOS 集成指引](https://www.finclip.com/mop/document/runtime-sdk/ios/ios-integrate.html)
+- [Android 集成指引](https://www.finclip.com/mop/document/runtime-sdk/android/android-integrate.html)
+- [Flutter 集成指引](https://www.finclip.com/mop/document/runtime-sdk/flutter/flutter-integrate.html)
+
+## ☎️ 联系我们
+微信扫描下面二维码，关注官方公众号 **「凡泰极客」**，获取更多精彩内容。<br>
+<img width="150px" src="https://www.finclip.com/mop/document/images/ic_qr.svg">
+
+微信扫描下面二维码，邀请进官方微信交流群（加好友备注：finclip 咨询），获取更多精彩内容。<br>
+<img width="150px" src="https://finclip-homeweb-1251849568.cos.ap-guangzhou.myqcloud.com/images/ldy111.jpg">
