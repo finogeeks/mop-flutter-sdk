@@ -54,9 +54,7 @@ class Mop {
       if (handler != null) {
         return await handler(call.arguments);
       }
-    } else if (call.method.startsWith("extensionApi:")) {
-      
-    }
+    } else if (call.method.startsWith("extensionApi:")) {}
   }
 
   ///
@@ -241,5 +239,11 @@ class Mop {
     var data = result['data']['data'];
     print(data);
     return data;
+  }
+
+  /// WKWebView的弹性设置
+  void webViewBounces(bool bounces) async {
+    await _channel.invokeMapMethod("webViewBounces", {'bounces': bounces});
+    return;
   }
 }
