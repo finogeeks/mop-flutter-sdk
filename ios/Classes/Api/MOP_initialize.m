@@ -51,7 +51,7 @@
         return;
     }
     [[FATExtClient sharedClient] fat_prepareExtensionApis];
-    [[FATExtClient sharedClient] fat_UsingMapType:@"FATExtMapStyleGD" MapKey:@"6f0f28c4138cbaa51aa5890e26996ea2"];
+//    [[FATExtClient sharedClient] fat_UsingMapType:@"FATExtMapStyleGD" MapKey:@"6f0f28c4138cbaa51aa5890e26996ea2"];
 
     [[FATClient sharedClient] setEnableLog:YES];
     success(@{});
