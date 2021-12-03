@@ -8,6 +8,7 @@
 #import "MOP_initialize.h"
 #import <FinApplet/FinApplet.h>
 #import <FinAppletExt/FinAppletExt.h>
+#import <FinAppletWebRTC/FinAppletWebRTC.h>
 
 @implementation MOP_initialize
 
@@ -54,6 +55,7 @@
 //    [[FATExtClient sharedClient] fat_UsingMapType:@"FATExtMapStyleGD" MapKey:@"6f0f28c4138cbaa51aa5890e26996ea2"];
 
     [[FATClient sharedClient] setEnableLog:YES];
+    [FATWebRTCComponent registerComponent];
     success(@{});
     
     
