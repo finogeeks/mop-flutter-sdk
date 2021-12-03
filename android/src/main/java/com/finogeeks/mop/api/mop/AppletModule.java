@@ -53,14 +53,18 @@ public class AppletModule extends BaseApi {
         String appId = String.valueOf(param.get("appId"));
         Integer sequence = (Integer) param.get("sequence");
         Map<String, String> params = (Map) param.get("params");
+        // mContext是FlutterActivity，
+        // 在Android 6.0、7.0系统的部分设备中热启动小程序时，如果context参数用mContext，会出现无法启动小程序的问题
+        // 所以这里使用Application Context
+        Context context = mContext.getApplicationContext();
         if (params == null) {
             if (sequence == null) {
-                FinAppClient.INSTANCE.getAppletApiManager().startApplet(mContext, appId);
+                FinAppClient.INSTANCE.getAppletApiManager().startApplet(context, appId);
             } else {
-                FinAppClient.INSTANCE.getAppletApiManager().startApplet(mContext, appId, sequence, null);
+                FinAppClient.INSTANCE.getAppletApiManager().startApplet(context, appId, sequence, null);
             }
         } else {
-            FinAppClient.INSTANCE.getAppletApiManager().startApplet(mContext, appId, params);
+            FinAppClient.INSTANCE.getAppletApiManager().startApplet(context, appId, params);
         }
 //        String apiServer = (String) param.get("apiServer");
 //        String apiPrefix = (String) param.get("apiPrefix");
