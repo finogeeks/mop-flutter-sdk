@@ -8,8 +8,7 @@
 #import "MOP_initialize.h"
 #import <FinApplet/FinApplet.h>
 #import <FinAppletExt/FinAppletExt.h>
-#import <FinAppletWebRTC/FinAppletWebRTC.h>
-#import <FinAppletGDMap/FinAppletGDMap.h>
+// #import <FinAppletWebRTC/FinAppletWebRTC.h>
 
 @implementation MOP_initialize
 
@@ -57,7 +56,7 @@
     
     [FATGDMapComponent setGDMapAppKey:@"6f0f28c4138cbaa51aa5890e26996ea2"];
     [[FATClient sharedClient] setEnableLog:YES];
-    [FATWebRTCComponent registerComponent];
+    // [FATWebRTCComponent registerComponent];
     success(@{});
     
     
