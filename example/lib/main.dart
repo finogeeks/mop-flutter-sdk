@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:io';
@@ -20,13 +22,11 @@ class _MyAppState extends State<MyApp> {
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> init() async {
     if (Platform.isIOS) {
-      final res = await Mop.instance.initialize(
-          '22LyZEib0gLTQdU3MUauAZ0pZVbKTWGmNN6Lx8hXhIkA', '74bde5fad53a817c',
+      final res = await Mop.instance.initialize('22LyZEib0gLTQdU3MUauAZ0pZVbKTWGmNN6Lx8hXhIkA', '74bde5fad53a817c',
           apiServer: 'https://api.finclip.com', apiPrefix: '/api/v1/mop');
       print(res);
     } else if (Platform.isAndroid) {
-      final res = await Mop.instance.initialize(
-          '22LyZEib0gLTQdU3MUauAZ0pZVbKTWGmNN6Lx8hXhIkA', '74bde5fad53a817c',
+      final res = await Mop.instance.initialize('22LyZEib0gLTQdU3MUauAZ0pZVbKTWGmNN6Lx8hXhIkA', '74bde5fad53a817c',
           apiServer: 'https://api.finclip.com', apiPrefix: '/api/v1/mop');
       print(res);
     }
@@ -59,10 +59,9 @@ class _MyAppState extends State<MyApp> {
                       end: Alignment.bottomCenter,
                     ),
                   ),
-                  child: FlatButton(
+                  child: TextButton(
                     onPressed: () {
-                      Mop.instance.openApplet('5ea03fa563cb900001d73863',
-                          path: 'pages/index/index', query: '');
+                      Mop.instance.openApplet('5ea03fa563cb900001d73863', path: 'pages/index/index', query: '');
                     },
                     child: Text(
                       '打开画图小程序',
@@ -82,7 +81,7 @@ class _MyAppState extends State<MyApp> {
                       end: Alignment.bottomCenter,
                     ),
                   ),
-                  child: FlatButton(
+                  child: TextButton(
                     onPressed: () {
                       Mop.instance.openApplet('5ea0401463cb900001d73865');
                     },
@@ -104,7 +103,7 @@ class _MyAppState extends State<MyApp> {
                       end: Alignment.bottomCenter,
                     ),
                   ),
-                  child: FlatButton(
+                  child: TextButton(
                     onPressed: () {
                       Mop.instance.openApplet('5ea0412663cb900001d73867');
                     },
