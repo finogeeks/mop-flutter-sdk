@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:mop/api.dart';
 
@@ -13,22 +14,22 @@ class Mop {
   late MethodChannel _channel;
   late EventChannel _mopEventChannel;
   late int eventId = 0;
-  List<Map<String, dynamic>> _mopEventQueye = <Map<String, dynamic>>[];
+  final List<Map<String, dynamic>> _mopEventQueye = <Map<String, dynamic>>[];
 
-  Map<String, ExtensionApiHandler> _extensionApis = {};
+  final Map<String, ExtensionApiHandler> _extensionApis = {};
 
   factory Mop() {
     return _instance;
   }
 
-   Mop._internal() {
-    print('mop: _internal');
+  Mop._internal() {
+    debugPrint('mop: _internal');
     // init
-    _channel = new MethodChannel('mop');
+    _channel = const MethodChannel('mop');
     _channel.setMethodCallHandler(_handlePlatformMethodCall);
-    _mopEventChannel = new EventChannel('plugins.mop.finogeeks.com/mop_event');
+    _mopEventChannel = const EventChannel('plugins.mop.finogeeks.com/mop_event');
     _mopEventChannel.receiveBroadcastStream().listen((dynamic value) {
-      print('matrix: receiveBroadcastStream $value');
+      debugPrint('matrix: receiveBroadcastStream $value');
       for (Map m in _mopEventQueye) {
         if (m['event'] == value['event']) {
           m['MopEventCallback'](value['body']);
@@ -47,7 +48,7 @@ class Mop {
   }
 
   Future<dynamic> _handlePlatformMethodCall(MethodCall call) async {
-    print("_handlePlatformMethodCall: method:${call.method}");
+    debugPrint("_handlePlatformMethodCall: method:${call.method}");
     if (call.method.startsWith("extensionApi:")) {
       final name = call.method.substring("extensionApi:".length);
       final handler = _extensionApis[name];
@@ -55,7 +56,7 @@ class Mop {
         return await handler(call.arguments);
       }
     } else if (call.method.startsWith("extensionApi:")) {
-      
+
     }
   }
 
@@ -212,12 +213,11 @@ class Mop {
         map["type"] = element.type;
         list.add(map);
       });
-      print("registerAppletHandler getCustomMenus list $list");
+      debugPrint("registerAppletHandler getCustomMenus list $list");
       return list;
     };
     _extensionApis["onCustomMenuClick"] = (params) async {
-      return handler.onCustomMenuClick(
-          params["appId"], params["path"], params["menuId"], params["appInfo"]);
+      return handler.onCustomMenuClick(params["appId"], params["path"], params["menuId"], params["appInfo"]);
     };
     _extensionApis["appletDidOpen"] = (params) async {
       return handler.appletDidOpen(params["appId"]);
@@ -239,7 +239,7 @@ class Mop {
     var result =
         await _channel.invokeMapMethod("smsign", {'plainText': plainText});
     var data = result?['data']['data'];
-    print(data);
+    debugPrint(data);
     return data;
   }
 }
