@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ffi';
 
 import 'package:flutter/services.dart';
 import 'package:mop/api.dart';
@@ -8,6 +9,24 @@ typedef MopEventErrorCallback = void Function(dynamic event);
 
 typedef ExtensionApiHandler = Future Function(dynamic params);
 
+class FinStoreConfig {
+  String sdkKey; //创建应用时生成的SDK Key
+  String sdkSecret; //创建应用时生成的SDK secret
+  String apiServer; //服务器地址，客户部署的后台地址
+
+  String apmServer; //apm统计服务器的地址,如果不填，则默认与apiServer一致
+  int cryptType; //网络接口加密类型，默认为MD5 0:MD5 1:国密MD5
+  String fingerprint; //SDK指纹 证联环境(https://open.fdep.cn/) 时必填，其他环境的不用填
+  String
+      encryptServerData; //是否需要接口加密验证（初始化多服务器时使用）默认为不开启，当设置为YES时开启，接口返回加密数据并处理
+
+}
+
+class FinAppletUIConfig {
+  Map<String, dynamic> navigationTitleTextAttributes; //导航栏的标题样式，目前支持了font
+
+}
+
 class Mop {
   static final Mop _instance = new Mop._internal();
   MethodChannel _channel;
@@ -16,6 +35,8 @@ class Mop {
   List<Map<String, dynamic>> _mopEventQueye = <Map<String, dynamic>>[];
 
   Map<String, ExtensionApiHandler> _extensionApis = {};
+
+  Map<String, ExtensionApiHandler> _webExtensionApis = {};
 
   factory Mop() {
     return _instance;
@@ -54,7 +75,13 @@ class Mop {
       if (handler != null) {
         return await handler(call.arguments);
       }
-    } else if (call.method.startsWith("extensionApi:")) {}
+    } else if (call.method.startsWith("webExtentionApi:")) {
+      final name = call.method.substring("webExtentionApi:".length);
+      final handler = _webExtensionApis[name];
+      if (handler != null) {
+        return await handler(call.arguments);
+      }
+    }
   }
 
   ///
@@ -245,5 +272,68 @@ class Mop {
   void webViewBounces(bool bounces) async {
     await _channel.invokeMapMethod("webViewBounces", {'bounces': bounces});
     return;
+  }
+
+  //20211220新增Api
+
+  //配置多个服务器
+  Future<void> setFinStoreConfigs(List<FinStoreConfig> configs) async {}
+
+  //定制ui样式
+  Future<void> setUiConfig() async {}
+
+  //自定义ua setUiConfig包含设置ua
+  Future<void> setCustomWebViewUserAgent(String ua) async {}
+
+  //支持指定服务器，启动参数，支持扫码打开小程序参数 之前已实现 启动参数 扫码打开小程序
+  Future<void> startApplet() async {}
+
+  //定时批量更新小程序的数量
+  Future<void> setAppletIntervalUpdateLimit(int count) async {}
+
+  //关闭小程序
+  Future<void> closeApplet(String appletId, bool animated) async {
+    await _channel.invokeMethod(
+        "closeApplet", {"appletId": appletId, "animated": animated});
+    return;
+  }
+
+  //结束小程序 关闭小程序
+  Future<void> finishRunningApplet(String appletId, bool animated) async {
+    await _channel.invokeMethod(
+        "finishRunningApplet", {"appletId": appletId, "animated": animated});
+    return;
+  }
+
+  //删除小程序 removeUsedApplet? 删掉缓存小程序包
+  Future<void> removeApplet(String appletId) async {
+    await _channel.invokeMethod("removeApplet", {"appletId": appletId});
+    return;
+  }
+
+  //设置小程序切换动画 安卓
+  Future<void> setActivityTransitionAnim() async {}
+
+  //发送事件给小程序
+  Future<void> sendCustomEvent(Map<String, dynamic> eventData) async {
+    await _channel.invokeMethod("sendCustomEvent", {"eventData": eventData});
+    return;
+  }
+
+  //原生调用js
+  Future<void> callJS(String eventName, String nativeViewId,
+      Map<String, dynamic> eventData) async {
+    await _channel.invokeMethod("callJS", {
+      "eventName": eventName,
+      "nativeViewId": nativeViewId,
+      "eventData": eventData
+    });
+    return;
+  }
+
+  //注册h5的拓展接口
+  void addWebExtentionApi(String name, ExtensionApiHandler handler) {
+    _webExtensionApis[name] = handler;
+    _channel.invokeMethod("addWebExtentionApi", {"name": name});
   }
 }
