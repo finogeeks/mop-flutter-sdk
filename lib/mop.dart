@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ffi';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:mop/api.dart';
 
@@ -29,12 +30,12 @@ class FinAppletUIConfig {
 
 class Mop {
   static final Mop _instance = new Mop._internal();
-  MethodChannel _channel;
-  EventChannel _mopEventChannel;
-  int eventId = 0;
-  List<Map<String, dynamic>> _mopEventQueye = <Map<String, dynamic>>[];
+  late MethodChannel _channel;
+  late EventChannel _mopEventChannel;
+  late int eventId = 0;
+  final List<Map<String, dynamic>> _mopEventQueye = <Map<String, dynamic>>[];
 
-  Map<String, ExtensionApiHandler> _extensionApis = {};
+  final Map<String, ExtensionApiHandler> _extensionApis = {};
 
   Map<String, ExtensionApiHandler> _webExtensionApis = {};
 
@@ -43,13 +44,13 @@ class Mop {
   }
 
   Mop._internal() {
-    print('mop: _internal');
+    debugPrint('mop: _internal');
     // init
-    _channel = new MethodChannel('mop');
+    _channel = const MethodChannel('mop');
     _channel.setMethodCallHandler(_handlePlatformMethodCall);
-    _mopEventChannel = new EventChannel('plugins.mop.finogeeks.com/mop_event');
+    _mopEventChannel = const EventChannel('plugins.mop.finogeeks.com/mop_event');
     _mopEventChannel.receiveBroadcastStream().listen((dynamic value) {
-      print('matrix: receiveBroadcastStream $value');
+      debugPrint('matrix: receiveBroadcastStream $value');
       for (Map m in _mopEventQueye) {
         if (m['event'] == value['event']) {
           m['MopEventCallback'](value['body']);
@@ -68,7 +69,7 @@ class Mop {
   }
 
   Future<dynamic> _handlePlatformMethodCall(MethodCall call) async {
-    print("_handlePlatformMethodCall: method:${call.method}");
+    debugPrint("_handlePlatformMethodCall: method:${call.method}");
     if (call.method.startsWith("extensionApi:")) {
       final name = call.method.substring("extensionApi:".length);
       final handler = _extensionApis[name];
@@ -96,11 +97,11 @@ class Mop {
   /// [disablePermission] is optional.
   ///
   Future<Map> initialize(String appkey, String secret,
-      {String apiServer,
-      String apiPrefix,
-      String cryptType,
-      bool disablePermission,
-      String userId,
+      { String? apiServer,
+       String? apiPrefix,
+       String? cryptType,
+       bool? disablePermission,
+       String? userId,
       bool encryptServerData = false,
       bool debug = false,
       bool bindAppletWithMainProcess = false}) async {
@@ -131,14 +132,14 @@ class Mop {
   /// [cryptType] is optional. cryptType, should be MD5/SM
   Future<Map> openApplet(
     final String appId, {
-    final String path,
-    final String query,
-    final int sequence,
-    final String apiServer,
-    final String apiPrefix,
-    final String fingerprint,
-    final String cryptType,
-    final String scene,
+     final String? path,
+     final String? query,
+     final int? sequence,
+     final String? apiServer,
+     final String? apiPrefix,
+     final String? fingerprint,
+     final String? cryptType,
+     final String? scene,
   }) async {
     Map<String, Object> params = {'appId': appId};
     Map param = {};
@@ -163,7 +164,7 @@ class Mop {
   ///
   Future<Map<String, dynamic>> currentApplet() async {
     final ret = await _channel.invokeMapMethod("currentApplet");
-    return Map<String, dynamic>.from(ret);
+    return Map<String, dynamic>.from(ret!);
   }
 
   ///
@@ -194,7 +195,7 @@ class Mop {
   Future<String> sdkVersion() async {
     return await _channel
         .invokeMapMethod("sdkVersion")
-        .then((value) => value["data"]);
+        .then((value) => value?["data"]);
   }
 
   ///
@@ -212,7 +213,7 @@ class Mop {
       String qrCode, String apiServer) async {
     final ret = await _channel.invokeMapMethod("parseAppletInfoFromWXQrCode",
         {"qrCode": qrCode, "apiServer": apiServer});
-    return Map<String, dynamic>.from(ret);
+    return Map<String, dynamic>.from(ret!);
   }
 
   ///
@@ -227,9 +228,9 @@ class Mop {
       return handler.getUserInfo();
     };
     _extensionApis["getCustomMenus"] = (params) async {
-      final res = await handler.getCustomMenus(params["appId"]);
+     final res = await handler.getCustomMenus(params["appId"]);
       List<Map<String, dynamic>> list = [];
-      res?.forEach((element) {
+      res.forEach((element) {
         Map<String, dynamic> map = Map();
         map["menuId"] = element.menuId;
         map["image"] = element.image;
@@ -237,12 +238,11 @@ class Mop {
         map["type"] = element.type;
         list.add(map);
       });
-      print("registerAppletHandler getCustomMenus list $list");
+      debugPrint("registerAppletHandler getCustomMenus list $list");
       return list;
     };
     _extensionApis["onCustomMenuClick"] = (params) async {
-      return handler.onCustomMenuClick(
-          params["appId"], params["path"], params["menuId"], params["appInfo"]);
+      return handler.onCustomMenuClick(params["appId"], params["path"], params["menuId"], params["appInfo"]);
     };
     _extensionApis["appletDidOpen"] = (params) async {
       return handler.appletDidOpen(params["appId"]);
@@ -263,8 +263,8 @@ class Mop {
   Future<String> getSMSign(String plainText) async {
     var result =
         await _channel.invokeMapMethod("smsign", {'plainText': plainText});
-    var data = result['data']['data'];
-    print(data);
+    var data = result?['data']['data'];
+    debugPrint(data);
     return data;
   }
 

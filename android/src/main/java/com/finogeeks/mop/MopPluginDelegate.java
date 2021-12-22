@@ -9,11 +9,8 @@ import com.finogeeks.mop.service.MopPluginService;
 
 import io.flutter.plugin.common.PluginRegistry;
 
-
 public class MopPluginDelegate implements PluginRegistry.ActivityResultListener {
-
     private Event mEvent;
-    private final Activity activity;
 
     public Event getEvent() {
         return mEvent;
@@ -23,16 +20,11 @@ public class MopPluginDelegate implements PluginRegistry.ActivityResultListener 
         this.mEvent = event;
     }
 
-    public MopPluginDelegate(final Activity activity) {
-        this.activity = activity;
-
-    }
     @Override
     public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Constants.REQUEST_CODE_CHOOSE
-                || requestCode == Constants.REQUEST_CODE_LOCATION_CHOOSE
-        ) {
-            MopPluginService.getInstance().getApisManager().getApiInstance(mEvent).onActivityResult(requestCode, resultCode, data, mEvent.getCallback());
+        if (requestCode == Constants.REQUEST_CODE_CHOOSE || requestCode == Constants.REQUEST_CODE_LOCATION_CHOOSE) {
+            MopPluginService.getInstance().getApisManager().getApiInstance(mEvent).onActivityResult(requestCode,
+                    resultCode, data, mEvent.getCallback());
         }
         return true;
     }

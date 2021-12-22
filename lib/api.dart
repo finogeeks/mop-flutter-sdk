@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 class CustomMenu {
   String menuId;
   String image;
@@ -8,8 +6,7 @@ class CustomMenu {
 
   CustomMenu(this.menuId, this.image, this.title, this.type);
 
-  Map<String, dynamic> toJson() =>
-      {'menuId': menuId, 'image': image, 'title': title, 'type': type};
+  Map<String, dynamic> toJson() => {'menuId': menuId, 'image': image, 'title': title, 'type': type};
 }
 
 abstract class AppletHandler {

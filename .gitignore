@@ -5,13 +5,9 @@
 .packages
 .pub/
 
-build/
-# See https://www.dartlang.org/guides/libraries/private-files
-
 # Files and directories created by pub
 .dart_tool/
 .packages
-build/
 # If you're building an application, you may want to check-in your pubspec.lock
 pubspec.lock
 
@@ -27,3 +23,16 @@ doc/api/
 *.js_
 *.js.deps
 *.js.map
+
+*.iml
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+/captures
+
+
+android/bin/
+android/.project
