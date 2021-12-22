@@ -11,14 +11,26 @@ typedef MopEventErrorCallback = void Function(dynamic event);
 typedef ExtensionApiHandler = Future Function(dynamic params);
 
 class FinStoreConfig {
-  String sdkKey; //创建应用时生成的SDK Key
-  String sdkSecret; //创建应用时生成的SDK secret
-  String apiServer; //服务器地址，客户部署的后台地址
+  ///创建应用时生成的SDK Key
+  String sdkKey;
 
-  String apmServer; //apm统计服务器的地址,如果不填，则默认与apiServer一致
-  String cryptType; //网络接口加密类型，默认为MD5 国密SM
-  String? fingerprint; //SDK指纹 证联环境(https://open.fdep.cn/) 时必填，其他环境的不用填
-  bool encryptServerData; //是否需要接口加密验证（初始化多服务器时使用）默认为不开启，当设置为YES时开启，接口返回加密数据并处理
+  ///创建应用时生成的SDK secret
+  String sdkSecret;
+
+  ///服务器地址，客户部署的后台地址
+  String apiServer;
+
+  ///apm统计服务器的地址,如果不填，则默认与apiServer一致
+  String apmServer;
+
+  ///网络接口加密类型，默认为MD5 国密SM
+  String cryptType;
+
+  ///SDK指纹 证联环境(https://open.fdep.cn/) 时必填，其他环境的不用填
+  String? fingerprint;
+
+  ///是否需要接口加密验证（初始化多服务器时使用）默认为不开启，当设置为YES时开启，接口返回加密数据并处理
+  bool encryptServerData;
 
   FinStoreConfig(this.sdkKey, this.sdkSecret, this.apiServer, this.apmServer,
       {this.cryptType = "MD5",
