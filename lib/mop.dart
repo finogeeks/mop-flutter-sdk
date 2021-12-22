@@ -67,6 +67,14 @@ class UIConfig {
 
   FloatWindowConfig? floatWindowConfig;
 
+  //iOS中独有的设置属性
+  //小程序里加载H5页面时进度条的颜色 格式 0xFFFFAA00
+  int? progressBarColor;
+  //是否自适应暗黑模式。如果设置为true，则更多页面、关于等原生页面会随着手机切换暗黑，也自动调整为暗黑模式
+  bool autoAdaptDarkMode = true;
+  //注入小程序统称appletText字符串，默认为“小程序”。
+  String? appletText;
+
   Map<String, dynamic> toMap() {
     return {
       "navigationTitleTextAttributes": navigationTitleTextAttributes,
@@ -81,6 +89,9 @@ class UIConfig {
       "disableSlideCloseAppletGesture": disableSlideCloseAppletGesture,
       "capsuleConfig": capsuleConfig?.toMap(),
       "floatWindowConfig": floatWindowConfig?.toMap(),
+      "progressBarColor": progressBarColor,
+      "autoAdaptDarkMode": autoAdaptDarkMode,
+      "appletText": appletText
     };
   }
 }

@@ -10,7 +10,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MOP_sendCustomEvent : MOPBaseApi
-@property (nonatomic, strong) NSDictonary *eventData;
+@property (nonatomic, strong) NSDictionary *eventData;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -10,7 +10,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MOP_finishRunningApplet : MOPBaseApi
-@property (nonatomic, copy) NSString appletId;
+@property (nonatomic, copy) NSString *appletId;
 @property (nonatomic, assign) BOOL animated;
 @end
 
