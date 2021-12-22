@@ -9,6 +9,12 @@
 #import "MopPlugin.h"
 #import "MopCustomMenuModel.h"
 
+@interface NSString (FATEncode)
+- (NSString *)fat_encodeString;
+
+@end
+
+
 @implementation MOPAppletDelegate
 
 + (instancetype)instance
@@ -87,6 +93,11 @@
     [channel invokeMethod:@"extensionApi:onCustomMenuClick" arguments:arguments result:^(id _Nullable result) {
         
     }];
+    
+    if ([@"Desktop" isEqualToString:customMenu.menuId]) {
+        [self addToDesktopItemClick:appletInfo path:path];
+    }
+
 }
 
 - (void)clickCustomItemMenuWithInfo:(NSDictionary *)contentInfo completion:(void (^)(FATExtensionCode code, NSDictionary *result))completion {
@@ -102,6 +113,12 @@
     }];
 }
 
+- (void)clickCustomItemMenuWithInfo:(NSDictionary *)contentInfo inApplet:(FATAppletInfo *)appletInfo completion:(void (^)(FATExtensionCode code, NSDictionary *result))completion {
+    if ([@"Desktop" isEqualToString:contentInfo[@"menuId"]]) {
+        [self addToDesktopItemClick:appletInfo path:contentInfo[@"path"]];
+    }
+}
+
 - (void)applet:(NSString *)appletId didOpenCompletion:(NSError *)error {
     if (!appletId) {
         return;
@@ -111,6 +128,36 @@
     [channel invokeMethod:@"extensionApi:appletDidOpen" arguments:params result:^(id _Nullable result) {
         
     }];
+}
+
+static NSString *scheme = @"fatae55433be2f62915";//App对应的scheme
+
+- (void)addToDesktopItemClick:(FATAppletInfo *)appInfo path:(NSString *)path {
+    NSMutableString *herf = [NSString stringWithFormat:@"%@://applet/appid/%@?", scheme, appInfo.appId].mutableCopy;
+    NSString *query = [NSString stringWithFormat:@"apiServer=%@&path=%@",appInfo.apiServer, path];
+
+    if ([appInfo.startParams[@"query"] length]) {
+        query = [NSString stringWithFormat:@"%@&query=%@",query, appInfo.startParams[@"query"]];
+    }
+    [herf appendString:query.fat_encodeString];
+
+    NSMutableString *url = [NSMutableString stringWithFormat:@"%@/mop/scattered-page/#/desktopicon", appInfo.apiServer];
+    [url appendFormat:@"?iconpath=%@", appInfo.appAvatar];
+    [url appendFormat:@"&apptitle=%@", appInfo.appTitle.fat_encodeString];
+    [url appendFormat:@"&linkhref=%@", herf];
+    
+    NSLog(@"跳转到中间页面:%@", url);
+    
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+}
+
+
+@end
+
+@implementation NSString (FATEncode)
+
+- (NSString *)fat_encodeString {
+    return (__bridge NSString *)CFURLCreateStringByAddingPercentEscapes( NULL,  (__bridge CFStringRef)self,  NULL,  (CFStringRef)@"!*'();:@&=+$,/?%#[]", kCFStringEncodingUTF8);
 }
 
 @end
