@@ -39,7 +39,7 @@ class FinStoreConfig {
 
   Map<String, dynamic> toMap() {
     return {
-      "sdkkey": sdkKey,
+      "sdkKey": sdkKey,
       "sdkSecret": sdkSecret,
       "apiServer": apiServer,
       "apmServer": apmServer,
@@ -318,6 +318,9 @@ class Mop {
     int appletIntervalUpdateLimit = 0,
     int maxRunningApplet = 5,
   }) async {
+    List<Map<String, dynamic>>? storeConfigs =
+        finStoreConfigs?.map((e) => e.toMap()).toList();
+
     final Map ret = await _channel.invokeMethod('initialize', {
       'appkey': sdkkey,
       'secret': secret,
@@ -329,7 +332,7 @@ class Mop {
       'userId': userId,
       "debug": debug,
       "bindAppletWithMainProcess": bindAppletWithMainProcess,
-      "finStoreConfigs": finStoreConfigs?.map((e) => e.toMap()),
+      "finStoreConfigs": storeConfigs,
       "uiConfig": uiConfig?.toMap(),
       "customWebViewUserAgent": customWebViewUserAgent,
       "appletIntervalUpdateLimit": appletIntervalUpdateLimit,
@@ -487,14 +490,14 @@ class Mop {
     return;
   }
 
-  //关闭小程序
+  //关闭小程序 小程序会在内存中存在
   Future<void> closeApplet(String appletId, bool animated) async {
     await _channel.invokeMethod(
         "closeApplet", {"appletId": appletId, "animated": animated});
     return;
   }
 
-  //结束小程序 关闭小程序
+  //结束小程序 小程序会从内存中清除
   Future<void> finishRunningApplet(String appletId, bool animated) async {
     await _channel.invokeMethod(
         "finishRunningApplet", {"appletId": appletId, "animated": animated});

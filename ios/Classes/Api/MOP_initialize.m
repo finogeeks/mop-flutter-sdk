@@ -15,7 +15,7 @@
 
 - (void)setupApiWithSuccess:(void (^)(NSDictionary<NSString *,id> * _Nonnull))success failure:(void (^)(id _Nullable))failure cancel:(void (^)(void))cancel
 {
-    if (!self.sdkkey || !self.secret) {
+    if (!self.appkey || !self.secret) {
         failure(@"sdkkey 或 secret不能为空");
         return;
     }
@@ -32,7 +32,7 @@
             FATStoreConfig *storeConfig = [[FATStoreConfig alloc] init];
             storeConfig.sdkKey = dict[@"sdkKey"];
     //        storeConfig.sdkKey = @"22LyZEib0gLTQdU3MUauAb4V4W8Uxd/gMgmH8Hg1bGQ=";
-            storeConfig.sdkSecret = @"703b9026be3d6bc5";
+            storeConfig.sdkSecret = dict[@"sdkSecret"];
             storeConfig.apiServer = dict[@"apiServer"];
             storeConfig.apmServer = dict[@"apmServer"];
             storeConfig.fingerprint = dict[@"fingerprint"];
@@ -46,7 +46,7 @@
         }
         config = [FATConfig configWithStoreConfigs:storeArrayM];
     } else {
-        config = [FATConfig configWithAppSecret:self.secret appKey:self.sdkkey];
+        config = [FATConfig configWithAppSecret:self.secret appKey:self.appkey];
         config.apiServer = [self.apiServer copy];
         config.apiPrefix = [self.apiPrefix copy];
         if([self.cryptType isEqualToString: @"SM"])
