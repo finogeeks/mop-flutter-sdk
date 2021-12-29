@@ -178,6 +178,11 @@ class Mop {
     return await _channel.invokeMapMethod("scanOpenApplet", params);
   }
 
+  Future qrcodeOpenApplet(String qrcode) async {
+    Map<String, Object> params = {'qrcode': qrcode};
+    return await _channel.invokeMapMethod("qrcodeOpenApplet", params);
+  }
+
   ///
   /// 根据微信QrCode信息解析小程序信息
   ///
