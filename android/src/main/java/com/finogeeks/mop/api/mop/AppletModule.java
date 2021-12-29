@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.finogeeks.lib.applet.client.FinAppClient;
+import com.finogeeks.lib.applet.interfaces.FinCallback;
 import com.finogeeks.lib.applet.sdk.model.StartAppletDecryptRequest;
 import com.finogeeks.mop.api.BaseApi;
 import com.finogeeks.mop.interfaces.ICallback;
@@ -28,7 +29,7 @@ public class AppletModule extends BaseApi {
 
     @Override
     public String[] apis() {
-        return new String[]{"openApplet", "scanOpenApplet"};
+        return new String[]{"openApplet", "scanOpenApplet","qrcodeOpenApplet"};
     }
 
     @Override
@@ -37,6 +38,8 @@ public class AppletModule extends BaseApi {
             openApplet(param, callback);
         } else if ("scanOpenApplet".equals(event)) {
             scanOpenApplet(param, callback);
+        } else if ("qrcodeOpenApplet".equals(event)){
+            qrcodeOpenApplet(param,callback);
         }
     }
 
@@ -108,5 +111,29 @@ public class AppletModule extends BaseApi {
         String info = String.valueOf(param.get("info"));
         FinAppClient.INSTANCE.getAppletApiManager().startApplet(mContext, new StartAppletDecryptRequest(info));
         callback.onSuccess(new HashMap());
+    }
+
+    private void qrcodeOpenApplet(Map param, ICallback callback){
+        String qrcode = String.valueOf(param.get("qrcode"));
+        FinAppClient.INSTANCE.getAppletApiManager().startAppletByQrcode(mContext, qrcode, new FinCallback<String>() {
+            @Override
+            public void onSuccess(String s) {
+                callback.onSuccess(new HashMap());
+            }
+
+            @Override
+            public void onError(int i, String s) {
+                callback.onFail(new HashMap(){
+                    {
+                        put("info",s);
+                    }
+                });
+            }
+
+            @Override
+            public void onProgress(int i, String s) {
+
+            }
+        });
     }
 }
