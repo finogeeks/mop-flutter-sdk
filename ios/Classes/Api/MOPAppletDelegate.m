@@ -61,7 +61,9 @@
     FlutterMethodChannel *channel = [[MopPlugin instance] methodChannel];
     [channel invokeMethod:@"extensionApi:getCustomMenus" arguments:@{@"appId": appletInfo.appId} result:^(id _Nullable result) {
         CFRunLoopStop(CFRunLoopGetMain());
-        list = result;
+        if ([result isKindOfClass:[NSArray class]]) {
+            list = result;
+        }
     }];
     CFRunLoopRun();
     
