@@ -78,9 +78,6 @@
             FATAppletMenuStyle style = [typeString isEqualToString:@"onMiniProgram"] ? FATAppletMenuStyleOnMiniProgram : FATAppletMenuStyleCommon;
             model.menuType = style;
         }
-        if ([@"Desktop" isEqualToString:model.menuId] && FATAppletVersionTypeRelease != appletInfo.appletVersionType) {
-            continue;
-        }
         [models addObject:model];
     }
     
