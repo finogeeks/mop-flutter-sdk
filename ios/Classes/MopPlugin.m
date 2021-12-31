@@ -48,6 +48,13 @@ static MopPlugin *_instance;
               binaryMessenger:[registrar messenger]];
     [registrar addMethodCallDelegate:_instance channel:shareChannel];
     _instance.shareMethodChannel = shareChannel;
+    
+    FlutterMethodChannel* appletChannel = [FlutterMethodChannel
+        methodChannelWithName:@"plugins.finosprite.finogeeks.com/applet"
+              binaryMessenger:[registrar messenger]];
+    [registrar addMethodCallDelegate:_instance channel:appletChannel];
+    _instance.appletMethodChannel = appletChannel;
+
 }
 
 + (instancetype)instance{
@@ -58,7 +65,11 @@ static MopPlugin *_instance;
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
   if ([@"getPlatformVersion" isEqualToString:call.method]) {
     result([@"iOS " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
-  } else {
+  }
+  else if ([@"getAppletInfo" isEqualToString:call.method]) {
+      result([self appInfoDictWithAppId:call.arguments[@"appId"]]);
+  }
+  else {
       MOPApiRequest* request = [[MOPApiRequest alloc] init];
       request.command = call.method;
       request.param = (NSDictionary*)call.arguments;
@@ -106,4 +117,39 @@ static MopPlugin *_instance;
     return YES;
 }
 
+
+- (NSDictionary *)appInfoDictWithAppId:(NSString *)appId {
+    FATAppletInfo *info = [[FATClient sharedClient] currentApplet];
+    if ([appId isEqualToString:info.appId]) {
+        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+        dict[@"appId"] = info.appId;
+        switch (info.appletVersionType) {
+            case FATAppletVersionTypeRelease: {
+                dict[@"appType"] = @"release";
+                break;
+            }
+            case FATAppletVersionTypeTrial: {
+                dict[@"appType"] = @"trial";
+                break;
+            }
+            case FATAppletVersionTypeTemporary: {
+                dict[@"appType"] = @"temporary";
+                break;
+            }
+            case FATAppletVersionTypeReview: {
+                dict[@"appType"] = @"review";
+                break;
+            }
+            case FATAppletVersionTypeDevelopment: {
+                dict[@"appType"] = @"development";
+                break;
+            }
+
+            default:
+                break;
+        }
+        return dict;
+    }
+    return nil;;
+}
 @end
