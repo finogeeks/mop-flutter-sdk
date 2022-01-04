@@ -17,8 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *apiPrefix;
 @property (nonatomic, copy) NSString *cryptType;
 @property (nonatomic, copy) NSString *userId;
-@property (nonatomic, assign) BOOL disablePermission;
-@property (nonatomic, assign) BOOL encryptServerData;
+@property (nonatomic, assign) bool disablePermission;
+@property (nonatomic, assign) bool encryptServerData;
 
 @end
 

@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MOP_webViewBounces : MOPBaseApi
 
-@property (nonatomic, assign) BOOL bounces;
+@property (nonatomic, assign) bool bounces;
 
 @end
 
