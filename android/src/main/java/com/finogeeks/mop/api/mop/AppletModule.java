@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.finogeeks.lib.applet.client.FinAppClient;
+import com.finogeeks.lib.applet.client.FinAppInfo;
 import com.finogeeks.lib.applet.sdk.model.StartAppletDecryptRequest;
 import com.finogeeks.mop.api.BaseApi;
 import com.finogeeks.mop.interfaces.ICallback;
@@ -53,19 +54,20 @@ public class AppletModule extends BaseApi {
         String appId = String.valueOf(param.get("appId"));
         Integer sequence = (Integer) param.get("sequence");
         Map<String, String> params = (Map) param.get("params");
+        String apiServer = (String) param.get("apiServer");
         // mContext是FlutterActivity，
         // 在Android 6.0、7.0系统的部分设备中热启动小程序时，如果context参数用mContext，会出现无法启动小程序的问题
         // 所以这里使用Application Context
         Context context = mContext.getApplicationContext();
-        if (params == null) {
-            if (sequence == null) {
-                FinAppClient.INSTANCE.getAppletApiManager().startApplet(context, appId);
-            } else {
-                FinAppClient.INSTANCE.getAppletApiManager().startApplet(context, appId, sequence, null);
-            }
+        FinAppInfo.StartParams startParams = params == null ? null : new FinAppInfo.StartParams(params.get("path"), params.get("query"), params.get("scene"));
+        Log.d(TAG, "openApplet:" + appId + "," + param + "," + sequence + "," + apiServer);
+
+        if (apiServer != null) {
+            FinAppClient.INSTANCE.getAppletApiManager().startApplet(context, apiServer, appId, sequence, startParams);
         } else {
-            FinAppClient.INSTANCE.getAppletApiManager().startApplet(context, appId, params);
+            FinAppClient.INSTANCE.getAppletApiManager().startApplet(context, appId, sequence, startParams);
         }
+
 //        String apiServer = (String) param.get("apiServer");
 //        String apiPrefix = (String) param.get("apiPrefix");
 //        if (apiServer == null || apiServer.isEmpty() || apiPrefix == null || apiPrefix.isEmpty()) {

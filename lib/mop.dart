@@ -315,8 +315,8 @@ class Mop {
     List<FinStoreConfig>? finStoreConfigs,
     UIConfig? uiConfig,
     String? customWebViewUserAgent,
-    int appletIntervalUpdateLimit = 0,
-    int maxRunningApplet = 5,
+    int? appletIntervalUpdateLimit,
+    int? maxRunningApplet,
   }) async {
     List<Map<String, dynamic>>? storeConfigs =
         finStoreConfigs?.map((e) => e.toMap()).toList();
