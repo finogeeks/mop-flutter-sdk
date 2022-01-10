@@ -11,7 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MOP_registerExtensionApi : MOPBaseApi
 
-@property NSString* name;
+@property(nonatomic, copy) NSString* name;
 
 @end
 

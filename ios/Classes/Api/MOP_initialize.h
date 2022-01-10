@@ -16,9 +16,15 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *apiServer;
 @property (nonatomic, copy) NSString *apiPrefix;
 @property (nonatomic, copy) NSString *cryptType;
+@property (nonatomic, assign) BOOL encryptServerData;
 @property (nonatomic, copy) NSString *userId;
-@property (nonatomic, assign) bool disablePermission;
-@property (nonatomic, assign) bool encryptServerData;
+@property (nonatomic, strong) NSArray *finStoreConfigs;
+@property (nonatomic, strong) NSDictionary *uiConfig;
+@property (nonatomic, copy) NSString *customWebViewUserAgent;
+@property (nonatomic, assign) BOOL disablePermission;
+@property (nonatomic, assign) NSInteger appletIntervalUpdateLimit;
+@property (nonatomic, assign) NSInteger maxRunningApplet;
+
 
 @end
 

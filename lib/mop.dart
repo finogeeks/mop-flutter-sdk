@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:ffi';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:mop/api.dart';
 
@@ -8,27 +10,244 @@ typedef MopEventErrorCallback = void Function(dynamic event);
 
 typedef ExtensionApiHandler = Future Function(dynamic params);
 
+class FinStoreConfig {
+  ///创建应用时生成的SDK Key
+  String sdkKey;
+
+  ///创建应用时生成的SDK secret
+  String sdkSecret;
+
+  ///服务器地址，客户部署的后台地址
+  String apiServer;
+
+  ///apm统计服务器的地址,如果不填，则默认与apiServer一致
+  String apmServer;
+
+  ///网络接口加密类型，默认为MD5 国密SM
+  String cryptType;
+
+  ///SDK指纹 证联环境(https://open.fdep.cn/) 时必填，其他环境的不用填
+  String? fingerprint;
+
+  ///是否需要接口加密验证（初始化多服务器时使用）默认为不开启，当设置为YES时开启，接口返回加密数据并处理
+  bool encryptServerData;
+
+  FinStoreConfig(this.sdkKey, this.sdkSecret, this.apiServer, this.apmServer,
+      {this.cryptType = "MD5",
+      this.fingerprint,
+      this.encryptServerData = false});
+
+  Map<String, dynamic> toMap() {
+    return {
+      "sdkKey": sdkKey,
+      "sdkSecret": sdkSecret,
+      "apiServer": apiServer,
+      "apmServer": apmServer,
+      "cryptType": cryptType,
+      "fingerprint": fingerprint,
+      "encryptServerData": encryptServerData
+    };
+  }
+}
+
+class UIConfig {
+  Map<String, dynamic>? navigationTitleTextAttributes; //导航栏的标题样式，目前支持了font
+
+  ///当导航栏为默认导航栏时，是否始终显示返回按钮
+  bool isAlwaysShowBackInDefaultNavigationBar = false;
+
+  ///是否清除导航栏导航按钮的背景
+  bool isClearNavigationBarNavButtonBackground = false;
+
+  ///是否隐藏"更多"菜单中的"反馈与投诉"菜单入口
+  bool isHideFeedbackAndComplaints = false;
+
+  ///是否隐藏"更多"菜单中的"返回首页"菜单入口
+  bool isHideBackHome = false;
+
+  ///是否隐藏"更多"菜单中的"转发"按钮
+  bool isHideForwardMenu = false;
+
+  /// 加载小程序过程中（小程序Service层还未加载成功，基础库还没有向SDK传递小程序配置信息），是否隐藏导航栏的关闭按钮
+  bool hideTransitionCloseButton = false;
+
+  /// 禁用侧滑关闭小程序手势
+  bool disableSlideCloseAppletGesture = false;
+
+  /// 胶囊按钮配置
+  CapsuleConfig? capsuleConfig;
+
+  FloatWindowConfig? floatWindowConfig;
+
+  //iOS中独有的设置属性
+  //小程序里加载H5页面时进度条的颜色 格式 0xFFFFAA00
+  int? progressBarColor;
+  //是否自适应暗黑模式。如果设置为true，则更多页面、关于等原生页面会随着手机切换暗黑，也自动调整为暗黑模式
+  bool autoAdaptDarkMode = true;
+  //注入小程序统称appletText字符串，默认为“小程序”。
+  String? appletText;
+
+  Map<String, dynamic> toMap() {
+    return {
+      "navigationTitleTextAttributes": navigationTitleTextAttributes,
+      "isAlwaysShowBackInDefaultNavigationBar":
+          isAlwaysShowBackInDefaultNavigationBar,
+      "isClearNavigationBarNavButtonBackground":
+          isClearNavigationBarNavButtonBackground,
+      "isHideFeedbackAndComplaints": isHideFeedbackAndComplaints,
+      "isHideBackHome": isHideBackHome,
+      "isHideForwardMenu": isHideForwardMenu,
+      "hideTransitionCloseButton": hideTransitionCloseButton,
+      "disableSlideCloseAppletGesture": disableSlideCloseAppletGesture,
+      "capsuleConfig": capsuleConfig?.toMap(),
+      "floatWindowConfig": floatWindowConfig?.toMap(),
+      "progressBarColor": progressBarColor,
+      "autoAdaptDarkMode": autoAdaptDarkMode,
+      "appletText": appletText
+    };
+  }
+}
+
+/// 胶囊按钮配置
+class CapsuleConfig {
+  /// 上角胶囊视图的宽度，默认值为88
+  double capsuleWidth = 88;
+
+  ///上角胶囊视图的高度，默认值为32
+  double capsuleHeight = 32;
+
+  ///右上角胶囊视图的右边距
+  double capsuleRightMargin = 7;
+
+  ///右上角胶囊视图的圆角半径，默认值为5
+  double capsuleCornerRadius = 5;
+
+  ///右上角胶囊视图的边框宽度，默认值为0.8
+  double capsuleBorderWidth = 1;
+
+  ///胶囊背景颜色浅色
+  int capsuleBgLightColor = 0x33000000;
+
+  ///胶囊背景颜色深色
+  int capsuleBgDarkColor = 0x80ffffff;
+
+  /// 右上角胶囊视图的边框浅色颜色
+
+  int capsuleBorderLightColor = 0x80ffffff;
+
+  ///右上角胶囊视图的边框深色颜色
+
+  int capsuleBorderDarkColor = 0x26000000;
+
+  ///胶囊分割线浅色颜色
+  int capsuleDividerLightColor = 0x80ffffff;
+
+  ///胶囊分割线深色颜色
+  int capsuleDividerDarkColor = 0x26000000;
+
+  ///胶囊里的浅色更多按钮的图片对象，如果不传，会使用默认图标
+  int? moreLightImage;
+
+  ///胶囊里的深色更多按钮的图片对象，如果不传，会使用默认图标
+  int? moreDarkImage;
+
+  ///胶囊里的更多按钮的宽度，高度与宽度相等
+  double moreBtnWidth = 32;
+
+  ///胶囊里的更多按钮的左边距
+  double moreBtnLeftMargin = 6;
+
+  ///胶囊里的浅色更多按钮的图片对象，如果不传，会使用默认图标
+
+  int? closeLightImage;
+
+  ///胶囊里的深色更多按钮的图片对象，如果不传，会使用默认图标
+  int? closeDarkImage;
+
+  ///胶囊里的关闭按钮的宽度，高度与宽度相等
+  double closeBtnWidth = 32;
+
+  ///胶囊里的关闭按钮的左边距
+  double closeBtnLeftMargin = 6;
+
+  Map<String, dynamic> toMap() {
+    return {
+      "capsuleWidth": capsuleWidth,
+      "capsuleHeight": capsuleHeight,
+      "capsuleRightMargin": capsuleRightMargin,
+      "capsuleCornerRadius": capsuleCornerRadius,
+      "capsuleBorderWidth": capsuleBorderWidth,
+      "capsuleBgLightColor": capsuleBgLightColor,
+      "capsuleBgDarkColor": capsuleBgDarkColor,
+      "capsuleBorderLightColor": capsuleBorderLightColor,
+      "capsuleBorderDarkColor": capsuleBorderDarkColor,
+      "capsuleDividerLightColor": capsuleDividerLightColor,
+      "capsuleDividerDarkColor": capsuleDividerDarkColor,
+      "moreLightImage": moreLightImage,
+      "moreDarkImage": moreDarkImage,
+      "moreBtnWidth": moreBtnWidth,
+      "moreBtnLeftMargin": moreBtnLeftMargin,
+      "closeLightImage": closeLightImage,
+      "closeDarkImage": closeDarkImage,
+      "closeBtnWidth": closeBtnWidth,
+      "closeBtnLeftMargin": closeBtnLeftMargin,
+    };
+  }
+}
+
+class FloatWindowConfig {
+  bool floatMode = false;
+  int x;
+  int y;
+  int width;
+  int height;
+
+  FloatWindowConfig(this.floatMode, this.x, this.y, this.width, this.height);
+
+  Map<String, dynamic> toMap() {
+    return {
+      "floatMode": floatMode,
+      "x": x,
+      "y": y,
+      "width": width,
+      "height": height
+    };
+  }
+}
+
+enum Anim {
+  SlideFromLeftToRightAnim,
+  SlideFromRightToLeftAnim,
+  SlideFromTopToBottomAnim,
+  SlideFromBottomToTopAnim,
+  FadeInAnim,
+  NoneAnim
+}
+
 class Mop {
   static final Mop _instance = new Mop._internal();
-  MethodChannel _channel;
-  EventChannel _mopEventChannel;
-  int eventId = 0;
-  List<Map<String, dynamic>> _mopEventQueye = <Map<String, dynamic>>[];
+  late MethodChannel _channel;
+  late EventChannel _mopEventChannel;
+  late int eventId = 0;
+  final List<Map<String, dynamic>> _mopEventQueye = <Map<String, dynamic>>[];
 
-  Map<String, ExtensionApiHandler> _extensionApis = {};
+  final Map<String, ExtensionApiHandler> _extensionApis = {};
+
+  Map<String, ExtensionApiHandler> _webExtensionApis = {};
 
   factory Mop() {
     return _instance;
   }
 
   Mop._internal() {
-    print('mop: _internal');
+    debugPrint('mop: _internal');
     // init
-    _channel = new MethodChannel('mop');
+    _channel = const MethodChannel('mop');
     _channel.setMethodCallHandler(_handlePlatformMethodCall);
-    _mopEventChannel = new EventChannel('plugins.mop.finogeeks.com/mop_event');
+    _mopEventChannel =
+        const EventChannel('plugins.mop.finogeeks.com/mop_event');
     _mopEventChannel.receiveBroadcastStream().listen((dynamic value) {
-      print('matrix: receiveBroadcastStream $value');
+      debugPrint('matrix: receiveBroadcastStream $value');
       for (Map m in _mopEventQueye) {
         if (m['event'] == value['event']) {
           m['MopEventCallback'](value['body']);
@@ -47,47 +266,77 @@ class Mop {
   }
 
   Future<dynamic> _handlePlatformMethodCall(MethodCall call) async {
-    print("_handlePlatformMethodCall: method:${call.method}");
+    debugPrint("_handlePlatformMethodCall: method:${call.method}");
     if (call.method.startsWith("extensionApi:")) {
       final name = call.method.substring("extensionApi:".length);
       final handler = _extensionApis[name];
       if (handler != null) {
         return await handler(call.arguments);
       }
-    } else if (call.method.startsWith("extensionApi:")) {}
+    } else if (call.method.startsWith("webExtentionApi:")) {
+      final name = call.method.substring("webExtentionApi:".length);
+      final handler = _webExtensionApis[name];
+      if (handler != null) {
+        return await handler(call.arguments);
+      }
+    }
   }
 
   ///
   ///
   /// initialize mop miniprogram engine.
   /// 初始化小程序
-  /// [appkey] is required. it can be getted from api.finclip.com
+  /// [sdkkey] is required. it can be getted from api.finclip.com
   /// [secret] is required. it can be getted from api.finclip.com
   /// [apiServer] is optional. the mop server address. default is https://mp.finogeek.com
   /// [apiPrefix] is optional. the mop server prefix. default is /api/v1/mop
   /// [cryptType] is optional. cryptType, should be MD5/SM
   /// [disablePermission] is optional.
+  /// [encryptServerData] 是否对服务器数据进行加密，需要服务器支持
+  /// [userId] 用户id
+  /// [finStoreConfigs] 多服务配置
+  /// [uiConfig] UI配置
+  /// [debug] 设置debug模式，影响调试和日志
+  /// [customWebViewUserAgent] 设置自定义webview ua
+  /// [appletIntervalUpdateLimit] 设置小程序批量更新周期
+  /// [maxRunningApplet] 设置最大同时运行小程序个数
   ///
-  Future<Map> initialize(String appkey, String secret,
-      {String apiServer,
-      String apiPrefix,
-      String cryptType,
-      bool disablePermission,
-      String userId,
-      bool encryptServerData = false,
-      bool debug = false,
-      bool bindAppletWithMainProcess = false}) async {
+  Future<Map> initialize(
+    String sdkkey,
+    String secret, {
+    String? apiServer,
+    String? apiPrefix,
+    String? cryptType,
+    bool encryptServerData = false,
+    bool disablePermission = false,
+    String? userId,
+    bool debug = false,
+    bool bindAppletWithMainProcess = false,
+    List<FinStoreConfig>? finStoreConfigs,
+    UIConfig? uiConfig,
+    String? customWebViewUserAgent,
+    int? appletIntervalUpdateLimit,
+    int? maxRunningApplet,
+  }) async {
+    List<Map<String, dynamic>>? storeConfigs =
+        finStoreConfigs?.map((e) => e.toMap()).toList();
+
     final Map ret = await _channel.invokeMethod('initialize', {
-      'appkey': appkey,
+      'appkey': sdkkey,
       'secret': secret,
       'apiServer': apiServer,
       'apiPrefix': apiPrefix,
       'cryptType': cryptType,
+      "encryptServerData": encryptServerData,
       'disablePermission': disablePermission,
       'userId': userId,
-      "encryptServerData": encryptServerData,
       "debug": debug,
-      "bindAppletWithMainProcess": bindAppletWithMainProcess
+      "bindAppletWithMainProcess": bindAppletWithMainProcess,
+      "finStoreConfigs": storeConfigs,
+      "uiConfig": uiConfig?.toMap(),
+      "customWebViewUserAgent": customWebViewUserAgent,
+      "appletIntervalUpdateLimit": appletIntervalUpdateLimit,
+      "maxRunningApplet": maxRunningApplet
     });
     return ret;
   }
@@ -104,14 +353,11 @@ class Mop {
   /// [cryptType] is optional. cryptType, should be MD5/SM
   Future<Map> openApplet(
     final String appId, {
-    final String path,
-    final String query,
-    final int sequence,
-    final String apiServer,
-    final String apiPrefix,
-    final String fingerprint,
-    final String cryptType,
-    final String scene,
+    final String? path,
+    final String? query,
+    final int? sequence,
+    final String? apiServer,
+    final String? scene,
   }) async {
     Map<String, Object> params = {'appId': appId};
     Map param = {};
@@ -120,9 +366,6 @@ class Mop {
     if (param.length > 0) params["params"] = param;
     if (sequence != null) params["sequence"] = sequence;
     if (apiServer != null) params["apiServer"] = apiServer;
-    if (apiPrefix != null) params["apiPrefix"] = apiPrefix;
-    if (fingerprint != null) params["fingerprint"] = fingerprint;
-    if (cryptType != null) params["cryptType"] = cryptType;
     if (scene != null) param["scene"] = scene;
     final Map ret = await _channel.invokeMethod('openApplet', params);
     return ret;
@@ -136,7 +379,7 @@ class Mop {
   ///
   Future<Map<String, dynamic>> currentApplet() async {
     final ret = await _channel.invokeMapMethod("currentApplet");
-    return Map<String, dynamic>.from(ret);
+    return Map<String, dynamic>.from(ret!);
   }
 
   ///
@@ -167,7 +410,7 @@ class Mop {
   Future<String> sdkVersion() async {
     return await _channel
         .invokeMapMethod("sdkVersion")
-        .then((value) => value["data"]);
+        .then((value) => value?["data"]);
   }
 
   ///
@@ -190,7 +433,7 @@ class Mop {
       String qrCode, String apiServer) async {
     final ret = await _channel.invokeMapMethod("parseAppletInfoFromWXQrCode",
         {"qrCode": qrCode, "apiServer": apiServer});
-    return Map<String, dynamic>.from(ret);
+    return Map<String, dynamic>.from(ret!);
   }
 
   ///
@@ -207,7 +450,7 @@ class Mop {
     _extensionApis["getCustomMenus"] = (params) async {
       final res = await handler.getCustomMenus(params["appId"]);
       List<Map<String, dynamic>> list = [];
-      res?.forEach((element) {
+      res.forEach((element) {
         Map<String, dynamic> map = Map();
         map["menuId"] = element.menuId;
         map["image"] = element.image;
@@ -215,7 +458,7 @@ class Mop {
         map["type"] = element.type;
         list.add(map);
       });
-      print("registerAppletHandler getCustomMenus list $list");
+      debugPrint("registerAppletHandler getCustomMenus list $list");
       return list;
     };
     _extensionApis["onCustomMenuClick"] = (params) async {
@@ -241,8 +484,8 @@ class Mop {
   Future<String> getSMSign(String plainText) async {
     var result =
         await _channel.invokeMapMethod("smsign", {'plainText': plainText});
-    var data = result['data']['data'];
-    print(data);
+    var data = result?['data']['data'];
+    debugPrint(data);
     return data;
   }
 
@@ -250,5 +493,52 @@ class Mop {
   void webViewBounces(bool bounces) async {
     await _channel.invokeMapMethod("webViewBounces", {'bounces': bounces});
     return;
+  }
+
+  //关闭小程序 小程序会在内存中存在
+  Future<void> closeApplet(String appletId, bool animated) async {
+    await _channel.invokeMethod(
+        "closeApplet", {"appletId": appletId, "animated": animated});
+    return;
+  }
+
+  //结束小程序 小程序会从内存中清除
+  Future<void> finishRunningApplet(String appletId, bool animated) async {
+    await _channel.invokeMethod(
+        "finishRunningApplet", {"appletId": appletId, "animated": animated});
+    return;
+  }
+
+  //设置小程序切换动画 安卓
+  Future setActivityTransitionAnim(Anim anim) async {
+    await _channel
+        .invokeMethod("setActivityTransitionAnim", {"anim": anim.name});
+    return;
+  }
+
+  //发送事件给小程序
+  Future<void> sendCustomEvent(
+      String appId, Map<String, dynamic> eventData) async {
+    await _channel.invokeMethod(
+        "sendCustomEvent", {"appId": appId, "eventData": eventData});
+    return;
+  }
+
+  //原生调用js
+  Future<void> callJS(String appId, String eventName, String nativeViewId,
+      Map<String, dynamic> eventData) async {
+    await _channel.invokeMethod("callJS", {
+      "appId": appId,
+      "eventName": eventName,
+      "nativeViewId": nativeViewId,
+      "eventData": eventData
+    });
+    return;
+  }
+
+  //注册h5的拓展接口
+  void addWebExtentionApi(String name, ExtensionApiHandler handler) {
+    _webExtensionApis[name] = handler;
+    _channel.invokeMethod("addWebExtentionApi", {"name": name});
   }
 }

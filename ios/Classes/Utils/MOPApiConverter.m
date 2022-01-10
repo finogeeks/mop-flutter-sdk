@@ -88,9 +88,10 @@
                 id value = container[key];
                 
                 id safetyValue = [self parseFromKeyValue:value];
-                if (!safetyValue)
+                if (!safetyValue) //如果safetyValue是字典或者数组类型，为nil值时设置成空字符串会产生崩溃
                 {
-                    safetyValue = @"";
+//                    safetyValue = @"";
+                    continue;
                 }
                 [result setObject:safetyValue forKey:key];
             }

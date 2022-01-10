@@ -4,14 +4,14 @@
     </a>
 </p>
 
-<p align="center"> 
+<p align="center">
     <strong>FinClip Flutter SDK</strong></br>
 <p>
-<p align="center"> 
+<p align="center">
         本项目提供在 Flutter 环境中运行小程序的能力
 <p>
 
-<p align="center"> 
+<p align="center">
 	👉 <a href="https://www.finclip.com?from=github">https://www.finclip.com/</a> 👈
 </p>
 
@@ -166,7 +166,7 @@ class _MyAppState extends State<MyApp> {
 ## 📋  接口文档
 
 ### 1. 初始化小程序
-   
+
    在使用 SDK 提供的 API 之前必须要初始化 SDK ，初始化 SDK 的接口如下
 
 ```
