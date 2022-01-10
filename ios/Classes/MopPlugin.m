@@ -99,11 +99,14 @@ static MopPlugin *_instance;
 
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *, id> *)options
 {
-    FlutterMethodChannel *channel = [[MopPlugin instance] shareMethodChannel];
-    [channel invokeMethod:@"shareApi:openURL" arguments:@{@"url":url.absoluteString} result:^(id  _Nullable result) {
+    NSString *string = url.absoluteString;
+    if ([string containsString:@"finclipWebview/url="]) {
+        FlutterMethodChannel *channel = [[MopPlugin instance] shareMethodChannel];
+        [channel invokeMethod:@"shareApi:openURL" arguments:@{@"url":string} result:^(id  _Nullable result) {
 
-    }];
-//    
+        }];
+        return YES;
+    }
     
     if (![FATClient sharedClient].inited) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
