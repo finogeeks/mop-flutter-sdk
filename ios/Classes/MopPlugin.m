@@ -101,10 +101,21 @@ static MopPlugin *_instance;
 {
     NSString *string = url.absoluteString;
     if ([string containsString:@"finclipWebview/url="]) {
-        FlutterMethodChannel *channel = [[MopPlugin instance] shareMethodChannel];
-        [channel invokeMethod:@"shareApi:openURL" arguments:@{@"url":string} result:^(id  _Nullable result) {
+        if (![FATClient sharedClient].inited) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                FlutterMethodChannel *channel = [[MopPlugin instance] shareMethodChannel];
+                [channel invokeMethod:@"shareApi:openURL" arguments:@{@"url":string} result:^(id  _Nullable result) {
 
-        }];
+                }];
+            });
+        }
+        else {
+            FlutterMethodChannel *channel = [[MopPlugin instance] shareMethodChannel];
+            [channel invokeMethod:@"shareApi:openURL" arguments:@{@"url":string} result:^(id  _Nullable result) {
+
+            }];
+        }
+
         return YES;
     }
     
