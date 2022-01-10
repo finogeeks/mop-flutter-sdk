@@ -5,6 +5,8 @@ import 'package:mop/mop.dart';
 void main() {
   const MethodChannel channel = MethodChannel('mop');
 
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   setUp(() {
     channel.setMockMethodCallHandler((MethodCall methodCall) async {
       return '42';

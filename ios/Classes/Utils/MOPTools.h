@@ -13,6 +13,9 @@ NS_ASSUME_NONNULL_BEGIN
 + (UIViewController *)topViewController;
 +  (UIViewController *)topViewController:(UIViewController *)rootViewController;
 
++ (UIColor *)colorWithRGBHex:(UInt32)hex;
+
++ (UIColor *)fat_colorWithHexString:(NSString *)hexColor;
 @end
 
 NS_ASSUME_NONNULL_END

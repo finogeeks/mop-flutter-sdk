@@ -2,6 +2,7 @@ package com.finogeeks.mop.api.mop;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
 import com.finogeeks.lib.applet.BuildConfig;
 import com.finogeeks.lib.applet.client.FinAppClient;
@@ -11,6 +12,8 @@ import com.finogeeks.lib.applet.interfaces.FinCallback;
 import com.finogeeks.mop.api.BaseApi;
 import com.finogeeks.mop.interfaces.ICallback;
 import com.finogeeks.mop.service.MopPluginService;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +77,22 @@ public class BaseModule extends BaseApi {
         Boolean bindAppletWithMainProcess = (Boolean) param.get("bindAppletWithMainProcess");
         if (bindAppletWithMainProcess == null) bindAppletWithMainProcess = false;
 
-        FinAppConfig config = new FinAppConfig.Builder()
+        String customWebViewUserAgent = (String) param.get("customWebViewUserAgent");
+        Integer appletIntervalUpdateLimit = (Integer) param.get("appletIntervalUpdateLimit");
+        Integer maxRunningApplet = (Integer) param.get("maxRunningApplet");
+        Gson gson = new Gson();
+        List<FinStoreConfig> finStoreConfigs = null;
+        if (param.get("finStoreConfigs") != null) {
+            finStoreConfigs = gson.fromJson(gson.toJson(param.get("finStoreConfigs")), new TypeToken<List<FinStoreConfig>>() {
+            }.getType());
+        }
+        FinAppConfig.UIConfig uiConfig = null;
+        if (param.get("uiConfig") != null) {
+            uiConfig = gson.fromJson(gson.toJson(param.get("uiConfig")), FinAppConfig.UIConfig.class);
+        }
+
+
+        FinAppConfig.Builder builder = new FinAppConfig.Builder()
                 .setSdkKey(appkey)
                 .setSdkSecret(secret)
                 .setApiUrl(apiServer)
@@ -84,8 +102,18 @@ public class BaseModule extends BaseApi {
                 .setUserId(userId)
                 .setDebugMode(debug)
                 .setDisableRequestPermissions(disablePermission)
-                .setBindAppletWithMainProcess(bindAppletWithMainProcess)
-                .build();
+                .setBindAppletWithMainProcess(bindAppletWithMainProcess);
+
+        if (customWebViewUserAgent != null)
+            builder.setCustomWebViewUserAgent(customWebViewUserAgent);
+        if (appletIntervalUpdateLimit != null)
+            builder.setAppletIntervalUpdateLimit(appletIntervalUpdateLimit);
+        if (maxRunningApplet != null) builder.setMaxRunningApplet(maxRunningApplet);
+        if (finStoreConfigs != null) builder.setFinStoreConfigs(finStoreConfigs);
+        if (uiConfig != null) builder.setUiConfig(uiConfig);
+
+        FinAppConfig config = builder.build();
+        Log.d(TAG, "config:" + gson.toJson(config));
 
         final Application application = MopPluginService.getInstance().getActivity().getApplication();
         // SDK初始化结果回调，用于接收SDK初始化状态
