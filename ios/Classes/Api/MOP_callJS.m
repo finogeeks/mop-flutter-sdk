@@ -19,7 +19,7 @@
     NSNumber *numberId = @(_nativeViewId.integerValue);
     [[FATClient sharedClient].nativeViewManager sendEvent:_eventName nativeViewId:numberId detail:_eventData completion:^(id result, NSError *error) {
         if (error) {
-            failure(@{@"errMsg": @"sendCustomEvent:fail"});
+            failure(@{@"errMsg": @"callJS:fail"});
         } else {
             success(result);
         }
