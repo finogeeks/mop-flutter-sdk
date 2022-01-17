@@ -82,8 +82,10 @@ class UIConfig {
   //iOS中独有的设置属性
   //小程序里加载H5页面时进度条的颜色 格式 0xFFFFAA00
   int? progressBarColor;
+
   //是否自适应暗黑模式。如果设置为true，则更多页面、关于等原生页面会随着手机切换暗黑，也自动调整为暗黑模式
   bool autoAdaptDarkMode = true;
+
   //注入小程序统称appletText字符串，默认为“小程序”。
   String? appletText;
 
@@ -421,6 +423,10 @@ class Mop {
     return await _channel.invokeMapMethod("scanOpenApplet", params);
   }
 
+  ///
+  /// 通过二维码打开小程序
+  /// [qrcode] 二维码内容
+  ///
   Future qrcodeOpenApplet(String qrcode) async {
     Map<String, Object> params = {'qrcode': qrcode};
     return await _channel.invokeMapMethod("qrcodeOpenApplet", params);
@@ -495,28 +501,36 @@ class Mop {
     return;
   }
 
-  //关闭小程序 小程序会在内存中存在
+  ///
+  /// 关闭小程序 小程序会在内存中存在
+  ///
   Future<void> closeApplet(String appletId, bool animated) async {
     await _channel.invokeMethod(
         "closeApplet", {"appletId": appletId, "animated": animated});
     return;
   }
 
-  //结束小程序 小程序会从内存中清除
+  ///
+  /// 结束小程序 小程序会从内存中清除
+  ///
   Future<void> finishRunningApplet(String appletId, bool animated) async {
     await _channel.invokeMethod(
         "finishRunningApplet", {"appletId": appletId, "animated": animated});
     return;
   }
 
-  //设置小程序切换动画 安卓
+  ///
+  /// 设置小程序切换动画 安卓
+  ///
   Future setActivityTransitionAnim(Anim anim) async {
     await _channel
         .invokeMethod("setActivityTransitionAnim", {"anim": anim.name});
     return;
   }
-
-  //发送事件给小程序
+  ///
+  /// 原生发送事件给小程序
+  /// [appId] 小程序id
+  /// [eventData] 事件对象
   Future<void> sendCustomEvent(
       String appId, Map<String, dynamic> eventData) async {
     await _channel.invokeMethod(
@@ -524,7 +538,13 @@ class Mop {
     return;
   }
 
-  //原生调用js
+  ///
+  /// 原生调用webview中的js方法
+  /// [appId] 小程序id
+  /// [eventName] 方法名
+  /// [nativeViewId] webviewId
+  /// [eventData] 参数
+  ///
   Future<void> callJS(String appId, String eventName, String nativeViewId,
       Map<String, dynamic> eventData) async {
     await _channel.invokeMethod("callJS", {
@@ -536,7 +556,10 @@ class Mop {
     return;
   }
 
-  //注册h5的拓展接口
+  ///
+  /// register webview extension api
+  /// 注册webview拓展api
+  ///
   void addWebExtentionApi(String name, ExtensionApiHandler handler) {
     _webExtensionApis[name] = handler;
     _channel.invokeMethod("addWebExtentionApi", {"name": name});
