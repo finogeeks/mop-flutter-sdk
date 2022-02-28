@@ -69,6 +69,12 @@ static MopPlugin *_instance;
   else if ([@"getAppletInfo" isEqualToString:call.method]) {
       result([self appInfoDictWithAppId:call.arguments[@"appId"]]);
   }
+  else if ([@"getAbsolutePath" isEqualToString:call.method]) {
+      NSString *path = call.arguments[@"path"];
+      NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+      dict[@"path"] = [[FATClient sharedClient] fat_absolutePathWithPath:path];
+      result(dict);
+  }
   else {
       MOPApiRequest* request = [[MOPApiRequest alloc] init];
       request.command = call.method;
