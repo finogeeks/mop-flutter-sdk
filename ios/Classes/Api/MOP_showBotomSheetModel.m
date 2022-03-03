@@ -79,6 +79,7 @@ returnInsets = inset;\
         [self.cancelButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [self.contentView addSubview:self.cancelButton];
         self.cancelButton.frame = CGRectMake(0, self.contentView.frame.size.height - kFinoSafeAreaBottom - 50, self.contentView.frame.size.width, 50);
+        [self.cancelButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
         
         UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.cancelButton.frame.size.width, 0.5)];
         line.backgroundColor = [UIColor lightGrayColor];
@@ -106,8 +107,7 @@ returnInsets = inset;\
     }];
 }
 
-- (void)dismiss
-{
+- (void)dismiss {
     [UIView animateWithDuration:0.25 animations:^{
         self.contentView.transform = CGAffineTransformMakeTranslation(0, self.contentView.frame.size.height);
         self.alpha = 0.5f;
