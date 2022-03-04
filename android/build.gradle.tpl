@@ -31,7 +31,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.0'
+        classpath 'com.android.tools.build:gradle:3.5.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.61"
 
     }
@@ -68,7 +68,6 @@ android {
         minSdkVersion 21
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
     buildTypes {
         release {
             minifyEnabled false
@@ -92,6 +91,6 @@ kapt {
 }
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.finogeeks.lib:finapplet:2.35.9'
-    implementation 'com.finogeeks.mop:plugins:2.35.9'
+    implementation 'com.finogeeks.lib:finapplet:__finapplet_version__'
+    implementation 'com.finogeeks.mop:plugins:__finapplet_version__'
 }
