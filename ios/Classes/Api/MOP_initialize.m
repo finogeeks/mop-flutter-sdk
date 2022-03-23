@@ -85,7 +85,6 @@
         if (_uiConfig[@"progressBarColor"]) {
             uiconfig.progressBarColor = [MOPTools colorWithRGBHex:[_uiConfig[@"progressBarColor"] intValue]];
         }
-        uiconfig.hideBackToHome = [_uiConfig[@"isHideBackHome"] boolValue];
         uiconfig.hideFeedbackMenu = [_uiConfig[@"isHideFeedbackAndComplaints"] boolValue];
         uiconfig.hideForwardMenu = [_uiConfig[@"isHideForwardMenu"] boolValue];
         uiconfig.autoAdaptDarkMode = [_uiConfig[@"autoAdaptDarkMode"] boolValue];
