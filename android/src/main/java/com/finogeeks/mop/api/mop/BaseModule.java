@@ -96,7 +96,7 @@ public class BaseModule extends BaseApi {
                     if (fingerprint == null) fingerprint = "";
                     String encryptType = (String) config.get("cryptType");
                     Boolean encryptServerData1 = (Boolean) config.get("encryptServerData");
-                    if (encryptServerData1 == null) encryptServerData1 = false
+                    if (encryptServerData1 == null) encryptServerData1 = false;
                     finStoreConfigs.add(new FinStoreConfig(sdkKey, sdkSecret, apiUrl, apmUrl, "", fingerprint, encryptType, encryptServerData1));
                 }
             }
