@@ -83,8 +83,23 @@ public class BaseModule extends BaseApi {
         Gson gson = new Gson();
         List<FinStoreConfig> finStoreConfigs = null;
         if (param.get("finStoreConfigs") != null) {
-            finStoreConfigs = gson.fromJson(gson.toJson(param.get("finStoreConfigs")), new TypeToken<List<FinStoreConfig>>() {
-            }.getType());
+            finStoreConfigs = new ArrayList<>();
+            List<Map<String, Object>> configs = (List<Map<String, Object>>) param.get("finStoreConfigs");
+            for (Map<String, Object> config : configs) {
+                for (String key : config.keySet()) {
+                    String sdkKey = (String) config.get("sdkKey");
+                    String sdkSecret = (String) config.get("sdkSecret");
+                    String apiUrl = (String) config.get("apiServer");
+                    String apmUrl = (String) config.get("apmServer");
+                    if (apmUrl == null) apmUrl = "";
+                    String fingerprint = (String) config.get("fingerprint");
+                    if (fingerprint == null) fingerprint = "";
+                    String encryptType = (String) config.get("cryptType");
+                    Boolean encryptServerData1 = (Boolean) config.get("encryptServerData");
+                    if (encryptServerData1 == null) encryptServerData1 = false;
+                    finStoreConfigs.add(new FinStoreConfig(sdkKey, sdkSecret, apiUrl, apmUrl, "", fingerprint, encryptType, encryptServerData1));
+                }
+            }
         }
         FinAppConfig.UIConfig uiConfig = null;
         if (param.get("uiConfig") != null) {
