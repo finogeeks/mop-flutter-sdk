@@ -91,7 +91,7 @@
         
         uiconfig.appletText = _uiConfig[@"appletText"];
         uiconfig.hideTransitionCloseButton = [_uiConfig[@"hideTransitionCloseButton"] boolValue];
-        uiconfig.disableSlideCloseAppletGesture = _uiConfig[@"disableSlideCloseAppletGesture"];
+        uiconfig.disableSlideCloseAppletGesture = [_uiConfig[@"disableSlideCloseAppletGesture"] boolValue];
         if (_uiConfig[@"capsuleConfig"]) {
             NSDictionary *capsuleConfigDic = _uiConfig[@"capsuleConfig"];
             FATCapsuleConfig *capsuleConfig = [[FATCapsuleConfig alloc]init];
