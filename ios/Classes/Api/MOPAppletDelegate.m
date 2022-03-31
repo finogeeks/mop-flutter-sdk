@@ -84,11 +84,11 @@
     return models;
 }
 
-- (void)customMenu:(id<FATAppletMenuProtocol>)customMenu inApplet:(FATAppletInfo *)appletInfo didClickAtPath:(NSString *)path {
+- (void)clickCustomItemMenuWithInfo:(NSDictionary *)contentInfo inApplet:(FATAppletInfo *)appletInfo completion:(void (^)(FATExtensionCode code, NSDictionary *result))completion {
     NSDictionary *arguments = @{
-        @"appId": appletInfo.appId,
-        @"path": path,
-        @"menuId": customMenu.menuId,
+        @"appId": contentInfo[@"appId"],
+        @"path": contentInfo[@"path"],
+        @"menuId": contentInfo[@"menuId"],
         @"appInfo": appletInfo.description
     };
     FlutterMethodChannel *channel = [[MopPlugin instance] methodChannel];
@@ -96,26 +96,6 @@
         
     }];
     
-    if ([@"Desktop" isEqualToString:customMenu.menuId]) {
-        [self addToDesktopItemClick:appletInfo path:path];
-    }
-
-}
-
-- (void)clickCustomItemMenuWithInfo:(NSDictionary *)contentInfo completion:(void (^)(FATExtensionCode code, NSDictionary *result))completion {
-    NSDictionary *arguments = @{
-        @"appId": contentInfo[@"appId"],
-        @"path": contentInfo[@"path"],
-        @"menuId": contentInfo[@"menuId"],
-        @"appInfo": [NSString stringWithFormat:@"{'title': '%@', 'description': '%@', 'imageUrl': '%@'}", contentInfo[@"title"], contentInfo[@"description"], contentInfo[@"imageUrl"]]
-    };
-    FlutterMethodChannel *channel = [[MopPlugin instance] methodChannel];
-    [channel invokeMethod:@"extensionApi:onCustomMenuClick" arguments:arguments result:^(id _Nullable result) {
-        
-    }];
-}
-
-- (void)clickCustomItemMenuWithInfo:(NSDictionary *)contentInfo inApplet:(FATAppletInfo *)appletInfo completion:(void (^)(FATExtensionCode code, NSDictionary *result))completion {
     if ([@"Desktop" isEqualToString:contentInfo[@"menuId"]]) {
         [self addToDesktopItemClick:appletInfo path:contentInfo[@"path"]];
     }
