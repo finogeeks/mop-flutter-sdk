@@ -2,6 +2,7 @@ package com.finogeeks.mop.api.mop;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -20,6 +21,7 @@ import com.google.gson.reflect.TypeToken;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
