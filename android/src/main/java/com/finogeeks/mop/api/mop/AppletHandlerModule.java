@@ -23,12 +23,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
-import java.io.ByteArrayOutputStream;
 
 import io.flutter.plugin.common.MethodChannel;
 
@@ -63,10 +63,12 @@ public class AppletHandlerModule extends BaseApi {
                 Map<String, Object> params = new HashMap<>();
                 params.put("appletInfo", GsonUtil.gson.fromJson(s, new TypeToken<Map<String, Object>>() {
                 }.getType()));
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                byte[] data = baos.toByteArray();
-                params.put("bitmap", data);
+                if (bitmap != null) {
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byte[] data = baos.toByteArray();
+                    params.put("bitmap", data);
+                }
                 handler.post(() -> {
                     channel.invokeMethod("extensionApi:forwardApplet", params, new MethodChannel.Result() {
                         @Override
