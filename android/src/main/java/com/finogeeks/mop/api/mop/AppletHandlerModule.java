@@ -259,7 +259,7 @@ public class AppletHandlerModule extends BaseApi {
 
             @Override
             public boolean feedback(@NotNull Bundle bundle) {
-                return false
+                return false;
             }
 
         });
