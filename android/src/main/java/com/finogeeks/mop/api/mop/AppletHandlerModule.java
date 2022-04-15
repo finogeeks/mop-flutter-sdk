@@ -205,6 +205,63 @@ public class AppletHandlerModule extends BaseApi {
             public void onNavigationBarCloseButtonClicked(@NotNull String s) {
 
             }
+
+            @Override
+            public boolean launchApp(@Nullable String appParameter) {
+                /*Log.d("AppletHandlerModule", "getUserInfo");
+                CountDownLatch latch = new CountDownLatch(1);
+                final Map<String, String>[] ret = new Map[1];
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("appParameter", appParameter);
+                handler.post(() -> {
+                    channel.invokeMethod("extensionApi:launchApp", params, new MethodChannel.Result() {
+                        @Override
+                        public void success(Object result) {
+                            ret[0] = (Map<String, String>) result;
+                            latch.countDown();
+                        }
+
+                        @Override
+                        public void error(String errorCode, String errorMessage, Object errorDetails) {
+                            latch.countDown();
+                        }
+
+                        @Override
+                        public void notImplemented() {
+                            latch.countDown();
+                        }
+                    });
+                });
+                try {
+                    latch.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if (ret[0].size() > 0)
+                    return ret[0];
+                else
+                    return null;*/
+                return false;
+            }
+
+            @Override
+            public void getPhoneNumber(@NotNull IAppletCallback callback) {
+            }
+
+            @Override
+            public void chooseAvatar(@NotNull IAppletCallback callback) {
+            }
+
+            @Override
+            public boolean contact(@NotNull JSONObject json) {
+                return false;
+            }
+
+            @Override
+            public boolean feedback(@NotNull Bundle bundle) {
+                return false;
+            }
+
         });
         callback.onSuccess(null);
     }
