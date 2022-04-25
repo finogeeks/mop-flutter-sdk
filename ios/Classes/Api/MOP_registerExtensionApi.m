@@ -15,7 +15,7 @@
 {
     NSLog(@"MOP_registerExtensionApi");
     FlutterMethodChannel *channel = [[MopPlugin instance] methodChannel];
-    [[FATClient sharedClient] registerExtensionApi:self.name handle:^(FATAppletInfo *appletInfo, id param, FATExtensionApiCallback callback) {
+    [[FATClient sharedClient] registerExtensionApi:self.name handle:^(id param, FATExtensionApiCallback callback) {
         NSLog(@"invoke ExtensionApi:");
         NSLog(@"%@",self.name);
         NSLog(@"%@",param);
