@@ -2,6 +2,7 @@ package com.finogeeks.mop.api.mop;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -20,13 +21,14 @@ import com.google.gson.reflect.TypeToken;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
-import java.io.ByteArrayOutputStream;
 
 import io.flutter.plugin.common.MethodChannel;
 
@@ -61,10 +63,12 @@ public class AppletHandlerModule extends BaseApi {
                 Map<String, Object> params = new HashMap<>();
                 params.put("appletInfo", GsonUtil.gson.fromJson(s, new TypeToken<Map<String, Object>>() {
                 }.getType()));
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                byte[] data = baos.toByteArray();
-                params.put("bitmap", data);
+                if (bitmap != null) {
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byte[] data = baos.toByteArray();
+                    params.put("bitmap", data);
+                }
                 handler.post(() -> {
                     channel.invokeMethod("extensionApi:forwardApplet", params, new MethodChannel.Result() {
                         @Override
@@ -205,6 +209,63 @@ public class AppletHandlerModule extends BaseApi {
             public void onNavigationBarCloseButtonClicked(@NotNull String s) {
 
             }
+
+            @Override
+            public boolean launchApp(@Nullable String appParameter) {
+                /*Log.d("AppletHandlerModule", "getUserInfo");
+                CountDownLatch latch = new CountDownLatch(1);
+                final Map<String, String>[] ret = new Map[1];
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("appParameter", appParameter);
+                handler.post(() -> {
+                    channel.invokeMethod("extensionApi:launchApp", params, new MethodChannel.Result() {
+                        @Override
+                        public void success(Object result) {
+                            ret[0] = (Map<String, String>) result;
+                            latch.countDown();
+                        }
+
+                        @Override
+                        public void error(String errorCode, String errorMessage, Object errorDetails) {
+                            latch.countDown();
+                        }
+
+                        @Override
+                        public void notImplemented() {
+                            latch.countDown();
+                        }
+                    });
+                });
+                try {
+                    latch.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if (ret[0].size() > 0)
+                    return ret[0];
+                else
+                    return null;*/
+                return false;
+            }
+
+            @Override
+            public void getPhoneNumber(@NotNull IAppletCallback callback) {
+            }
+
+            @Override
+            public void chooseAvatar(@NotNull IAppletCallback callback) {
+            }
+
+            @Override
+            public boolean contact(@NotNull JSONObject json) {
+                return false;
+            }
+
+            @Override
+            public boolean feedback(@NotNull Bundle bundle) {
+                return false;
+            }
+
         });
         callback.onSuccess(null);
     }
