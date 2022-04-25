@@ -15,7 +15,7 @@
 {
     NSLog(@"MOB_addWebExtentionApi");
     FlutterMethodChannel *channel = [[MopPlugin instance] methodChannel];
-    [[FATClient sharedClient] fat_registerWebApi:self.name handle:^(id param, FATExtensionApiCallback callback) {
+    [[FATClient sharedClient] fat_registerWebApi:self.name handle:^(FATAppletInfo *appletInfo, id param, FATExtensionApiCallback callback) {
         NSLog(@"invoke webExtentionApi:");
         NSLog(@"%@",self.name);
         NSLog(@"%@",param);
