@@ -76,6 +76,10 @@ public class BaseModule extends BaseApi {
         if (debug == null) debug = false;
         Boolean bindAppletWithMainProcess = (Boolean) param.get("bindAppletWithMainProcess");
         if (bindAppletWithMainProcess == null) bindAppletWithMainProcess = false;
+        Integer pageCountLimit = (Integer) param.get("pageCountLimit");
+        if (pageCountLimit == null) {
+            pageCountLimit = 0;
+        }
 
         String customWebViewUserAgent = (String) param.get("customWebViewUserAgent");
         Integer appletIntervalUpdateLimit = (Integer) param.get("appletIntervalUpdateLimit");
@@ -117,7 +121,8 @@ public class BaseModule extends BaseApi {
                 .setUserId(userId)
                 .setDebugMode(debug)
                 .setDisableRequestPermissions(disablePermission)
-                .setBindAppletWithMainProcess(bindAppletWithMainProcess);
+                .setBindAppletWithMainProcess(bindAppletWithMainProcess)
+                .setPageCountLimit(pageCountLimit);
 
         if (customWebViewUserAgent != null)
             builder.setCustomWebViewUserAgent(customWebViewUserAgent);
