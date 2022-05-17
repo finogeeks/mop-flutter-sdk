@@ -12,6 +12,7 @@ import com.finogeeks.lib.applet.anim.SlideFromTopToBottomAnim;
 import com.finogeeks.lib.applet.client.FinAppClient;
 import com.finogeeks.lib.applet.db.entity.FinApplet;
 import com.finogeeks.lib.applet.interfaces.FinCallback;
+import com.finogeeks.lib.applet.rest.model.WechatLoginInfo;
 import com.finogeeks.mop.api.BaseApi;
 import com.finogeeks.mop.interfaces.ICallback;
 import com.google.gson.Gson;
@@ -31,7 +32,7 @@ public class AppletManageModule extends BaseApi {
     @Override
     public String[] apis() {
         return new String[]{"currentApplet", "closeAllApplets", "clearApplets", "removeUsedApplet", "closeApplet",
-                "setActivityTransitionAnim", "sendCustomEvent", "callJS","finishRunningApplet"};
+                "setActivityTransitionAnim", "sendCustomEvent", "callJS", "finishRunningApplet"};
     }
 
     @Override
@@ -48,6 +49,19 @@ public class AppletManageModule extends BaseApi {
                     res.put("description", applet.getDescription());
                     res.put("version", applet.getVersion());
                     res.put("thumbnail", applet.getThumbnail());
+                    Map<String, String> wechatLoginInfo = new HashMap<>(3);
+//                    wechatLoginInfo.put("wechatOriginId", "1");
+//                    wechatLoginInfo.put("profileUrl", "2");
+//                    wechatLoginInfo.put("phoneUrl", "3");
+                    WechatLoginInfo wechatLogin = applet.getWechatLoginInfo();
+                    if (wechatLogin != null) {
+                        wechatLoginInfo.put("wechatOriginId", wechatLogin.getWechatOriginId());
+                        wechatLoginInfo.put("profileUrl", wechatLogin.getProfileUrl());
+                        wechatLoginInfo.put("phoneUrl", wechatLogin.getPhoneUrl());
+                        res.put("wechatLoginInfo",wechatLoginInfo);
+                    }else{
+                        res.put("wechatLoginInfo", null);
+                    }
                     callback.onSuccess(res);
                 } else {
                     callback.onSuccess(null);
@@ -58,7 +72,7 @@ public class AppletManageModule extends BaseApi {
         } else if (event.equals("closeAllApplets")) {
             FinAppClient.INSTANCE.getAppletApiManager().closeApplets();
             callback.onSuccess(null);
-        }else if(event.equals("finishRunningApplet")){
+        } else if (event.equals("finishRunningApplet")) {
             if (param.containsKey("appId") && param.get("appId") instanceof String) {
                 String appId = (String) param.get("appId");
                 FinAppClient.INSTANCE.getAppletApiManager().finishRunningApplet(appId);
