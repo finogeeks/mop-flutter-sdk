@@ -133,7 +133,15 @@ static NSString *scheme = @"fatae55433be2f62915";//App对应的scheme
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
 }
 
+- (void)getPhoneNumberWithAppletInfo:(FATAppletInfo *)appletInfo bindGetPhoneNumber:(void (^)(NSDictionary *))bindGetPhoneNumber {
+    NSDictionary *params = @{@"name":@"getPhoneNumber"};
 
+    FlutterMethodChannel *channel = [[MopPlugin instance] methodChannel];
+    [channel invokeMethod:@"extensionApi:getPhoneNumber" arguments:params result:^(id _Nullable result) {
+        !bindGetPhoneNumber?: bindGetPhoneNumber(result);
+    }];
+
+}
 @end
 
 @implementation NSString (FATEncode)
