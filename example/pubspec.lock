@@ -115,7 +115,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "2.35.11"
+    version: "2.36.5"
   path:
     dependency: transitive
     description:

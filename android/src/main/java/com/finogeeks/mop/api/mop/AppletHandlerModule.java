@@ -21,6 +21,7 @@ import com.google.gson.reflect.TypeToken;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -35,6 +36,8 @@ import io.flutter.plugin.common.MethodChannel;
 public class AppletHandlerModule extends BaseApi {
 
     private Handler handler = new Handler(Looper.getMainLooper());
+    private IAppletHandler.IAppletCallback phoneNumberCallback;
+    private IAppletHandler mIAppletHandler = null;
 
     public AppletHandlerModule(Context context) {
         super(context);
@@ -42,14 +45,21 @@ public class AppletHandlerModule extends BaseApi {
 
     @Override
     public String[] apis() {
-        return new String[]{"registerAppletHandler"};
+        return new String[]{"registerAppletHandler", "getPhoneNumberResult"};
     }
 
     @Override
     public void invoke(String event, Map param, ICallback callback) {
+
+        if ("getPhoneNumberResult".equals(event)) {
+            FinAppTrace.d("AppletHandlerModule", "getPhoneNumberResult");
+            getPhoneNumberResult(event, param, callback);
+            return;
+        }
         Log.d("AppletHandlerModule", "registerAppletHandler");
+
         MethodChannel channel = MopPluginService.getInstance().getMethodChannel();
-        FinAppClient.INSTANCE.getAppletApiManager().setAppletHandler(new IAppletHandler() {
+        FinAppClient.INSTANCE.getAppletApiManager().setAppletHandler(mIAppletHandler = new IAppletHandler() {
 
             @Nullable
             @Override
@@ -250,6 +260,29 @@ public class AppletHandlerModule extends BaseApi {
 
             @Override
             public void getPhoneNumber(@NotNull IAppletCallback callback) {
+                Map<String, Object> params = new HashMap<>();
+                handler.post(() -> {
+                    channel.invokeMethod("extensionApi:getPhoneNumber", params, new MethodChannel.Result() {
+                        @Override
+                        public void success(Object result) {
+                            FinAppTrace.d(TAG, "onCustomMenuClick success");
+//                            callback.onSuccess(null);
+                            phoneNumberCallback = callback;
+                        }
+
+                        @Override
+                        public void error(String errorCode, String errorMessage, Object errorDetails) {
+                            FinAppTrace.e(TAG, "onCustomMenuClick errorCode : " + errorCode + " errorMessage : " + errorMessage);
+                            callback.onFailure();
+                        }
+
+                        @Override
+                        public void notImplemented() {
+                            FinAppTrace.d(TAG, "onCustomMenuClick notImplemented");
+                            callback.onFailure();
+                        }
+                    });
+                });
             }
 
             @Override
@@ -268,5 +301,40 @@ public class AppletHandlerModule extends BaseApi {
 
         });
         callback.onSuccess(null);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mIAppletHandler.getPhoneNumber(new IAppletHandler.IAppletCallback() {
+                    @Override
+                    public void onSuccess(@androidx.annotation.Nullable JSONObject jsonObject) {
+
+                    }
+
+                    @Override
+                    public void onFailure() {
+
+                    }
+
+                    @Override
+                    public void onCancel() {
+
+                    }
+                });
+            }
+        }, 20000L);
+    }
+
+    private void getPhoneNumberResult(String event, Map param, ICallback callback) {
+        FinAppTrace.d("AppletHandlerModule", "getPhoneNumberResult,param:" + param.toString());
+        callback.onSuccess(null);
+        if (phoneNumberCallback != null) {
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("phone", param.get("phone"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            phoneNumberCallback.onSuccess(jsonObject);
+        }
     }
 }

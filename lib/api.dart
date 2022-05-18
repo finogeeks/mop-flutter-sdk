@@ -34,6 +34,9 @@ abstract class AppletHandler {
   Future<void> onCustomMenuClick(
       String appId, String path, String menuId, String appInfo);
 
-  //打开小程序
+  ///打开小程序
   Future<void> appletDidOpen(String appId);
+
+  ///getMobileNumber
+  Future<void> getMobileNumber(Function(dynamic params) param0);
 }

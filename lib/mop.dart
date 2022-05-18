@@ -272,6 +272,7 @@ class Mop {
     if (call.method.startsWith("extensionApi:")) {
       final name = call.method.substring("extensionApi:".length);
       final handler = _extensionApis[name];
+      debugPrint("name:$name,handler:$handler");
       if (handler != null) {
         return await handler(call.arguments);
       }
@@ -474,6 +475,10 @@ class Mop {
     _extensionApis["appletDidOpen"] = (params) async {
       return handler.appletDidOpen(params["appId"]);
     };
+    _extensionApis["getPhoneNumber"] = (params) async {
+      return handler.getMobileNumber((params0) =>
+          {_channel.invokeMethod("getPhoneNumberResult", params0)});
+    };
     _channel.invokeMethod("registerAppletHandler");
   }
 
@@ -527,6 +532,7 @@ class Mop {
         .invokeMethod("setActivityTransitionAnim", {"anim": anim.name});
     return;
   }
+
   ///
   /// 原生发送事件给小程序
   /// [appId] 小程序id
