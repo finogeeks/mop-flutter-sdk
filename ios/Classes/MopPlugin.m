@@ -2,6 +2,7 @@
 #import "MOPBaseApi.h"
 #import "MOPApiRequest.h"
 #import "MOPApiConverter.h"
+#import "MOPAppletDelegate.h"
 
 @implementation MopEventStream {
     FlutterEventSink _eventSink;
@@ -74,6 +75,11 @@ static MopPlugin *_instance;
       NSMutableDictionary *dict = [NSMutableDictionary dictionary];
       dict[@"path"] = [[FATClient sharedClient] fat_absolutePathWithPath:path];
       result(dict);
+  }
+  else if ([@"getPhoneNumberResult" isEqualToString:call.method]) {
+      if ([MOPAppletDelegate instance].bindGetPhoneNumber) {
+          [MOPAppletDelegate instance].bindGetPhoneNumber(call.arguments);
+      }
   }
   else {
       MOPApiRequest* request = [[MOPApiRequest alloc] init];
