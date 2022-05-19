@@ -42,6 +42,7 @@ public class AppletManageModule extends BaseApi {
             if (appId != null) {
                 FinApplet applet = FinAppClient.INSTANCE.getAppletApiManager().getUsedApplet(appId);
                 if (applet != null) {
+                    //Log.e(TAG, "applet:" + new Gson().toJson(applet));
                     Map<String, Object> res = new HashMap<>();
                     res.put("appId", applet.getId());
                     res.put("name", applet.getName());
@@ -50,9 +51,6 @@ public class AppletManageModule extends BaseApi {
                     res.put("version", applet.getVersion());
                     res.put("thumbnail", applet.getThumbnail());
                     Map<String, String> wechatLoginInfo = new HashMap<>(3);
-//                    wechatLoginInfo.put("wechatOriginId", "1");
-//                    wechatLoginInfo.put("profileUrl", "2");
-//                    wechatLoginInfo.put("phoneUrl", "3");
                     WechatLoginInfo wechatLogin = applet.getWechatLoginInfo();
                     if (wechatLogin != null) {
                         wechatLoginInfo.put("wechatOriginId", wechatLogin.getWechatOriginId());

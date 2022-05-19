@@ -301,27 +301,6 @@ public class AppletHandlerModule extends BaseApi {
 
         });
         callback.onSuccess(null);
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mIAppletHandler.getPhoneNumber(new IAppletHandler.IAppletCallback() {
-                    @Override
-                    public void onSuccess(@androidx.annotation.Nullable JSONObject jsonObject) {
-
-                    }
-
-                    @Override
-                    public void onFailure() {
-
-                    }
-
-                    @Override
-                    public void onCancel() {
-
-                    }
-                });
-            }
-        }, 20000L);
     }
 
     private void getPhoneNumberResult(String event, Map param, ICallback callback) {
