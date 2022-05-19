@@ -134,14 +134,14 @@ static NSString *scheme = @"fatae55433be2f62915";//App对应的scheme
 }
 
 - (void)getPhoneNumberWithAppletInfo:(FATAppletInfo *)appletInfo bindGetPhoneNumber:(void (^)(NSDictionary *))bindGetPhoneNumber {
-    self.bindGetPhoneNumber = bindGetPhoneNumber;
-    FlutterMethodChannel *channel = [[MopPlugin instance] methodChannel];
-    [channel invokeMethod:@"extensionApi:getPhoneNumber" arguments:@{} result:^(id _Nullable result) {
+    NSDictionary *params = @{@"name":@"getPhoneNumber"};
 
+    FlutterMethodChannel *channel = [[MopPlugin instance] methodChannel];
+    [channel invokeMethod:@"extensionApi:getPhoneNumber" arguments:params result:^(id _Nullable result) {
+        !bindGetPhoneNumber?: bindGetPhoneNumber(result);
     }];
 
 }
-
 @end
 
 @implementation NSString (FATEncode)
