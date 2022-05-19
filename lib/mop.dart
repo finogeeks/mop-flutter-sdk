@@ -407,6 +407,12 @@ class Mop {
     return await _channel.invokeMethod("removeUsedApplet", params);
   }
 
+  /// 清除所有小程序缓存
+  Future removeAllUsedApplets() async {
+    Map<String, Object> params = {};
+    return await _channel.invokeMethod("removeAllUsedApplets", params);
+  }
+
   ///
   /// 获取运行时版本号
   ///

@@ -31,7 +31,8 @@ public class AppletManageModule extends BaseApi {
 
     @Override
     public String[] apis() {
-        return new String[]{"currentApplet", "closeAllApplets", "clearApplets", "removeUsedApplet", "closeApplet",
+        return new String[]{"currentApplet", "closeAllApplets", "clearApplets",
+                "removeUsedApplet", "removeAllUsedApplets","closeApplet",
                 "setActivityTransitionAnim", "sendCustomEvent", "callJS", "finishRunningApplet"};
     }
 
@@ -97,7 +98,10 @@ public class AppletManageModule extends BaseApi {
             } else {
                 callback.onFail(null);
             }
-        } else if (event.equals("setActivityTransitionAnim")) {
+        } else if(event.equals("removeAllUsedApplets")){
+            Log.e(TAG,"removeAllUsedApplets");
+            FinAppClient.INSTANCE.getAppletApiManager().removeAllUsedApplets();
+        }else if (event.equals("setActivityTransitionAnim")) {
             String anim = (String) param.get("anim");
             Log.d(TAG, "setActivityTransitionAnim:" + anim);
             if ("SlideFromLeftToRightAnim".equals(anim)) {
