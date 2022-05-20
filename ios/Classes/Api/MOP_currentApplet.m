@@ -24,13 +24,16 @@
         dic[@"description"]=info.appDescription;
         dic[@"version"] = info.appVersion;
         dic[@"thumbnail"]=info.appThumbnail;
-        dic[@"wechatLoginInfo"]=info.wechatLoginInfo;
         success(dic);
     }
     else
     {
         success(@{});
     }
+}
+
++ (void)load {
+    
 }
 
 @end
