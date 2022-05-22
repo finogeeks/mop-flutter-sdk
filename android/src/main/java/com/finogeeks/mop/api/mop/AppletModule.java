@@ -30,7 +30,7 @@ public class AppletModule extends BaseApi {
 
     @Override
     public String[] apis() {
-        return new String[]{"openApplet", "scanOpenApplet","qrcodeOpenApplet"};
+        return new String[]{"openApplet", "scanOpenApplet","qrcodeOpenApplet", "changeUserId"};
     }
 
     @Override
@@ -41,6 +41,8 @@ public class AppletModule extends BaseApi {
             scanOpenApplet(param, callback);
         } else if ("qrcodeOpenApplet".equals(event)){
             qrcodeOpenApplet(param,callback);
+        } else if ("changeUserId".equals(event)) {
+            changeUserId(param, callback);
         }
     }
 
@@ -137,5 +139,19 @@ public class AppletModule extends BaseApi {
 
             }
         });
+    }
+
+    private void changeUserId(Map param, ICallback callback) {
+        String userId = String.valueOf(param.get("userId"));
+        if (FinAppClient.INSTANCE.getFinAppConfig() != null) {
+            FinAppClient.INSTANCE.getFinAppConfig().setUserId(userId);
+            callback.onSuccess(new HashMap());
+        } else {
+            callback.onFail(new HashMap(){
+                {
+                    put("info", "sdk not initilized");
+                }
+            });
+        }
     }
 }

@@ -121,8 +121,8 @@ public class BaseModule extends BaseApi {
                 .setUserId(userId)
                 .setDebugMode(debug)
                 .setDisableRequestPermissions(disablePermission)
-                .setBindAppletWithMainProcess(bindAppletWithMainProcess)
-                .setPageCountLimit(pageCountLimit);
+                .setBindAppletWithMainProcess(bindAppletWithMainProcess);
+//                .setPageCountLimit(pageCountLimit);
 
         if (customWebViewUserAgent != null)
             builder.setCustomWebViewUserAgent(customWebViewUserAgent);

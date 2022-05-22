@@ -387,6 +387,12 @@ class Mop {
     return Map<String, dynamic>.from(ret!);
   }
 
+  Future<Map<String, dynamic>> changeUserId(String userId) async {
+    Map<String, Object> params = {'userId': userId};
+    final ret = await _channel.invokeMapMethod("changeUserId", params);
+    return Map<String, dynamic>.from(ret!);
+  }
+
   ///
   /// close all running applets
   /// 关闭当前打开的所有小程序
