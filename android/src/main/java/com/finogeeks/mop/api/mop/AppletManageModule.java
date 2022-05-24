@@ -72,16 +72,16 @@ public class AppletManageModule extends BaseApi {
             FinAppClient.INSTANCE.getAppletApiManager().closeApplets();
             callback.onSuccess(null);
         } else if (event.equals("finishRunningApplet")) {
-            if (param.containsKey("appId") && param.get("appId") instanceof String) {
-                String appId = (String) param.get("appId");
+            if (param.containsKey("appletId") && param.get("appletId") instanceof String) {
+                String appId = (String) param.get("appletId");
                 FinAppClient.INSTANCE.getAppletApiManager().finishRunningApplet(appId);
                 callback.onSuccess(null);
             } else {
                 callback.onFail(null);
             }
         } else if (event.equals("closeApplet")) {
-            if (param.containsKey("appId") && param.get("appId") instanceof String) {
-                String appId = (String) param.get("appId");
+            if (param.containsKey("appletId") && param.get("appletId") instanceof String) {
+                String appId = (String) param.get("appletId");
                 FinAppClient.INSTANCE.getAppletApiManager().closeApplet(appId);
                 callback.onSuccess(null);
             } else {
