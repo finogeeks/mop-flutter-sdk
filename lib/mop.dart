@@ -537,7 +537,7 @@ class Mop {
   ///
   Future setActivityTransitionAnim(Anim anim) async {
     await _channel
-        .invokeMethod("setActivityTransitionAnim", {"anim": anim.name});
+        .invokeMethod("setActivityTransitionAnim", {"anim": anim.toString().split('.').last});
     return;
   }
 
