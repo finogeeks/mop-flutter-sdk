@@ -68,9 +68,9 @@ public class AppletModule extends BaseApi {
         Log.d(TAG, "openApplet:" + appId + "," + param + "," + sequence + "," + apiServer);
 
         if (apiServer != null) {
-            FinAppClient.INSTANCE.getAppletApiManager().startApplet(context, apiServer, appId, sequence, startParams);
+            FinAppClient.INSTANCE.getAppletApiManager().startApplet(context, apiServer, appId, sequence, startParams,null);
         } else {
-            FinAppClient.INSTANCE.getAppletApiManager().startApplet(context, appId, sequence, startParams);
+            FinAppClient.INSTANCE.getAppletApiManager().startApplet(context, appId, sequence, startParams,null);
         }
 
 //        String apiServer = (String) param.get("apiServer");
@@ -113,7 +113,7 @@ public class AppletModule extends BaseApi {
 
     private void scanOpenApplet(Map param, ICallback callback) {
         String info = String.valueOf(param.get("info"));
-        FinAppClient.INSTANCE.getAppletApiManager().startApplet(mContext, new StartAppletDecryptRequest(info));
+        FinAppClient.INSTANCE.getAppletApiManager().startApplet(mContext, new StartAppletDecryptRequest(info),null);
         callback.onSuccess(new HashMap());
     }
 
