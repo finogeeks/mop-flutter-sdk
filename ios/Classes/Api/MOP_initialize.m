@@ -126,7 +126,7 @@
         return;
     }
 //    [[FATExtClient sharedClient] fat_prepareExtensionApis];
-
+    [[FATClient sharedClient].logManager initLogWithLogDir:nil logLevel:FATLogLevelVerbose consoleLog:YES];
     
     
     [[FATClient sharedClient] setEnableLog:YES];

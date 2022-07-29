@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ffi';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -217,6 +216,91 @@ class FloatWindowConfig {
   }
 }
 
+class BaseAppletRequest {
+  // 服务器地址，必填
+  String apiServer;
+  // 小程序id，必填
+  String appletId;
+  // 小程序的启动参数，非必填
+  Map<String, String>? startParams;
+  // iOS端打开小程序时是否显示动画，默认为true。
+  bool? animated;
+
+  BaseAppletRequest({
+    required this.apiServer, 
+    required this.appletId,
+    this.startParams,
+    this.animated = true,
+    });
+
+  Map<String, dynamic> toMap() {
+    return {
+      "apiServer": apiServer,
+      "appletId": appletId,
+      "startParams": startParams,
+      "animated": animated
+    };
+  }
+}
+
+class RemoteAppletRequest {
+  // 服务器地址，必填
+  String apiServer;
+  // 小程序id，必填
+  String appletId;
+  // 小程序的启动参数，非必填
+  Map<String, String>? startParams;
+  // 小程序的索引，（审核小程序时必填）
+  int? sequence;
+  // 离线小程序压缩包路径，非必填
+  String? offlineMiniprogramZipPath;
+  // 离线基础库压缩包路径，非必填
+  String? offlineFrameworkZipPath;
+  // iOS端打开小程序时是否显示动画，默认为true。
+  bool animated;
+
+  RemoteAppletRequest({
+    required this.apiServer, 
+    required this.appletId,
+    this.startParams,
+    this.sequence,
+    this.offlineMiniprogramZipPath,
+    this.offlineFrameworkZipPath,
+    this.animated = true,
+    });
+
+  @override
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> result = {
+      "apiServer": apiServer,
+      "appletId": appletId,
+      "animated": animated
+    };
+    if (startParams != null) result["startParams"] = startParams;
+    if (offlineMiniprogramZipPath != null) result["offlineMiniprogramZipPath"] = offlineMiniprogramZipPath;
+    if (offlineFrameworkZipPath != null) result["offlineFrameworkZipPath"] = offlineFrameworkZipPath;
+    if (sequence != null) result["sequence"] = sequence;
+
+    return result;
+  }
+}
+
+class QRCodeAppletRequest {
+  // 二维码内容
+  String qrCode;
+  // 是否显示打开动画
+  bool animated = true;
+
+  QRCodeAppletRequest(this.qrCode);
+
+  Map<String, dynamic> toMap() {
+    return {
+      "apiServer": qrCode,
+      "animated": animated
+    };
+  }
+}
+
 enum Anim {
   SlideFromLeftToRightAnim,
   SlideFromRightToLeftAnim,
@@ -373,6 +457,13 @@ class Mop {
     if (apiServer != null) params["apiServer"] = apiServer;
     if (scene != null) param["scene"] = scene;
     final Map ret = await _channel.invokeMethod('openApplet', params);
+    return ret;
+  }
+
+  
+  Future<Map> startApplet(RemoteAppletRequest request) async {
+    Map<String, dynamic> params = request.toMap();
+    final Map ret = await _channel.invokeMethod('startApplet', params);
     return ret;
   }
 

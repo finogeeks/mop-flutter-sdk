@@ -91,6 +91,7 @@ public class AppletManageModule extends BaseApi {
             FinAppClient.INSTANCE.getAppletApiManager().clearApplets();
             callback.onSuccess(null);
         } else if (event.equals("removeUsedApplet")) {
+            Log.d("MopPlugin", "removeUsedApplet:params:" + param);
             if (param.containsKey("appId") && param.get("appId") instanceof String) {
                 String appId = (String) param.get("appId");
                 FinAppClient.INSTANCE.getAppletApiManager().removeUsedApplet(appId);

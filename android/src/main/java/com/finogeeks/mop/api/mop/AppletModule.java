@@ -31,7 +31,7 @@ public class AppletModule extends BaseApi {
 
     @Override
     public String[] apis() {
-        return new String[]{"openApplet", "scanOpenApplet","qrcodeOpenApplet", "changeUserId"};
+        return new String[]{"openApplet", "scanOpenApplet","qrcodeOpenApplet", "changeUserId", "startApplet"};
     }
 
     @Override
@@ -44,6 +44,8 @@ public class AppletModule extends BaseApi {
             qrcodeOpenApplet(param,callback);
         } else if ("changeUserId".equals(event)) {
             changeUserId(param, callback);
+        } else if ("startApplet".equals(event)) {
+            startApplet(param, callback);
         }
     }
 
@@ -115,6 +117,43 @@ public class AppletModule extends BaseApi {
 //            Log.d("MopPlugin", "openApplet:startParams:" + startParams);
 //            FinAppClient.INSTANCE.getAppletApiManager().startApplet(mContext, finAppletStoreConfig, appId, sequence, startParams);
 //        }
+        callback.onSuccess(new HashMap());
+    }
+
+    private void startApplet(Map param, ICallback callback) {
+        if (param.get("appletId") == null) {
+            callback.onFail(new HashMap() {
+                {
+                    put("info", "appId不能为空");
+                }
+            });
+            return;
+        }
+        Log.d("MopPlugin", "startApplet:params:" + param);
+        String appId = String.valueOf(param.get("appletId"));
+        Integer sequence = (Integer) param.get("sequence");
+        Map<String, String> params = (Map) param.get("startParams");
+        String apiServer = (String) param.get("apiServer");
+        String offlineMiniprogramZipPath = (String) param.get("offlineMiniprogramZipPath");
+        String offlineFrameworkZipPath = (String) param.get("offlineFrameworkZipPath");
+        Log.d("MopPlugin", "startApplet (appId=" + appId + ", sequence=" + sequence + " apiServer=" + apiServer + ")");
+        // mContext是FlutterActivity，
+        // 在Android 6.0、7.0系统的部分设备中热启动小程序时，如果context参数用mContext，会出现无法启动小程序的问题
+        // 所以这里使用Application Context
+        Context context = mContext.getApplicationContext();
+//        String dir = context.getFilesDir();
+        // FinAppInfo.StartParams startParams = params == null ? null : new FinAppInfo.StartParams(params.get("path"), params.get("query"), params.get("scene"));
+        // Log.d(TAG, "openApplet:" + appId + "," + param + "," + apiServer);
+
+        FinAppClient.INSTANCE.getAppletApiManager().startApplet(context,
+                IFinAppletRequest.Companion.fromAppId(apiServer, appId)
+                        .setSequence(sequence)
+                        .setStartParams(params)
+                        .setOfflineParams(offlineFrameworkZipPath, offlineMiniprogramZipPath),
+                null);
+        // 改成通过request来启动小程序
+        // FinAppClient.INSTANCE.getAppletApiManager().startApplet(context, IFinAppletRequest.Companion.fromAppId("apiServer", "appId")
+        // .setStartParams(params).setOfflinexxxx);
         callback.onSuccess(new HashMap());
     }
 
