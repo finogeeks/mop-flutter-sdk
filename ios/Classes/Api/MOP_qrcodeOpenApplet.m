@@ -25,7 +25,7 @@
             if (result){
                 success(@{});
             } else {
-                failure(error.description);
+                failure(error.localizedDescription);
             }
         } closeCompletion:^{
             NSLog(@"关闭");
