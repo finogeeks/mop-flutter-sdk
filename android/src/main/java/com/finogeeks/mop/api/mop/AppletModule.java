@@ -174,11 +174,7 @@ public class AppletModule extends BaseApi {
 
             @Override
             public void onError(int i, String s) {
-                callback.onFail(new HashMap(){
-                    {
-                        put("info",s);
-                    }
-                });
+                callback.onFail(s);
             }
 
             @Override
