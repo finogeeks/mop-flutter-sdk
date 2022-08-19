@@ -165,6 +165,10 @@ static NSString *cellID = @"cellid";
         _collectionView.pagingEnabled = YES;
         _collectionView.showsVerticalScrollIndicator = NO;
         _collectionView.showsHorizontalScrollIndicator = NO;
+        _collectionView.backgroundColor = [UIColor whiteColor];
+        if (@available(iOS 11.0, *)) {
+            _collectionView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+        }
     }
     return _collectionView;;
 }
@@ -180,9 +184,11 @@ static NSString *cellID = @"cellid";
         self.imageView.frame = CGRectMake((frame.size.width-50)/2, 10, 50, 50);
         [self.contentView addSubview:self.imageView];
         
-        self.label = [[UILabel alloc] initWithFrame:CGRectMake((frame.size.width-50)/2, 65, frame.size.width, 30)];
+        // self.label = [[UILabel alloc] initWithFrame:CGRectMake((frame.size.width-50)/2, 65, frame.size.width, 30)];
+        self.label = [[UILabel alloc] initWithFrame:CGRectMake(25, 65, frame.size.width-50, 30)];
         self.label.font = [UIFont systemFontOfSize:14];
         self.label.textColor = [UIColor grayColor];
+        self.label.textAlignment = NSTextAlignmentCenter;
         [self.contentView addSubview:self.label];
         
     }
