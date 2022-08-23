@@ -88,12 +88,25 @@ returnInsets = inset;\
         [self.contentView addSubview:self.collectionView];
         self.collectionView.frame = CGRectMake(0, 0, frame.size.width, 100);
 
+        [self p_addNotifications];
     }
     return self;
 }
 
 + (instancetype)view {
     return [[self alloc] initWithFrame:[UIScreen mainScreen].bounds];
+}
+
+- (void)p_addNotifications {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationDidChange) name:UIDeviceOrientationDidChangeNotification object:nil];
+}
+
+- (void)deviceOrientationDidChange {
+    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
+    CGFloat currentWidth = self.frame.size.width;
+    if (screenWidth != currentWidth) {
+        [self removeFromSuperview];
+    }
 }
 
 - (void)show {
