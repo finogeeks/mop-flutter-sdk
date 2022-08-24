@@ -142,6 +142,17 @@ static NSString *scheme = @"fatae55433be2f62915";//App对应的scheme
     }];
 
 }
+
+- (void)chooseAvatarWithAppletInfo:(FATAppletInfo *)appletInfo bindChooseAvatar:(void (^)(NSDictionary *result))bindChooseAvatar {
+    
+    NSDictionary *params = @{@"name":@"chooseAvatar"};
+
+    FlutterMethodChannel *channel = [[MopPlugin instance] methodChannel];
+    [channel invokeMethod:@"extensionApi:chooseAvatar" arguments:params result:^(id _Nullable result) {
+        !bindChooseAvatar?: bindChooseAvatar(result);
+    }];
+}
+
 @end
 
 @implementation NSString (FATEncode)
