@@ -8,6 +8,7 @@
 #import "MOPAppletDelegate.h"
 #import "MopPlugin.h"
 #import "MopCustomMenuModel.h"
+#import <mop/MOPTools.h>
 
 @interface NSString (FATEncode)
 - (NSString *)fat_encodeString;
@@ -144,14 +145,39 @@ static NSString *scheme = @"fatae55433be2f62915";//App对应的scheme
 }
 
 - (void)chooseAvatarWithAppletInfo:(FATAppletInfo *)appletInfo bindChooseAvatar:(void (^)(NSDictionary *result))bindChooseAvatar {
-    
-    NSDictionary *params = @{@"name":@"chooseAvatar"};
 
-    FlutterMethodChannel *channel = [[MopPlugin instance] methodChannel];
-    [channel invokeMethod:@"extensionApi:chooseAvatar" arguments:params result:^(id _Nullable result) {
-        !bindChooseAvatar?: bindChooseAvatar(result);
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil
+                                                                             message:nil
+                                                                      preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertAction *chooseAlbumAction = [UIAlertAction actionWithTitle:@"从相册选择" style:UIAlertActionStyleDefault handler:^(UIAlertAction *_Nonnull action) {
+        NSDictionary *params = @{@"name":@"chooseAvatarAlbum"};
+        
+        FlutterMethodChannel *channel = [[MopPlugin instance] methodChannel];
+        [channel invokeMethod:@"extensionApi:chooseAvatarAlbum" arguments:params result:^(id _Nullable result) {
+            !bindChooseAvatar?: bindChooseAvatar(result);
+        }];
     }];
+    UIAlertAction *photoAction = [UIAlertAction actionWithTitle:@"拍照" style:UIAlertActionStyleDefault handler:^(UIAlertAction *_Nonnull action) {
+        NSDictionary *params = @{@"name":@"chooseAvatarPhoto"};
+        
+        FlutterMethodChannel *channel = [[MopPlugin instance] methodChannel];
+        [channel invokeMethod:@"extensionApi:chooseAvatarPhoto" arguments:params result:^(id _Nullable result) {
+            !bindChooseAvatar?: bindChooseAvatar(result);
+        }];
+    }];
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *_Nonnull action){
+        bindChooseAvatar(@{});
+    }];
+    [alertController addAction:chooseAlbumAction];
+    [alertController addAction:photoAction];
+    [alertController addAction:cancelAction];
+    UIViewController *topVC = [MOPTools topViewController];
+    [topVC presentViewController:alertController animated:YES completion:nil];
 }
+
+
+
 
 @end
 
