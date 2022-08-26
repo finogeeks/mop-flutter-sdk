@@ -1,17 +1,22 @@
 package com.finogeeks.mop.api.mop;
 
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.finogeeks.lib.applet.client.FinAppClient;
 import com.finogeeks.lib.applet.client.FinAppTrace;
+import com.finogeeks.lib.applet.interfaces.FinCallback;
 import com.finogeeks.lib.applet.page.view.moremenu.MoreMenuItem;
 import com.finogeeks.lib.applet.page.view.moremenu.MoreMenuType;
 import com.finogeeks.lib.applet.rest.model.GrayAppletVersionConfig;
+import com.finogeeks.lib.applet.sdk.api.IAppletApiManager;
 import com.finogeeks.lib.applet.sdk.api.IAppletHandler;
 import com.finogeeks.mop.api.BaseApi;
 import com.finogeeks.mop.interfaces.ICallback;
@@ -287,6 +292,32 @@ public class AppletHandlerModule extends BaseApi {
 
             @Override
             public void chooseAvatar(@NotNull IAppletCallback callback) {
+                IAppletApiManager appletApiManager = FinAppClient.INSTANCE.getAppletApiManager();
+                String currentId = appletApiManager.getCurrentAppletId();
+                if (currentId == null || TextUtils.isEmpty(currentId)) {
+                    callback.onFailure();
+                    return;
+                }
+                appletApiManager.callInAppletProcess(
+                        currentId,
+                        "showChooseAvatarBottomSheet",
+                        "",
+                        new FinCallback<String>() {
+                            @Override
+                            public void onSuccess(String s) {
+                                chooseAvatarChannel(s, callback, channel);
+                            }
+
+                            @Override
+                            public void onError(int i, String s) {
+                                callback.onFailure();
+                            }
+
+                            @Override
+                            public void onProgress(int i, String s) {
+
+                            }
+                        });
             }
 
             @Override
@@ -314,6 +345,72 @@ public class AppletHandlerModule extends BaseApi {
                 e.printStackTrace();
             }
             phoneNumberCallback.onSuccess(jsonObject);
+        }
+    }
+
+    private void chooseAvatarChannel(String type, IAppletHandler.IAppletCallback callback, MethodChannel channel) {
+        handler.post(() -> {
+            String channelMethodName;
+            if (TextUtils.equals(type, "album")) {
+                channelMethodName = "extensionApi:chooseAvatarAlbum";
+            } else if (TextUtils.equals(type, "camera")) {
+                channelMethodName = "extensionApi:chooseAvatarPhoto";
+            } else {
+                return;
+            }
+            channel.invokeMethod(channelMethodName, null, new MethodChannel.Result() {
+                @Override
+                public void success(@androidx.annotation.Nullable Object result) {
+                    moveCurrentAppletToFront();
+                    if (result != null) {
+                        try {
+                            Map<String, String> resultMap = (Map<String, String>) result;
+                            JSONObject resultJson = new JSONObject();
+                            String avatarUrl = resultMap.get("avatarUrl");
+                            resultJson.put("avatarUrl", avatarUrl);
+                            callback.onSuccess(resultJson);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            callback.onFailure();
+                        }
+                    } else {
+                        callback.onFailure();
+                    }
+                }
+
+                @Override
+                public void error(String errorCode, @androidx.annotation.Nullable String errorMessage, @androidx.annotation.Nullable Object errorDetails) {
+                    moveCurrentAppletToFront();
+                    callback.onFailure();
+                }
+
+                @Override
+                public void notImplemented() {
+
+                }
+            });
+        });
+    }
+
+    private void moveCurrentAppletToFront() {
+        try {
+            String currentAppletId = FinAppClient.INSTANCE.getAppletApiManager().getCurrentAppletId();
+            if (currentAppletId == null || TextUtils.isEmpty(currentAppletId)) {
+                return;
+            }
+            String activityName = FinAppClient.INSTANCE.getAppletApiManager().getAppletActivityName(currentAppletId);
+            if (activityName == null) {
+                return;
+            }
+            if (activityName.contains("@")) {
+                activityName = activityName.substring(0, activityName.indexOf("@"));
+            }
+            Intent intent = new Intent(getContext(), Class.forName(activityName));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            PendingIntent pendingIntent = PendingIntent.getActivities(getContext(), 0, new Intent[]{intent}, 0);
+            pendingIntent.send();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
