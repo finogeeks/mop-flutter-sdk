@@ -10,6 +10,8 @@ import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.finogeeks.lib.applet.client.FinAppClient;
 import com.finogeeks.lib.applet.client.FinAppTrace;
 import com.finogeeks.lib.applet.interfaces.FinCallback;
@@ -65,6 +67,17 @@ public class AppletHandlerModule extends BaseApi {
 
         MethodChannel channel = MopPluginService.getInstance().getMethodChannel();
         FinAppClient.INSTANCE.getAppletApiManager().setAppletHandler(mIAppletHandler = new IAppletHandler() {
+
+            @Nullable
+            @Override
+            public Map<String, String> getWebViewCookie(@NonNull String s) {
+                return null;
+            }
+
+            @Override
+            public void getJSSDKConfig(@NonNull JSONObject jsonObject, @NonNull IAppletCallback iAppletCallback) {
+
+            }
 
             @Nullable
             @Override
