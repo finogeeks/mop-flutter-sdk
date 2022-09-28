@@ -12,9 +12,11 @@ import com.finogeeks.lib.applet.interfaces.FinCallback;
 import com.finogeeks.mop.api.BaseApi;
 import com.finogeeks.mop.interfaces.ICallback;
 import com.finogeeks.mop.service.MopPluginService;
+import com.finogeeks.xlog.XLogLevel;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -121,7 +123,9 @@ public class BaseModule extends BaseApi {
                 .setUserId(userId)
                 .setDebugMode(debug)
                 .setDisableRequestPermissions(disablePermission)
-                .setBindAppletWithMainProcess(bindAppletWithMainProcess);
+                .setBindAppletWithMainProcess(bindAppletWithMainProcess)
+                .setLogLevel(XLogLevel.LEVEL_VERBOSE)
+                .setXLogDir(new File(getContext().getExternalCacheDir(),"xlog"));
 //                .setPageCountLimit(pageCountLimit);
 
         if (customWebViewUserAgent != null)

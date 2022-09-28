@@ -225,12 +225,15 @@ class BaseAppletRequest {
   Map<String, String>? startParams;
   // iOS端打开小程序时是否显示动画，默认为true。
   bool? animated;
+  // 是否以单进程模式运行，仅限android，默认为false
+  bool isSingleProcess;
 
   BaseAppletRequest({
-    required this.apiServer, 
+    required this.apiServer,
     required this.appletId,
     this.startParams,
     this.animated = true,
+    this.isSingleProcess = false,
     });
 
   Map<String, dynamic> toMap() {
@@ -238,7 +241,8 @@ class BaseAppletRequest {
       "apiServer": apiServer,
       "appletId": appletId,
       "startParams": startParams,
-      "animated": animated
+      "animated": animated,
+      "isSingleProcess": isSingleProcess,
     };
   }
 }
@@ -258,15 +262,18 @@ class RemoteAppletRequest {
   String? offlineFrameworkZipPath;
   // iOS端打开小程序时是否显示动画，默认为true。
   bool animated;
+// 是否以单进程模式运行，仅限android，默认为false
+  bool isSingleProcess;
 
   RemoteAppletRequest({
-    required this.apiServer, 
+    required this.apiServer,
     required this.appletId,
     this.startParams,
     this.sequence,
     this.offlineMiniprogramZipPath,
     this.offlineFrameworkZipPath,
     this.animated = true,
+    this.isSingleProcess = false,
     });
 
   @override
@@ -274,7 +281,8 @@ class RemoteAppletRequest {
     Map<String, dynamic> result = {
       "apiServer": apiServer,
       "appletId": appletId,
-      "animated": animated
+      "animated": animated,
+      "isSingleProcess": isSingleProcess,
     };
     if (startParams != null) result["startParams"] = startParams;
     if (offlineMiniprogramZipPath != null) result["offlineMiniprogramZipPath"] = offlineMiniprogramZipPath;
@@ -290,13 +298,16 @@ class QRCodeAppletRequest {
   String qrCode;
   // 是否显示打开动画
   bool animated = true;
+  // 是否以单进程模式运行，仅限android，默认为false
+  bool isSingleProcess;
 
-  QRCodeAppletRequest(this.qrCode);
+  QRCodeAppletRequest(this.qrCode, {this.isSingleProcess = false});
 
   Map<String, dynamic> toMap() {
     return {
       "apiServer": qrCode,
-      "animated": animated
+      "animated": animated,
+      "isSingleProcess": isSingleProcess,
     };
   }
 }
@@ -447,6 +458,7 @@ class Mop {
     final int? sequence,
     final String? apiServer,
     final String? scene,
+    final bool isSingleProcess = false,
   }) async {
     Map<String, Object> params = {'appId': appId};
     Map param = {};
@@ -456,6 +468,7 @@ class Mop {
     if (sequence != null) params["sequence"] = sequence;
     if (apiServer != null) params["apiServer"] = apiServer;
     if (scene != null) param["scene"] = scene;
+    params["isSingleProcess"] = isSingleProcess;
     final Map ret = await _channel.invokeMethod('openApplet', params);
     return ret;
   }
@@ -524,8 +537,11 @@ class Mop {
   ///
   /// （扫码后）解密-鉴权-打开小程序
   ///
-  Future scanOpenApplet(String info) async {
-    Map<String, Object> params = {'info': info};
+  Future scanOpenApplet(String info, {bool isSingleProcess = false}) async {
+    Map<String, Object> params = {
+      'info': info,
+      'isSingleProcess': isSingleProcess,
+    };
     return await _channel.invokeMapMethod("scanOpenApplet", params);
   }
 
@@ -533,8 +549,11 @@ class Mop {
   /// 通过二维码打开小程序
   /// [qrcode] 二维码内容
   ///
-  Future qrcodeOpenApplet(String qrcode) async {
-    Map<String, Object> params = {'qrcode': qrcode};
+  Future qrcodeOpenApplet(String qrcode, {bool isSingleProcess = false}) async {
+    Map<String, Object> params = {
+      'qrcode': qrcode,
+      'isSingleProcess': isSingleProcess,
+    };
     return await _channel.invokeMapMethod("qrcodeOpenApplet", params);
   }
 
