@@ -10,6 +10,7 @@ import com.finogeeks.lib.applet.anim.SlideFromLeftToRightAnim;
 import com.finogeeks.lib.applet.anim.SlideFromRightToLeftAnim;
 import com.finogeeks.lib.applet.anim.SlideFromTopToBottomAnim;
 import com.finogeeks.lib.applet.client.FinAppClient;
+import com.finogeeks.lib.applet.client.FinAppProcessClient;
 import com.finogeeks.lib.applet.db.entity.FinApplet;
 import com.finogeeks.lib.applet.interfaces.FinCallback;
 import com.finogeeks.lib.applet.rest.model.WechatLoginInfo;
@@ -51,6 +52,7 @@ public class AppletManageModule extends BaseApi {
                     res.put("description", applet.getDescription());
                     res.put("version", applet.getVersion());
                     res.put("thumbnail", applet.getThumbnail());
+                    res.put("isSingleProcess", FinAppProcessClient.INSTANCE.getAppletProcessActivity(applet.getId()) != null);
                     Map<String, String> wechatLoginInfo = new HashMap<>(3);
                     WechatLoginInfo wechatLogin = applet.getWechatLoginInfo();
                     if (wechatLogin != null) {
