@@ -51,12 +51,14 @@ public class AppletManageModule extends BaseApi {
                     res.put("description", applet.getDescription());
                     res.put("version", applet.getVersion());
                     res.put("thumbnail", applet.getThumbnail());
+                    res.put("appletType", applet.getAppletType());
                     Map<String, String> wechatLoginInfo = new HashMap<>(3);
                     WechatLoginInfo wechatLogin = applet.getWechatLoginInfo();
                     if (wechatLogin != null) {
                         wechatLoginInfo.put("wechatOriginId", wechatLogin.getWechatOriginId());
                         wechatLoginInfo.put("profileUrl", wechatLogin.getProfileUrl());
                         wechatLoginInfo.put("phoneUrl", wechatLogin.getPhoneUrl());
+                        wechatLoginInfo.put("paymentUrl", wechatLogin.getPaymentUrl());
                         res.put("wechatLoginInfo",wechatLoginInfo);
                     }else{
                         res.put("wechatLoginInfo", null);
