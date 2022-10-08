@@ -10,7 +10,7 @@ import com.finogeeks.lib.applet.anim.SlideFromLeftToRightAnim;
 import com.finogeeks.lib.applet.anim.SlideFromRightToLeftAnim;
 import com.finogeeks.lib.applet.anim.SlideFromTopToBottomAnim;
 import com.finogeeks.lib.applet.client.FinAppClient;
-import com.finogeeks.lib.applet.db.entity.FinApplet;
+import com.finogeeks.lib.applet.client.FinAppInfo;
 import com.finogeeks.lib.applet.interfaces.FinCallback;
 import com.finogeeks.lib.applet.rest.model.WechatLoginInfo;
 import com.finogeeks.mop.api.BaseApi;
@@ -41,19 +41,19 @@ public class AppletManageModule extends BaseApi {
         if (event.equals("currentApplet")) {
             String appId = FinAppClient.INSTANCE.getAppletApiManager().getCurrentAppletId();
             if (appId != null) {
-                FinApplet applet = FinAppClient.INSTANCE.getAppletApiManager().getUsedApplet(appId);
-                if (applet != null) {
+                FinAppInfo appletInfo = FinAppClient.INSTANCE.getAppletApiManager().getAppletInfoFromRunning(appId);
+                if (appletInfo != null) {
                     //Log.e(TAG, "applet:" + new Gson().toJson(applet));
                     Map<String, Object> res = new HashMap<>();
-                    res.put("appId", applet.getId());
-                    res.put("name", applet.getName());
-                    res.put("icon", applet.getIcon());
-                    res.put("description", applet.getDescription());
-                    res.put("version", applet.getVersion());
-                    res.put("thumbnail", applet.getThumbnail());
-                    res.put("appletType", applet.getAppletType());
-                    Map<String, String> wechatLoginInfo = new HashMap<>(3);
-                    WechatLoginInfo wechatLogin = applet.getWechatLoginInfo();
+                    res.put("appId", appletInfo.getAppId());
+                    res.put("name", appletInfo.getAppTitle());
+                    res.put("icon", appletInfo.getAppAvatar());
+                    res.put("description", appletInfo.getAppDescription());
+                    res.put("version", appletInfo.getAppVersion());
+                    res.put("thumbnail", appletInfo.getAppThumbnail());
+                    res.put("appletType", appletInfo.getAppType());
+                    Map<String, String> wechatLoginInfo = new HashMap<>(4);
+                    WechatLoginInfo wechatLogin = appletInfo.getWechatLoginInfo();
                     if (wechatLogin != null) {
                         wechatLoginInfo.put("wechatOriginId", wechatLogin.getWechatOriginId());
                         wechatLoginInfo.put("profileUrl", wechatLogin.getProfileUrl());
