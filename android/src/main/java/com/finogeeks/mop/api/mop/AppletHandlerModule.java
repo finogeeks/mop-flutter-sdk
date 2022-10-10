@@ -23,6 +23,7 @@ import com.finogeeks.lib.applet.sdk.api.IAppletHandler;
 import com.finogeeks.mop.api.BaseApi;
 import com.finogeeks.mop.interfaces.ICallback;
 import com.finogeeks.mop.service.MopPluginService;
+import com.finogeeks.mop.utils.AppletUtils;
 import com.finogeeks.mop.utils.GsonUtil;
 import com.google.gson.reflect.TypeToken;
 
@@ -374,7 +375,7 @@ public class AppletHandlerModule extends BaseApi {
             channel.invokeMethod(channelMethodName, null, new MethodChannel.Result() {
                 @Override
                 public void success(@androidx.annotation.Nullable Object result) {
-                    moveCurrentAppletToFront();
+                    AppletUtils.moveCurrentAppletToFront(getContext(), null);
                     if (result != null) {
                         try {
                             Map<String, String> resultMap = (Map<String, String>) result;
@@ -393,7 +394,7 @@ public class AppletHandlerModule extends BaseApi {
 
                 @Override
                 public void error(String errorCode, @androidx.annotation.Nullable String errorMessage, @androidx.annotation.Nullable Object errorDetails) {
-                    moveCurrentAppletToFront();
+                    AppletUtils.moveCurrentAppletToFront(getContext(), null);
                     callback.onFailure();
                 }
 
@@ -403,27 +404,5 @@ public class AppletHandlerModule extends BaseApi {
                 }
             });
         });
-    }
-
-    private void moveCurrentAppletToFront() {
-        try {
-            String currentAppletId = FinAppClient.INSTANCE.getAppletApiManager().getCurrentAppletId();
-            if (currentAppletId == null || TextUtils.isEmpty(currentAppletId)) {
-                return;
-            }
-            String activityName = FinAppClient.INSTANCE.getAppletApiManager().getAppletActivityName(currentAppletId);
-            if (activityName == null) {
-                return;
-            }
-            if (activityName.contains("@")) {
-                activityName = activityName.substring(0, activityName.indexOf("@"));
-            }
-            Intent intent = new Intent(getContext(), Class.forName(activityName));
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            PendingIntent pendingIntent = PendingIntent.getActivities(getContext(), 0, new Intent[]{intent}, 0);
-            pendingIntent.send();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }

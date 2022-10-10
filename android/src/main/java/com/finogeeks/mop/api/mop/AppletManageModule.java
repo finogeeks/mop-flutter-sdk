@@ -15,6 +15,7 @@ import com.finogeeks.lib.applet.interfaces.FinCallback;
 import com.finogeeks.lib.applet.rest.model.WechatLoginInfo;
 import com.finogeeks.mop.api.BaseApi;
 import com.finogeeks.mop.interfaces.ICallback;
+import com.finogeeks.mop.utils.AppletUtils;
 import com.google.gson.Gson;
 
 import java.util.HashMap;
@@ -32,8 +33,9 @@ public class AppletManageModule extends BaseApi {
     @Override
     public String[] apis() {
         return new String[]{"currentApplet", "closeAllApplets", "clearApplets",
-                "removeUsedApplet", "removeAllUsedApplets","closeApplet",
-                "setActivityTransitionAnim", "sendCustomEvent", "callJS", "finishRunningApplet"};
+                "removeUsedApplet", "removeAllUsedApplets", "closeApplet",
+                "setActivityTransitionAnim", "sendCustomEvent", "callJS", "finishRunningApplet",
+                "moveCurrentAppletToFront"};
     }
 
     @Override
@@ -168,6 +170,8 @@ public class AppletManageModule extends BaseApi {
             } else {
                 callback.onFail(null);
             }
+        } else if (event.equals("moveCurrentAppletToFront")) {
+            AppletUtils.moveCurrentAppletToFront(getContext(), callback);
         }
     }
 }

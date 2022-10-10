@@ -675,4 +675,11 @@ class Mop {
     _webExtensionApis[name] = handler;
     _channel.invokeMethod("addWebExtentionApi", {"name": name});
   }
+
+  ///
+  /// 将当前正在运行的最后一个打开的小程序移至任务栈前台
+  ///
+  void moveCurrentAppletToFront() async {
+    return await _channel.invokeMethod("moveCurrentAppletToFront");
+  }
 }
