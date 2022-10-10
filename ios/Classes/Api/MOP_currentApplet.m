@@ -25,10 +25,19 @@
         dic[@"version"] = info.appVersion;
         dic[@"thumbnail"]=info.appThumbnail;
         dic[@"wechatLoginInfo"]=info.wechatLoginInfo;
+        if (info.appletVersionType == FATAppletVersionTypeRelease) {
+            dic[@"appletType"] = @"release";
+        } else if (info.appletVersionType == FATAppletVersionTypeTrial) {
+            dic[@"appletType"] = @"trial";
+        } else if (info.appletVersionType == FATAppletVersionTypeTemporary) {
+            dic[@"appletType"] = @"temporary";
+        } else if (info.appletVersionType == FATAppletVersionTypeReview) {
+            dic[@"appletType"] = @"review";
+        } else {
+            dic[@"appletType"] = @"development";
+        }
         success(dic);
-    }
-    else
-    {
+    } else {
         success(@{});
     }
 }
