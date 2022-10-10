@@ -1,8 +1,6 @@
 package com.finogeeks.mop.api.mop;
 
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,7 +27,6 @@ import com.google.gson.reflect.TypeToken;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -352,13 +349,13 @@ public class AppletHandlerModule extends BaseApi {
         FinAppTrace.d("AppletHandlerModule", "getPhoneNumberResult,param:" + param.toString());
         callback.onSuccess(null);
         if (phoneNumberCallback != null) {
-            JSONObject jsonObject = new JSONObject();
             try {
-                jsonObject.put("phone", param.get("phone"));
-            } catch (JSONException e) {
+                JSONObject jsonObject = new JSONObject(param.get("phone").toString());
+                phoneNumberCallback.onSuccess(jsonObject);
+            } catch (Exception e) {
                 e.printStackTrace();
+                phoneNumberCallback.onFailure();
             }
-            phoneNumberCallback.onSuccess(jsonObject);
         }
     }
 
