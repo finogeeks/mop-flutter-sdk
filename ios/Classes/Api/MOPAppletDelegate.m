@@ -139,7 +139,8 @@ static NSString *scheme = @"fatae55433be2f62915";//App对应的scheme
 
     FlutterMethodChannel *channel = [[MopPlugin instance] methodChannel];
     [channel invokeMethod:@"extensionApi:getPhoneNumber" arguments:params result:^(id _Nullable result) {
-        !bindGetPhoneNumber?: bindGetPhoneNumber(result);
+        self.bindGetPhoneNumbers = bindGetPhoneNumber;
+//        !self.bindGetPhoneNumbers?: bindGetPhoneNumber(result);
     }];
 
 }

@@ -77,13 +77,13 @@ static MopPlugin *_instance;
       result(dict);
   }
   else if ([@"getPhoneNumberResult" isEqualToString:call.method]) {
-      if ([MOPAppletDelegate instance].bindGetPhoneNumber) {
+      if ([MOPAppletDelegate instance].bindGetPhoneNumbers) {
           NSDictionary *dic = [[NSDictionary alloc] initWithDictionary:call.arguments];
           NSString *jsonString = [dic[@"phone"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
           NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
           NSError *error;
           NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&error];
-          [MOPAppletDelegate instance].bindGetPhoneNumber(jsonDic);
+          [MOPAppletDelegate instance].bindGetPhoneNumbers(jsonDic);
       }
   }
   else {
