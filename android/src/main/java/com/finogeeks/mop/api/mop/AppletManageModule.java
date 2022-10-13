@@ -56,7 +56,7 @@ public class AppletManageModule extends BaseApi {
                     res.put("version", appletInfo.getAppVersion());
                     res.put("thumbnail", appletInfo.getAppThumbnail());
                     res.put("appletType", appletInfo.getAppType());
-                    res.put("isSingleProcess", FinAppProcessClient.INSTANCE.getAppletProcessActivity(applet.getId()) != null);
+                    res.put("isSingleProcess", FinAppProcessClient.INSTANCE.getAppletProcessActivity(appletInfo.getAppId()) != null);
                     Map<String, String> wechatLoginInfo = new HashMap<>(4);
                     WechatLoginInfo wechatLogin = appletInfo.getWechatLoginInfo();
                     if (wechatLogin != null) {
