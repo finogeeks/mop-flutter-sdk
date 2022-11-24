@@ -23,9 +23,10 @@
         [channel invokeMethod:api arguments:param result:^(id  _Nullable result) {
             NSLog(@"extensionApi reslut:%@",result);
             // 先判断是否flutter发生错误
-            BOOL isFlutterError = [result isKindOfClass:[FlutterError class]] || result == FlutterMethodNotImplemented;
-            if (isFlutterError) {
-                NSLog(@"extensionApi reslut:fail");
+//            BOOL isFlutterError = [result isKindOfClass:[FlutterError class]] || result == FlutterMethodNotImplemented;
+            BOOL isValid = [result isKindOfClass:[NSDictionary class]];
+            if (!isValid) {
+                NSLog(@"extensionApi reslut is not NSDictionary");
                 callback(FATExtensionCodeFailure,nil);
                 return;
             }

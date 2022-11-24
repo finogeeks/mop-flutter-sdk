@@ -7,7 +7,8 @@ import 'package:mop/api.dart';
 typedef MopEventCallback = void Function(dynamic event);
 typedef MopEventErrorCallback = void Function(dynamic event);
 
-typedef ExtensionApiHandler = Future Function(dynamic params);
+typedef ExtensionApiHandler = Future<Map<String, dynamic>> Function(dynamic params);
+typedef MopAppletHandler = Future Function(dynamic params);
 
 class FinStoreConfig {
   ///创建应用时生成的SDK Key
@@ -328,6 +329,8 @@ class Mop {
   late int eventId = 0;
   final List<Map<String, dynamic>> _mopEventQueye = <Map<String, dynamic>>[];
 
+  final Map<String, MopAppletHandler> _appletHandlerApis = {};
+
   final Map<String, ExtensionApiHandler> _extensionApis = {};
 
   Map<String, ExtensionApiHandler> _webExtensionApis = {};
@@ -370,6 +373,11 @@ class Mop {
       debugPrint("name:$name,handler:$handler");
       if (handler != null) {
         return await handler(call.arguments);
+      }
+      
+      final apiHandler = _appletHandlerApis[name];
+       if (apiHandler != null) {
+        return await apiHandler(call.arguments);
       }
     } else if (call.method.startsWith("webExtentionApi:")) {
       final name = call.method.substring("webExtentionApi:".length);
@@ -572,13 +580,13 @@ class Mop {
   /// 注册小程序事件处理
   ///
   void registerAppletHandler(AppletHandler handler) {
-    _extensionApis["forwardApplet"] = (params) async {
+    _appletHandlerApis["forwardApplet"] = (params) async {
       handler.forwardApplet(Map<String, dynamic>.from(params));
     };
-    _extensionApis["getUserInfo"] = (params) {
+    _appletHandlerApis["getUserInfo"] = (params) {
       return handler.getUserInfo();
     };
-    _extensionApis["getCustomMenus"] = (params) async {
+    _appletHandlerApis["getCustomMenus"] = (params) async {
       final res = await handler.getCustomMenus(params["appId"]);
       List<Map<String, dynamic>> list = [];
       res.forEach((element) {
@@ -592,14 +600,14 @@ class Mop {
       debugPrint("registerAppletHandler getCustomMenus list $list");
       return list;
     };
-    _extensionApis["onCustomMenuClick"] = (params) async {
+    _appletHandlerApis["onCustomMenuClick"] = (params) async {
       return handler.onCustomMenuClick(
           params["appId"], params["path"], params["menuId"], params["appInfo"]);
     };
-    _extensionApis["appletDidOpen"] = (params) async {
+    _appletHandlerApis["appletDidOpen"] = (params) async {
       return handler.appletDidOpen(params["appId"]);
     };
-    _extensionApis["getPhoneNumber"] = (params) async {
+    _appletHandlerApis["getPhoneNumber"] = (params) async {
       return handler.getMobileNumber((params0) =>
           {_channel.invokeMethod("getPhoneNumberResult", params0)});
     };
