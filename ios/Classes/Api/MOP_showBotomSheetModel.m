@@ -7,7 +7,7 @@
 
 #import "MOP_showBotomSheetModel.h"
 #import "MopPlugin.h"
-
+#import "MOPTools.h"
 
 @implementation MOP_showBotomSheetModel
 
@@ -75,7 +75,8 @@ returnInsets = inset;\
         [self addSubview:self.contentView];
         
         self.cancelButton  = [UIButton buttonWithType:UIButtonTypeCustom];
-        [self.cancelButton setTitle:@"取消" forState:UIControlStateNormal];
+        NSString *cancel = [MOPTools fat_currentLanguageIsEn] ? @"Cancel" : @"取消";
+        [self.cancelButton setTitle:cancel forState:UIControlStateNormal];
         [self.cancelButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [self.contentView addSubview:self.cancelButton];
         self.cancelButton.frame = CGRectMake(0, self.contentView.frame.size.height - kFinoSafeAreaBottom - 50, self.contentView.frame.size.width, 50);
@@ -211,7 +212,8 @@ static NSString *cellID = @"cellid";
 - (void)setType:(NSInteger)type {
     _type = type;
     if (_type == 0) {
-        self.label.text = @"微信好友";
+        NSString *wechat = [MOPTools fat_currentLanguageIsEn] ? @"Wechat" : @"微信好友";
+        self.label.text = wechat;
         self.imageView.image = [UIImage imageNamed:@"turkey_share_wechat"];
     }
 }
