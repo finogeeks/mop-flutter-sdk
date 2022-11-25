@@ -150,7 +150,8 @@ static NSString *scheme = @"fatae55433be2f62915";//App对应的scheme
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil
                                                                              message:nil
                                                                       preferredStyle:UIAlertControllerStyleActionSheet];
-    UIAlertAction *chooseAlbumAction = [UIAlertAction actionWithTitle:@"从相册选择" style:UIAlertActionStyleDefault handler:^(UIAlertAction *_Nonnull action) {
+    NSString *album = [MOPTools fat_currentLanguageIsEn] ? @"Album" : @"从相册选择";
+    UIAlertAction *chooseAlbumAction = [UIAlertAction actionWithTitle:album style:UIAlertActionStyleDefault handler:^(UIAlertAction *_Nonnull action) {
         NSDictionary *params = @{@"name":@"chooseAvatarAlbum"};
         
         FlutterMethodChannel *channel = [[MopPlugin instance] methodChannel];
@@ -158,7 +159,8 @@ static NSString *scheme = @"fatae55433be2f62915";//App对应的scheme
             !bindChooseAvatar?: bindChooseAvatar(result);
         }];
     }];
-    UIAlertAction *photoAction = [UIAlertAction actionWithTitle:@"拍照" style:UIAlertActionStyleDefault handler:^(UIAlertAction *_Nonnull action) {
+    NSString *camera = [MOPTools fat_currentLanguageIsEn] ? @"Camera" : @"拍照";
+    UIAlertAction *photoAction = [UIAlertAction actionWithTitle:camera style:UIAlertActionStyleDefault handler:^(UIAlertAction *_Nonnull action) {
         NSDictionary *params = @{@"name":@"chooseAvatarPhoto"};
         
         FlutterMethodChannel *channel = [[MopPlugin instance] methodChannel];
@@ -166,8 +168,8 @@ static NSString *scheme = @"fatae55433be2f62915";//App对应的scheme
             !bindChooseAvatar?: bindChooseAvatar(result);
         }];
     }];
-    
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *_Nonnull action){
+    NSString *cancel = [MOPTools fat_currentLanguageIsEn] ? @"Cancel" : @"取消";
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:cancel style:UIAlertActionStyleCancel handler:^(UIAlertAction *_Nonnull action){
         bindChooseAvatar(@{});
     }];
     [alertController addAction:chooseAlbumAction];

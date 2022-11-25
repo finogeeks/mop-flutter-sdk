@@ -16,6 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (UIColor *)colorWithRGBHex:(UInt32)hex;
 
 + (UIColor *)fat_colorWithHexString:(NSString *)hexColor;
+
++ (BOOL)fat_currentLanguageIsEn;
 @end
 
 NS_ASSUME_NONNULL_END

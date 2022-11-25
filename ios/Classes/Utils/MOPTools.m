@@ -112,5 +112,12 @@
     return [UIColor colorWithRed:red / 255.0f green:green / 255.0f blue:blue / 255.0f alpha:alpha / 255.0f];
 }
 
++ (BOOL)fat_currentLanguageIsEn {
+    NSString *languageCode = [NSLocale preferredLanguages].firstObject; // 返回的是国际通用语言Code+国际通用国家地区代码
+    if ([languageCode hasPrefix:@"zh"]) {
+        return NO;
+    }
+    return YES;
+}
 
 @end
