@@ -93,7 +93,7 @@ static MopPlugin *_instance;
       MOPBaseApi* api = [MOPApiConverter apiWithRequest: request];
       if (api) {
           [api setupApiWithSuccess:^(NSDictionary<NSString *,id> * _Nonnull data) {
-              result(@{@"retMsg":@"ok",@"success":@(YES),@"data": data});
+              result(@{@"retMsg":@"ok",@"success":@(YES),@"data": data ? : @{}});
           } failure:^(id _Nullable error) {
               if ([error isKindOfClass:[NSDictionary class]]) {
                   NSDictionary* dict = (NSDictionary*)error;
