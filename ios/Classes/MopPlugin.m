@@ -76,6 +76,14 @@ static MopPlugin *_instance;
       dict[@"path"] = [[FATClient sharedClient] fat_absolutePathWithPath:path];
       result(dict);
   }
+  else if ([@"copyFileAsFinFile" isEqualToString:call.method]) {
+      NSString *appId = call.arguments[@"appId"];
+      NSString *path = call.arguments[@"path"];
+      NSString *fileName = [path componentsSeparatedByString:@"/"].lastObject;
+      NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+      dict[@"path"] = [[FATClient sharedClient] saveFile:[NSData dataWithContentsOfFile:path] fileName:fileName];
+      result(dict);
+  }
   else if ([@"getPhoneNumberResult" isEqualToString:call.method]) {
       if ([MOPAppletDelegate instance].bindGetPhoneNumbers) {
           NSDictionary *dic = [[NSDictionary alloc] initWithDictionary:call.arguments];
@@ -93,7 +101,7 @@ static MopPlugin *_instance;
       MOPBaseApi* api = [MOPApiConverter apiWithRequest: request];
       if (api) {
           [api setupApiWithSuccess:^(NSDictionary<NSString *,id> * _Nonnull data) {
-              result(@{@"retMsg":@"ok",@"success":@(YES),@"data": data});
+              result(@{@"retMsg":@"ok",@"success":@(YES),@"data": data ? : @{}});
           } failure:^(id _Nullable error) {
               if ([error isKindOfClass:[NSDictionary class]]) {
                   NSDictionary* dict = (NSDictionary*)error;
