@@ -153,6 +153,7 @@ public class AppletHandlerModule extends BaseApi {
 
             @Nullable
             @Override
+            @SuppressWarnings("unchecked")
             public List<MoreMenuItem> getRegisteredMoreMenuItems(@NotNull String s) {
                 CountDownLatch latch = new CountDownLatch(1);
                 List<MoreMenuItem> moreMenuItems = new ArrayList<>();
@@ -162,9 +163,8 @@ public class AppletHandlerModule extends BaseApi {
                     channel.invokeMethod("extensionApi:getCustomMenus", params, new MethodChannel.Result() {
                         @Override
                         public void success(Object result) {
-                            List<Map<String, Object>> ret = (List<Map<String, Object>>) result;
-                            FinAppTrace.d(TAG, "getCustomMenus success : " + ret + " size : " + ret.size());
-                            if (ret != null) {
+                            if (result instanceof List) {
+                                List<Map<String, Object>> ret = (List<Map<String, Object>>) result;
                                 for (Map<String, Object> map : ret) {
                                     String type = (String) map.get("type");
                                     MoreMenuType moreMenuType;
@@ -173,7 +173,28 @@ public class AppletHandlerModule extends BaseApi {
                                     } else {
                                         moreMenuType = MoreMenuType.ON_MINI_PROGRAM;
                                     }
-                                    moreMenuItems.add(new MoreMenuItem((String) map.get("menuId"), (String) map.get("title"), moreMenuType));
+                                    String menuId = (String) map.get("menuId");
+                                    if (menuId == null) {
+                                        menuId = "";
+                                    }
+                                    String title = (String) map.get("title");
+                                    if (title == null) {
+                                        title = "";
+                                    }
+                                    String image = (String) map.get("image");
+                                    if (image == null) {
+                                        image = "";
+                                    }
+                                    moreMenuItems.add(
+                                            new MoreMenuItem(
+                                                    menuId,
+                                                    title,
+                                                    image,
+                                                    -1,
+                                                    moreMenuType,
+                                                    true
+                                            )
+                                    );
                                 }
                             }
                             latch.countDown();
