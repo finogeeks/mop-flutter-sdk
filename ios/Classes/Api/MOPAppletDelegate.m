@@ -74,7 +74,14 @@
         MopCustomMenuModel *model = [[MopCustomMenuModel alloc] init];
         model.menuId = data[@"menuId"];
         model.menuTitle = data[@"title"];
-        model.menuIconImage = [UIImage imageNamed:data[@"image"]];
+        NSString *imageUrl = data[@"image"];
+        if ([imageUrl hasPrefix:@"http"]) {
+            // 需要异步加载，待优化！
+            NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageUrl]];
+            model.menuIconImage = [UIImage imageWithData:data];
+        } else {
+            model.menuIconImage = [UIImage imageNamed:imageUrl];
+        }
         NSString *typeString = data[@"type"];
         if (typeString) {
             FATAppletMenuStyle style = [typeString isEqualToString:@"onMiniProgram"] ? FATAppletMenuStyleOnMiniProgram : FATAppletMenuStyleCommon;
