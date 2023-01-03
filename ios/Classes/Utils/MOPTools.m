@@ -6,6 +6,7 @@
 //
 
 #import "MOPTools.h"
+#import <FinApplet/FinApplet.h>
 
 @implementation MOPTools
 + (UIViewController *)topViewController{
@@ -118,6 +119,121 @@
         return NO;
     }
     return YES;
+}
+
+///  设置颜色( + 暗黑模式)
+/// @param lightHexString (明亮模式 的颜色值)
+/// @param darkHexString (暗黑模式 的颜色值)
++ (UIColor *)fat_dynamicColorWithLightHexString:(NSString *)lightHexString darkHexString:(NSString *)darkHexString {
+    return [self fat_dynamicColorWithLight:[UIColor fat_colorWithRGBAHexString:lightHexString] darkColor:[UIColor fat_colorWithRGBAHexString:darkHexString]];
+}
+
++ (UIColor *)fat_dynamicColorWithLight:(UIColor *)lightColor darkColor:(UIColor *)darkColor {
+    if (!darkColor) {
+        return lightColor;
+    }
+    BOOL autoAdaptDarkMode = [FATClient sharedClient].uiConfig.autoAdaptDarkMode;
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunsupported-availability-guard"
+#pragma clang diagnostic ignored "-Wunguarded-availability-new"
+    if (@available(iOS 13.0, *) && autoAdaptDarkMode) {
+        return [UIColor colorWithDynamicProvider:^UIColor *_Nonnull(UITraitCollection *_Nonnull traitCollection) {
+            if (traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
+#pragma clang diagnostic pop
+                return darkColor;
+            } else {
+                return lightColor;
+            }
+        }];
+    } else {
+        return lightColor;
+    }
+}
+
++ (UIImage *)snapshotWithView:(UIView *)view {
+    UIGraphicsBeginImageContextWithOptions(view.bounds.size, NO, [UIScreen mainScreen].scale);
+    [view.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
+}
+
+
+
++ (UIImage *)makeQRCodeForString:(NSString *)string {
+    NSString *text = string;
+    NSData *stringData = [text dataUsingEncoding: NSUTF8StringEncoding];
+    //生成
+    CIFilter *qrFilter = [CIFilter filterWithName:@"CIQRCodeGenerator"];
+    [qrFilter setValue:stringData forKey:@"inputMessage"];
+    [qrFilter setValue:@"M" forKey:@"inputCorrectionLevel"];
+    //二维码颜色
+    UIColor *onColor = [UIColor whiteColor];
+    UIColor *offColor = [UIColor blackColor];
+    //上色，如果只要白底黑块的QRCode可以跳过这一步
+    CIFilter *colorFilter = [CIFilter filterWithName:@"CIFalseColor"
+                                          keysAndValues:
+                             @"inputImage",qrFilter.outputImage,
+                             @"inputColor0",[CIColor colorWithCGColor:onColor.CGColor],
+                             @"inputColor1",[CIColor colorWithCGColor:offColor.CGColor],
+                             nil];
+    //绘制
+    CIImage *qrImage = colorFilter.outputImage;
+    CGSize size = CGSizeMake(300, 300);
+    CGImageRef cgImage = [[CIContext contextWithOptions:nil] createCGImage:qrImage  fromRect:qrImage.extent];
+    UIGraphicsBeginImageContext(size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetInterpolationQuality(context, kCGInterpolationNone);
+    CGContextScaleCTM(context, 1.0, -1.0);//生成的QRCode就是上下颠倒的,需要翻转一下
+    CGContextDrawImage(context, CGContextGetClipBoundingBox(context), cgImage);
+    UIImage *codeImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    CGImageRelease(cgImage);
+
+    return [UIImage imageWithCIImage:qrImage];
+}
+
+
+// 截取当前屏幕 ,返回截取到的图片
++ (UIImage *)imageWithScreenshot {
+
+    
+    CGSize imageSize = CGSizeZero;
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    if (UIInterfaceOrientationIsPortrait(orientation)) {
+        imageSize = [UIScreen mainScreen].bounds.size;
+    } else {
+        imageSize = CGSizeMake([UIScreen mainScreen].bounds.size.height, [UIScreen mainScreen].bounds.size.width);
+    }
+    // 绘制上下文
+    UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    for (UIWindow *window in [[UIApplication sharedApplication] windows]) {
+        CGContextSaveGState(context);
+        CGContextTranslateCTM(context, window.center.x, window.center.y);
+        CGContextConcatCTM(context, window.transform);
+        CGContextTranslateCTM(context, -window.bounds.size.width * window.layer.anchorPoint.x, -window.bounds.size.height * window.layer.anchorPoint.y);
+        if (orientation == UIInterfaceOrientationLandscapeLeft) {
+            CGContextRotateCTM(context, M_PI_2);
+            CGContextTranslateCTM(context, 0, -imageSize.width);
+        } else if (orientation == UIInterfaceOrientationLandscapeRight) {
+            CGContextRotateCTM(context, -M_PI_2);
+            CGContextTranslateCTM(context, -imageSize.height, 0);
+        } else if (orientation == UIInterfaceOrientationPortraitUpsideDown) {
+            CGContextRotateCTM(context, M_PI);
+            CGContextTranslateCTM(context, -imageSize.width, -imageSize.height);
+        }
+        if ([window respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {
+            [window drawViewHierarchyInRect:window.bounds afterScreenUpdates:YES];
+        } else {
+            [window.layer renderInContext:context];
+        }
+        CGContextRestoreGState(context);
+    }
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    NSData *imageData = UIImagePNGRepresentation(image);
+    return [UIImage imageWithData:imageData];
 }
 
 @end
