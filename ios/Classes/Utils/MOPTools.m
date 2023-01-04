@@ -186,7 +186,7 @@
     CGContextSetInterpolationQuality(context, kCGInterpolationNone);
     CGContextScaleCTM(context, 1.0, -1.0);//生成的QRCode就是上下颠倒的,需要翻转一下
     CGContextDrawImage(context, CGContextGetClipBoundingBox(context), cgImage);
-    UIImage *codeImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     CGImageRelease(cgImage);
 
@@ -199,9 +199,14 @@
 
     
     CGSize imageSize = CGSizeZero;
+    
+
+
+    
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
     if (UIInterfaceOrientationIsPortrait(orientation)) {
-        imageSize = [UIScreen mainScreen].bounds.size;
+//        imageSize = [UIScreen mainScreen].bounds.size;
+        imageSize = CGSizeMake([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - [self getStatusHeight]);
     } else {
         imageSize = CGSizeMake([UIScreen mainScreen].bounds.size.height, [UIScreen mainScreen].bounds.size.width);
     }
@@ -210,9 +215,9 @@
     CGContextRef context = UIGraphicsGetCurrentContext();
     for (UIWindow *window in [[UIApplication sharedApplication] windows]) {
         CGContextSaveGState(context);
-        CGContextTranslateCTM(context, window.center.x, window.center.y);
+        CGContextTranslateCTM(context, window.center.x, window.center.y - [self getStatusHeight]);
         CGContextConcatCTM(context, window.transform);
-        CGContextTranslateCTM(context, -window.bounds.size.width * window.layer.anchorPoint.x, -window.bounds.size.height * window.layer.anchorPoint.y);
+        CGContextTranslateCTM(context, -window.bounds.size.width * window.layer.anchorPoint.x, -(window.bounds.size.height + [self getStatusHeight] ) * window.layer.anchorPoint.y);
         if (orientation == UIInterfaceOrientationLandscapeLeft) {
             CGContextRotateCTM(context, M_PI_2);
             CGContextTranslateCTM(context, 0, -imageSize.width);
@@ -224,7 +229,7 @@
             CGContextTranslateCTM(context, -imageSize.width, -imageSize.height);
         }
         if ([window respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {
-            [window drawViewHierarchyInRect:window.bounds afterScreenUpdates:YES];
+            [window drawViewHierarchyInRect:CGRectMake(0, [self getStatusHeight], window.bounds.size.width, window.bounds.size.height - [self getStatusHeight]) afterScreenUpdates:YES];
         } else {
             [window.layer renderInContext:context];
         }
@@ -236,4 +241,16 @@
     return [UIImage imageWithData:imageData];
 }
 
+
+/// 顶部状态栏高度（包括安全区）
++ (CGFloat)getStatusHeight {
+    if (@available(iOS 13.0, *)) {
+        NSSet *set = [UIApplication sharedApplication].connectedScenes;
+        UIWindowScene *windowScene = [set anyObject];
+        UIStatusBarManager *statusBarManager = windowScene.statusBarManager;
+        return statusBarManager.statusBarFrame.size.height;
+    } else {
+        return [UIApplication sharedApplication].statusBarFrame.size.height;
+    }
+}
 @end

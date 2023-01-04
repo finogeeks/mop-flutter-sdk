@@ -123,10 +123,16 @@ static MopPlugin *_instance;
       result([self appInfoDictWithAppId:call.arguments[@"appId"]]);
   }
   else if ([@"getScreenshot" isEqualToString:call.method]) {
-      UIImage *image = [MOPTools imageWithScreenshot];
-      NSString *filePtah = [[FATClient sharedClient] saveFile:UIImagePNGRepresentation(image) fileName:[NSString stringWithFormat:@"%@",call.arguments[@"appId"]]];
-      filePtah = [[FATClient sharedClient] fat_absolutePathWithPath:filePtah];
-      result(filePtah);
+      UIViewController *currentVC = [MOPTools topViewController];
+      [currentVC.view fatHideToastActivity];
+      [currentVC.view fatHideAllToasts];
+      dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+          UIImage *image = [MOPTools imageWithScreenshot];
+//          UIImage *image = [[FATClient sharedClient] getCurrentAppletImage];
+          NSString *filePtah = [[FATClient sharedClient] saveFile:UIImagePNGRepresentation(image) fileName:[NSString stringWithFormat:@"%@",call.arguments[@"appId"]]];
+          filePtah = [[FATClient sharedClient] fat_absolutePathWithPath:filePtah];
+          result(filePtah);
+      });
   }
   else if ([@"getPhoneNumberResult" isEqualToString:call.method]) {
       if ([MOPAppletDelegate instance].bindGetPhoneNumbers) {
