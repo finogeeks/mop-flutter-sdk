@@ -74,13 +74,15 @@ returnInsets = inset;\
         UILabel *descLabel = [[UILabel alloc] init];
         descLabel.frame = CGRectMake(14, bottomY + 12, 168, 21);
         descLabel.font = [UIFont fontWithName:@"PingFangSC-Semibold" size:15];
+        descLabel.textAlignment = NSTextAlignmentLeft;
         descLabel.textColor = [MOPTools fat_dynamicColorWithLightHexString:@"#222222" darkHexString:@"#222222"];
         self.titleLabel = descLabel;
         [self.shareView addSubview:descLabel];
         
         UILabel *detailLabel = [[UILabel alloc] init];
-        detailLabel.frame = CGRectMake(14, self.titleLabel.frame.size.height + self.titleLabel.frame.origin.y, 168, 44);
+        detailLabel.frame = CGRectMake(14, self.titleLabel.frame.size.height + self.titleLabel.frame.origin.y - 3, 168, 44);
         detailLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:11];
+        detailLabel.textAlignment = NSTextAlignmentLeft;
         detailLabel.numberOfLines = 0;
         detailLabel.textColor = [MOPTools fat_dynamicColorWithLightHexString:@"#666666" darkHexString:@"#666666"];
         self.descLabel = detailLabel;
@@ -127,6 +129,12 @@ returnInsets = inset;\
         maskLayer.frame = self.contentView.bounds;
         maskLayer.path = maskPath.CGPath;
         self.contentView.layer.mask = maskLayer;
+        
+        UIBezierPath *appletImageViewMask = [UIBezierPath bezierPathWithRoundedRect:self.appletImageView.bounds byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight cornerRadii:CGSizeMake(6.0, 6.0)];
+        CAShapeLayer *appletImageMaskLayer = [[CAShapeLayer alloc] init];
+        appletImageMaskLayer.frame = self.appletImageView.bounds;
+        appletImageMaskLayer.path = appletImageViewMask.CGPath;
+        self.appletImageView.layer.mask = appletImageMaskLayer;
         
         self.shareView.frame = CGRectMake(52.5, self.contentView.frame.origin.y - 400 , 270 , 380);
         
