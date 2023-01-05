@@ -67,7 +67,7 @@ returnInsets = inset;\
                 
         float bottomY = appletImageView.frame.size.height + appletImageView.frame.origin.y;
         UIView *line0 = [[UIView alloc] initWithFrame:CGRectMake(0, bottomY, self.shareView.frame.size.width, 0.5)];
-        line0.backgroundColor = [MOPTools fat_dynamicColorWithLightHexString:@"#E0E0E0" darkHexString:@"#2E2E2E"];
+        line0.backgroundColor = [MOPTools fat_dynamicColorWithLightHexString:@"#eeeeee" darkHexString:@"#2E2E2E"];
         [self.shareView addSubview:line0];
         
         
