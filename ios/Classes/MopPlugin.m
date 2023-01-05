@@ -95,7 +95,7 @@ static MopPlugin *_instance;
   }
   else if ([@"showShareAppletDialog" isEqualToString:call.method]) {
       dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-          UIImage *image = [MOPTools imageWithScreenshot];
+          UIImage *image = [[FATClient sharedClient] getDefaultCurrentAppletImage:400.0f];
           MopShareView *view = [MopShareView viewWithData:call.arguments];
           view.image = image;
           [view show];
@@ -127,8 +127,7 @@ static MopPlugin *_instance;
       [currentVC.view fatHideToastActivity];
       [currentVC.view fatHideAllToasts];
       dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-          UIImage *image = [MOPTools imageWithScreenshot];
-//          UIImage *image = [[FATClient sharedClient] getCurrentAppletImage];
+          UIImage *image = [[FATClient sharedClient] getDefaultCurrentAppletImage:0.0f];
           NSString *filePtah = [[FATClient sharedClient] saveFile:UIImagePNGRepresentation(image) fileName:[NSString stringWithFormat:@"%@",call.arguments[@"appId"]]];
           filePtah = [[FATClient sharedClient] fat_absolutePathWithPath:filePtah];
           result(filePtah);

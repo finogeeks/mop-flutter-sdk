@@ -29,7 +29,7 @@ returnInsets = inset;\
 (returnInsets);\
 })\
 
-@interface MopShareView ()<UICollectionViewDelegate, UICollectionViewDataSource>
+@interface MopShareView ()<UICollectionViewDelegate, UICollectionViewDataSource, MOPCellClickDelegate>
 
 
 @property (nonatomic, strong) UIView *shareView;
@@ -56,34 +56,30 @@ returnInsets = inset;\
                            @{@"lightImage":@"share_link",@"title":@"复制链接", @"type":@"links"}];
         self.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4f];
         
-        float proportionWithNumber = self.frame.size.width / 375;
-        float proportionheightNumber = self.frame.size.height / 667;
-
-        self.shareView = [[UIView alloc] initWithFrame:CGRectMake(52.5 * proportionWithNumber, 46 * proportionheightNumber + kFinoSafeAreaTop, 270 * proportionWithNumber, 380 * proportionheightNumber)];
+        self.shareView = [[UIView alloc] initWithFrame:CGRectMake(52.5 , 46 + kFinoSafeAreaTop, 270, 380)];
         self.shareView.layer.cornerRadius = 6;
         self.shareView.backgroundColor = UIColor.whiteColor;
 
-        UIImageView *appletImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 6, self.shareView.frame.size.width, 300 * proportionheightNumber)];
-        self.appletImageView = appletImageView;
+        UIImageView *appletImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.shareView.frame.size.width, 300)];
         appletImageView.contentMode = UIViewContentModeScaleAspectFit;
+        self.appletImageView = appletImageView;
         [self.shareView addSubview:appletImageView];
-        
-        UIButton *saveButton = [[UIButton alloc] initWithFrame:CGRectMake(226 * proportionWithNumber, 12 * proportionheightNumber, 36, 36)];
-        [saveButton addTarget:self action:@selector(saveOnClick) forControlEvents:UIControlEventTouchUpInside];
-        [saveButton setImage:[UIImage imageNamed:@"share_download"] forState:UIControlStateNormal];
-        [self.shareView addSubview:saveButton];
-        
+                
         float bottomY = appletImageView.frame.size.height + appletImageView.frame.origin.y;
+        UIView *line0 = [[UIView alloc] initWithFrame:CGRectMake(0, bottomY, self.shareView.frame.size.width, 0.5)];
+        line0.backgroundColor = [MOPTools fat_dynamicColorWithLightHexString:@"#E0E0E0" darkHexString:@"#2E2E2E"];
+        [self.shareView addSubview:line0];
+        
         
         UILabel *descLabel = [[UILabel alloc] init];
-        descLabel.frame = CGRectMake(15, bottomY + 12, 168, 21);
+        descLabel.frame = CGRectMake(14, bottomY + 12, 168, 21);
         descLabel.font = [UIFont fontWithName:@"PingFangSC-Semibold" size:15];
         descLabel.textColor = [MOPTools fat_dynamicColorWithLightHexString:@"#222222" darkHexString:@"#222222"];
         self.titleLabel = descLabel;
         [self.shareView addSubview:descLabel];
         
         UILabel *detailLabel = [[UILabel alloc] init];
-        detailLabel.frame = CGRectMake(15, bottomY + 26, 168, 44);
+        detailLabel.frame = CGRectMake(14, self.titleLabel.frame.size.height + self.titleLabel.frame.origin.y + 5, 168, 44);
         detailLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:11];
         detailLabel.numberOfLines = 0;
         detailLabel.textColor = [MOPTools fat_dynamicColorWithLightHexString:@"#666666" darkHexString:@"#666666"];
@@ -96,7 +92,7 @@ returnInsets = inset;\
         [self addSubview:self.shareView];
 
         
-        self.contentView = [[UIView alloc] initWithFrame:CGRectMake(0, self.shareView.frame.origin.y + self.shareView.frame.size.height + 28 , self.frame.size.width, (221 + kFinoSafeAreaBottom))];
+        self.contentView = [[UIView alloc] initWithFrame:CGRectMake(0,self.frame.size.height - (221 + kFinoSafeAreaBottom) , self.frame.size.width, (221 + kFinoSafeAreaBottom))];
         self.contentView.backgroundColor = [MOPTools fat_dynamicColorWithLightHexString:@"#F0F0F0" darkHexString:@"#1A1A1A"];
         [self addSubview:self.contentView];
         
@@ -119,7 +115,7 @@ returnInsets = inset;\
         [self.contentView addSubview:self.cancelButton];
         self.cancelButton.frame = CGRectMake(0, self.contentView.frame.size.height - kFinoSafeAreaBottom - 56, self.contentView.frame.size.width, 56 );
         [self.cancelButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
-                
+        
         [self.contentView addSubview:self.collectionView];
         self.collectionView.frame = CGRectMake(0, 58.5, frame.size.width, 107);
         
@@ -131,7 +127,13 @@ returnInsets = inset;\
         maskLayer.frame = self.contentView.bounds;
         maskLayer.path = maskPath.CGPath;
         self.contentView.layer.mask = maskLayer;
-
+        
+        self.shareView.frame = CGRectMake(52.5, self.contentView.frame.origin.y - 400 , 270 , 380);
+        
+        UIButton *saveButton = [[UIButton alloc] initWithFrame:CGRectMake(278.5,  self.shareView.frame.origin.y + 12, 36, 36)];
+        [saveButton addTarget:self action:@selector(saveOnClick) forControlEvents:UIControlEventTouchUpInside];
+        [saveButton setImage:[UIImage imageNamed:@"share_download"] forState:UIControlStateNormal];
+        [self addSubview:saveButton];
         [self p_addNotifications];
     }
     return self;
@@ -209,10 +211,19 @@ returnInsets = inset;\
 static NSString *cellID = @"cellid";
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     MOPshareBottomViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellID forIndexPath:indexPath];
-//    cell.type = [self.dataArray[indexPath.row] intValue];
-    cell.imageView.image = [UIImage imageNamed:self.dataArray[indexPath.row][@"lightImage"]];
+    [cell.imageButton setImage:[UIImage imageNamed:self.dataArray[indexPath.row][@"lightImage"]] forState:UIControlStateNormal];
     cell.label.text = self.dataArray[indexPath.row][@"title"];
+    cell.type = self.dataArray[indexPath.row][@"type"];
+    cell.delegate = self;
     return cell;
+}
+
+- (void)iconBtnDidClick:(MOPshareBottomViewCell *)cell {
+    if (self.didSelcetTypeBlock) {
+        NSString *typeString = cell.type;
+        self.didSelcetTypeBlock(typeString);
+    }
+    [self dismiss];
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -268,14 +279,15 @@ static NSString *cellID = @"cellid";
     if (self) {
         self.backgroundColor = [MOPTools fat_dynamicColorWithLightHexString:@"#F0F0F0" darkHexString:@"#1A1A1A"];
         
-        UIView *imageBgView = [[UIView alloc] initWithFrame:CGRectMake(18, 20, 48, 48)];
-        imageBgView.backgroundColor = [MOPTools fat_dynamicColorWithLightHexString:@"#FFFFFF " darkHexString:@"#2C2C2C"];
-        [self.contentView addSubview:imageBgView];
-
-        self.imageView = [UIImageView new];
-        self.imageView.frame = CGRectMake(9, 9, 30, 30);
-        [imageBgView addSubview:self.imageView];
-        
+        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(18, 20, 48, 48)];
+        button.backgroundColor = [MOPTools fat_dynamicColorWithLightHexString:@"#FFFFFF " darkHexString:@"#2C2C2C"];
+        [self.contentView addSubview:button];
+        button.layer.masksToBounds = YES;
+        button.layer.cornerRadius = 6;
+        UIImage *highBgImage = [UIImage fat_imageWithColor:[MOPTools fat_dynamicColorWithLightHexString:@"#D7D7D7 " darkHexString:@"#4A4A4A"]];
+        [button setBackgroundImage:highBgImage forState:UIControlStateHighlighted];
+        [button addTarget:self action:@selector(iconBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+        self.imageButton = button;
         // self.label = [[UILabel alloc] initWithFrame:CGRectMake((frame.size.width-50)/2, 65, frame.size.width, 30)];
         self.label = [[UILabel alloc] initWithFrame:CGRectMake(18, 75, 48, 12)];
         self.label.font = [UIFont systemFontOfSize:10];
@@ -285,6 +297,12 @@ static NSString *cellID = @"cellid";
         
     }
     return self;
+}
+
+- (void)iconBtnClick:(UIButton *)btn {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(iconBtnDidClick:)]) {
+        [self.delegate iconBtnDidClick:self];
+    }
 }
 
 @end

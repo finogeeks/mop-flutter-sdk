@@ -12,18 +12,26 @@ NS_ASSUME_NONNULL_BEGIN
 typedef void (^MOPshareBottomViewTypeBlock)(NSString *type);
 
 @interface MopShareView : UIView
-@property(nonatomic, copy) MOPshareBottomViewTypeBlock didSelcetTypeBlock;
+@property (nonatomic, copy) MOPshareBottomViewTypeBlock didSelcetTypeBlock;
 @property (nonatomic, strong) UIImage *image;
-@property(nonatomic, strong) NSDictionary *dataDic;
+@property (nonatomic, strong) NSDictionary *dataDic;
 + (instancetype)viewWithData:(NSDictionary *)data;
 - (void)show;
 - (void)dismiss;
 @end
 
+
+@class MOPshareBottomViewCell;
+
+@protocol MOPCellClickDelegate <NSObject>
+- (void)iconBtnDidClick:(MOPshareBottomViewCell *)cell;
+@end
+
 @interface MOPshareBottomViewCell : UICollectionViewCell
-@property(nonatomic, assign) NSInteger type;
-@property(nonatomic, strong) UIImageView *imageView;
-@property(nonatomic, strong) UILabel *label;
+@property (nonatomic, strong) NSString *type;
+@property (nonatomic, strong) UIButton *imageButton;
+@property (nonatomic, strong) UILabel *label;
+@property (nonatomic, weak) id<MOPCellClickDelegate> delegate;
 
 
 @end
