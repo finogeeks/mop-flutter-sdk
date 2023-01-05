@@ -32,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param string 二维码的内容
 + (UIImage *)makeQRCodeForString:(NSString *)string;
 
-
++ (UIImage *)getCurrentPageImage;
 
 @end
 

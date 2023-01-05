@@ -60,14 +60,14 @@ returnInsets = inset;\
         self.shareView.layer.cornerRadius = 6;
         self.shareView.backgroundColor = UIColor.whiteColor;
 
-        UIImageView *appletImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.shareView.frame.size.width, 300)];
-        appletImageView.contentMode = UIViewContentModeScaleAspectFit;
+        UIImageView *appletImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 270, 300)];
+        appletImageView.contentMode = UIViewContentModeScaleToFill;
         self.appletImageView = appletImageView;
         [self.shareView addSubview:appletImageView];
                 
         float bottomY = appletImageView.frame.size.height + appletImageView.frame.origin.y;
         UIView *line0 = [[UIView alloc] initWithFrame:CGRectMake(0, bottomY, self.shareView.frame.size.width, 0.5)];
-        line0.backgroundColor = [MOPTools fat_dynamicColorWithLightHexString:@"#eeeeee" darkHexString:@"#2E2E2E"];
+        line0.backgroundColor = [MOPTools fat_dynamicColorWithLightHexString:@"#eeeeee" darkHexString:@"#eeeeee"];
         [self.shareView addSubview:line0];
         
         
@@ -79,7 +79,7 @@ returnInsets = inset;\
         [self.shareView addSubview:descLabel];
         
         UILabel *detailLabel = [[UILabel alloc] init];
-        detailLabel.frame = CGRectMake(14, self.titleLabel.frame.size.height + self.titleLabel.frame.origin.y + 5, 168, 44);
+        detailLabel.frame = CGRectMake(14, self.titleLabel.frame.size.height + self.titleLabel.frame.origin.y, 168, 44);
         detailLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:11];
         detailLabel.numberOfLines = 0;
         detailLabel.textColor = [MOPTools fat_dynamicColorWithLightHexString:@"#666666" darkHexString:@"#666666"];

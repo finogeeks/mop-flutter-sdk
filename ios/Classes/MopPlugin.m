@@ -94,15 +94,15 @@ static MopPlugin *_instance;
       result(dict);
   }
   else if ([@"showShareAppletDialog" isEqualToString:call.method]) {
-      dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-          UIImage *image = [[FATClient sharedClient] getDefaultCurrentAppletImage:400.0f];
+//      dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+          UIImage *image = [MOPTools getCurrentPageImage];
           MopShareView *view = [MopShareView viewWithData:call.arguments];
           view.image = image;
           [view show];
           [view setDidSelcetTypeBlock:^(NSString *type) {
               result(type);
           }];
-      });
+//      });
   }
   else if ([@"showLoading" isEqualToString:call.method]) {
       UIViewController *currentVC = [MOPTools topViewController];
@@ -124,14 +124,15 @@ static MopPlugin *_instance;
   }
   else if ([@"getScreenshot" isEqualToString:call.method]) {
       UIViewController *currentVC = [MOPTools topViewController];
-      [currentVC.view fatHideToastActivity];
-      [currentVC.view fatHideAllToasts];
-      dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-          UIImage *image = [[FATClient sharedClient] getDefaultCurrentAppletImage:0.0f];
+//      [currentVC.view fatHideToastActivity];
+//      [currentVC.view fatHideAllToasts];
+//      dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//          UIImage *image = [[FATClient sharedClient] getDefaultCurrentAppletImage:0.0f];
+          UIImage *image = [MOPTools getCurrentPageImage];
           NSString *filePtah = [[FATClient sharedClient] saveFile:UIImagePNGRepresentation(image) fileName:[NSString stringWithFormat:@"%@",call.arguments[@"appId"]]];
           filePtah = [[FATClient sharedClient] fat_absolutePathWithPath:filePtah];
           result(filePtah);
-      });
+//      });
   }
   else if ([@"getPhoneNumberResult" isEqualToString:call.method]) {
       if ([MOPAppletDelegate instance].bindGetPhoneNumbers) {
