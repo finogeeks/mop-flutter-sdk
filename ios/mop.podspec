@@ -17,7 +17,7 @@ A finclip miniprogram flutter sdk.
   s.dependency 'Flutter'
   s.ios.deployment_target = '9.0'
 
-  s.dependency 'FinApplet' , '2.39.2-alpha20230105v08'
-  s.dependency 'FinAppletExt' , '2.39.2-alpha20230105v08'
+  s.dependency 'FinApplet' , '2.39.2-alpha20230106v02'
+  s.dependency 'FinAppletExt' , '2.39.2-alpha20230106v02'
 end
 
