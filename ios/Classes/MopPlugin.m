@@ -3,6 +3,9 @@
 #import "MOPApiRequest.h"
 #import "MOPApiConverter.h"
 #import "MOPAppletDelegate.h"
+#import <mop/MOPTools.h>
+#import "MopShareView.h"
+#import <UIView+MOPFATToast.h>
 
 @implementation MopEventStream {
     FlutterEventSink _eventSink;
@@ -55,6 +58,12 @@ static MopPlugin *_instance;
               binaryMessenger:[registrar messenger]];
     [registrar addMethodCallDelegate:_instance channel:appletChannel];
     _instance.appletMethodChannel = appletChannel;
+    
+    FlutterMethodChannel* appletShareChannel = [FlutterMethodChannel
+        methodChannelWithName:@"plugins.finosprite.finogeeks.com/share_applet"
+              binaryMessenger:[registrar messenger]];
+    [registrar addMethodCallDelegate:_instance channel:appletShareChannel];
+    _instance.shareMethodChannel = appletShareChannel;
 
 }
 
@@ -77,12 +86,53 @@ static MopPlugin *_instance;
       result(dict);
   }
   else if ([@"copyFileAsFinFile" isEqualToString:call.method]) {
-      NSString *appId = call.arguments[@"appId"];
+//      NSString *appId = call.arguments[@"appId"];
       NSString *path = call.arguments[@"path"];
       NSString *fileName = [path componentsSeparatedByString:@"/"].lastObject;
       NSMutableDictionary *dict = [NSMutableDictionary dictionary];
       dict[@"path"] = [[FATClient sharedClient] saveFile:[NSData dataWithContentsOfFile:path] fileName:fileName];
       result(dict);
+  }
+  else if ([@"showShareAppletDialog" isEqualToString:call.method]) {
+//      dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+          UIImage *image = [MOPTools getCurrentPageImage];
+          MopShareView *view = [MopShareView viewWithData:call.arguments];
+          view.image = image;
+          [view show];
+          [view setDidSelcetTypeBlock:^(NSString *type) {
+              result(type);
+          }];
+//      });
+  }
+  else if ([@"showLoading" isEqualToString:call.method]) {
+      UIViewController *currentVC = [MOPTools topViewController];
+      [currentVC.view fatMakeToastActivity:CSToastPositionCenter];
+      result([self appInfoDictWithAppId:call.arguments[@"appId"]]);
+  }
+  else if ([@"hideLoading" isEqualToString:call.method]) {
+      UIViewController *currentVC = [MOPTools topViewController];
+      [currentVC.view fatHideToastActivity];
+      [currentVC.view fatHideAllToasts];
+      result([self appInfoDictWithAppId:call.arguments[@"appId"]]);
+  }
+  else if ([@"showToast" isEqualToString:call.method]) {
+      UIViewController *currentVC = [MOPTools topViewController];
+      [currentVC.view fatMakeToast:call.arguments[@"msg"]
+                                       duration:2.0
+                                       position:CSToastPositionCenter];
+      result([self appInfoDictWithAppId:call.arguments[@"appId"]]);
+  }
+  else if ([@"getScreenshot" isEqualToString:call.method]) {
+      UIViewController *currentVC = [MOPTools topViewController];
+//      [currentVC.view fatHideToastActivity];
+//      [currentVC.view fatHideAllToasts];
+//      dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//          UIImage *image = [[FATClient sharedClient] getDefaultCurrentAppletImage:0.0f];
+          UIImage *image = [MOPTools getCurrentPageImage];
+          NSString *filePtah = [[FATClient sharedClient] saveFile:UIImagePNGRepresentation(image) fileName:[NSString stringWithFormat:@"%@",call.arguments[@"appId"]]];
+          filePtah = [[FATClient sharedClient] fat_absolutePathWithPath:filePtah];
+          result(filePtah);
+//      });
   }
   else if ([@"getPhoneNumberResult" isEqualToString:call.method]) {
       if ([MOPAppletDelegate instance].bindGetPhoneNumbers) {
@@ -199,4 +249,5 @@ static MopPlugin *_instance;
     }
     return nil;;
 }
+
 @end

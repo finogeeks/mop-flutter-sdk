@@ -9,6 +9,7 @@
 #import "MopPlugin.h"
 #import "MopCustomMenuModel.h"
 #import <mop/MOPTools.h>
+#import <objc/runtime.h>
 
 @interface NSString (FATEncode)
 - (NSString *)fat_encodeString;
@@ -73,7 +74,14 @@
         MopCustomMenuModel *model = [[MopCustomMenuModel alloc] init];
         model.menuId = data[@"menuId"];
         model.menuTitle = data[@"title"];
-        model.menuIconImage = [UIImage imageNamed:data[@"image"]];
+        NSString *imageUrl = data[@"image"];
+        if ([imageUrl hasPrefix:@"http"]) {
+            // 需要异步加载，待优化！
+            NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageUrl]];
+            model.menuIconImage = [UIImage imageWithData:data];
+        } else {
+            model.menuIconImage = [UIImage imageNamed:imageUrl];
+        }
         NSString *typeString = data[@"type"];
         if (typeString) {
             FATAppletMenuStyle style = [typeString isEqualToString:@"onMiniProgram"] ? FATAppletMenuStyleOnMiniProgram : FATAppletMenuStyleCommon;
@@ -86,11 +94,16 @@
 }
 
 - (void)clickCustomItemMenuWithInfo:(NSDictionary *)contentInfo inApplet:(FATAppletInfo *)appletInfo completion:(void (^)(FATExtensionCode code, NSDictionary *result))completion {
+    NSError *parseError = nil;
+    NSMutableDictionary *shareDic = [[NSMutableDictionary alloc] initWithDictionary:[self dictionaryRepresentation:appletInfo]];
+    [shareDic setValue:@{@"desc" : shareDic[@"originalInfo"][@"customData"][@"detailDescription"]} forKey:@"params"];
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:shareDic options:NSJSONWritingPrettyPrinted error:&parseError];
+    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
     NSDictionary *arguments = @{
         @"appId": contentInfo[@"appId"],
         @"path": contentInfo[@"path"],
         @"menuId": contentInfo[@"menuId"],
-        @"appInfo": appletInfo.description
+        @"appInfo": jsonString
     };
     FlutterMethodChannel *channel = [[MopPlugin instance] methodChannel];
     [channel invokeMethod:@"extensionApi:onCustomMenuClick" arguments:arguments result:^(id _Nullable result) {
@@ -100,6 +113,21 @@
     if ([@"Desktop" isEqualToString:contentInfo[@"menuId"]]) {
         [self addToDesktopItemClick:appletInfo path:contentInfo[@"path"]];
     }
+}
+
+- (NSDictionary *)dictionaryRepresentation:(FATAppletInfo *)object {
+    unsigned int count;
+    objc_property_t *properties = class_copyPropertyList([object class], &count);
+    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:count];
+    for (int i = 0; i < count; i++) {
+        NSString *key = [NSString stringWithUTF8String:property_getName(properties[i])];
+        id value = [object valueForKey:key];
+        if (key && value) {
+            [dict setObject:value forKey:key];
+        }
+    }
+    free(properties);
+    return dict;
 }
 
 - (void)applet:(NSString *)appletId didOpenCompletion:(NSError *)error {
