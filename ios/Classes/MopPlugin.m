@@ -94,8 +94,8 @@ static MopPlugin *_instance;
       result(dict);
   }
   else if ([@"showShareAppletDialog" isEqualToString:call.method]) {
-//      dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-          UIImage *image = [MOPTools getCurrentPageImage];
+//      dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+      UIImage *image = [[FATClient sharedClient] getDefaultCurrentAppletImage:440.0f];
           MopShareView *view = [MopShareView viewWithData:call.arguments];
           view.image = image;
           [view show];
@@ -123,12 +123,11 @@ static MopPlugin *_instance;
       result([self appInfoDictWithAppId:call.arguments[@"appId"]]);
   }
   else if ([@"getScreenshot" isEqualToString:call.method]) {
-      UIViewController *currentVC = [MOPTools topViewController];
+//      UIViewController *currentVC = [MOPTools topViewController];
 //      [currentVC.view fatHideToastActivity];
 //      [currentVC.view fatHideAllToasts];
 //      dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//          UIImage *image = [[FATClient sharedClient] getDefaultCurrentAppletImage:0.0f];
-          UIImage *image = [MOPTools getCurrentPageImage];
+          UIImage *image = [[FATClient sharedClient] getDefaultCurrentAppletImage:0.0f];
           NSString *filePtah = [[FATClient sharedClient] saveFile:UIImagePNGRepresentation(image) fileName:[NSString stringWithFormat:@"%@",call.arguments[@"appId"]]];
           filePtah = [[FATClient sharedClient] fat_absolutePathWithPath:filePtah];
           result(filePtah);
