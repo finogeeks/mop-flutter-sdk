@@ -106,7 +106,7 @@ returnInsets = inset;\
         [self.contentView addSubview:titleLabel];
         
         UIView *line1 = [[UIView alloc] initWithFrame:CGRectMake(0, 58 , self.contentView.frame.size.width, 0.5)];
-        line1.backgroundColor = [MOPTools fat_dynamicColorWithLightHexString:@"#E0E0E0" darkHexString:@"#E0E0E0"];
+        line1.backgroundColor = [MOPTools fat_dynamicColorWithLightHexString:@"#E0E0E0" darkHexString:@"#2E2E2E"];
         [self.contentView addSubview:line1];
 
         self.cancelButton  = [UIButton buttonWithType:UIButtonTypeCustom];
