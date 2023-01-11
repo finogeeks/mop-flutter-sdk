@@ -136,9 +136,9 @@ returnInsets = inset;\
         appletImageMaskLayer.path = appletImageViewMask.CGPath;
         self.appletImageView.layer.mask = appletImageMaskLayer;
         
-        self.shareView.frame = CGRectMake(52.5, self.contentView.frame.origin.y - 400 , 270 , 380);
-        
-        UIButton *saveButton = [[UIButton alloc] initWithFrame:CGRectMake(278.5,  self.shareView.frame.origin.y + 12, 36, 36)];
+        self.shareView.frame = CGRectMake((self.frame.size.width - 270) / 2, self.contentView.frame.origin.y - 400 , 270 , 380);
+        float leftCoordinate = (self.shareView.frame.size.width + self.shareView.frame.origin.x) - 36 - 12;
+        UIButton *saveButton = [[UIButton alloc] initWithFrame:CGRectMake(leftCoordinate,  self.shareView.frame.origin.y + 12, 36, 36)];
         [saveButton addTarget:self action:@selector(saveOnClick) forControlEvents:UIControlEventTouchUpInside];
         [saveButton setImage:[UIImage imageNamed:@"share_download"] forState:UIControlStateNormal];
         [self addSubview:saveButton];
