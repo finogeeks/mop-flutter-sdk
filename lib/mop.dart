@@ -608,7 +608,6 @@ class Mop {
         params["path"],
         params["menuId"],
         params["appInfo"],
-        params["query"],
       );
     };
     _appletHandlerApis["appletDidOpen"] = (params) async {

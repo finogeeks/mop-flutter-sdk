@@ -95,14 +95,14 @@
     NSError *parseError = nil;
     NSMutableDictionary *shareDic = [[NSMutableDictionary alloc] initWithDictionary:[self dictionaryRepresentation:appletInfo]];
     [shareDic setValue:@{@"desc" : shareDic[@"originalInfo"][@"customData"][@"detailDescription"]} forKey:@"params"];
+    [shareDic setValue:contentInfo[@"query"] forKey:@"query"];
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:shareDic options:NSJSONWritingPrettyPrinted error:&parseError];
     NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
     NSDictionary *arguments = @{
         @"appId": contentInfo[@"appId"],
         @"path": contentInfo[@"path"],
         @"menuId": contentInfo[@"menuId"],
-        @"appInfo": jsonString,
-        @"query" : contentInfo[@"query"]
+        @"appInfo": jsonString
     };
     FlutterMethodChannel *channel = [[MopPlugin instance] methodChannel];
     [channel invokeMethod:@"extensionApi:onCustomMenuClick" arguments:arguments result:^(id _Nullable result) {
