@@ -7,7 +7,8 @@ import 'package:mop/api.dart';
 typedef MopEventCallback = void Function(dynamic event);
 typedef MopEventErrorCallback = void Function(dynamic event);
 
-typedef ExtensionApiHandler = Future<Map<String, dynamic>> Function(dynamic params);
+typedef ExtensionApiHandler = Future<Map<String, dynamic>> Function(
+    dynamic params);
 typedef MopAppletHandler = Future Function(dynamic params);
 
 class FinStoreConfig {
@@ -235,7 +236,7 @@ class BaseAppletRequest {
     this.startParams,
     this.animated = true,
     this.isSingleProcess = false,
-    });
+  });
 
   Map<String, dynamic> toMap() {
     return {
@@ -275,7 +276,7 @@ class RemoteAppletRequest {
     this.offlineFrameworkZipPath,
     this.animated = true,
     this.isSingleProcess = false,
-    });
+  });
 
   @override
   Map<String, dynamic> toMap() {
@@ -286,8 +287,10 @@ class RemoteAppletRequest {
       "isSingleProcess": isSingleProcess,
     };
     if (startParams != null) result["startParams"] = startParams;
-    if (offlineMiniprogramZipPath != null) result["offlineMiniprogramZipPath"] = offlineMiniprogramZipPath;
-    if (offlineFrameworkZipPath != null) result["offlineFrameworkZipPath"] = offlineFrameworkZipPath;
+    if (offlineMiniprogramZipPath != null)
+      result["offlineMiniprogramZipPath"] = offlineMiniprogramZipPath;
+    if (offlineFrameworkZipPath != null)
+      result["offlineFrameworkZipPath"] = offlineFrameworkZipPath;
     if (sequence != null) result["sequence"] = sequence;
 
     return result;
@@ -374,9 +377,9 @@ class Mop {
       if (handler != null) {
         return await handler(call.arguments);
       }
-      
+
       final apiHandler = _appletHandlerApis[name];
-       if (apiHandler != null) {
+      if (apiHandler != null) {
         return await apiHandler(call.arguments);
       }
     } else if (call.method.startsWith("webExtentionApi:")) {
@@ -481,7 +484,6 @@ class Mop {
     return ret;
   }
 
-  
   Future<Map> startApplet(RemoteAppletRequest request) async {
     Map<String, dynamic> params = request.toMap();
     final Map ret = await _channel.invokeMethod('startApplet', params);
@@ -602,7 +604,12 @@ class Mop {
     };
     _appletHandlerApis["onCustomMenuClick"] = (params) async {
       return handler.onCustomMenuClick(
-          params["appId"], params["path"], params["menuId"], params["appInfo"]);
+        params["appId"],
+        params["path"],
+        params["menuId"],
+        params["appInfo"],
+        params["query"],
+      );
     };
     _appletHandlerApis["appletDidOpen"] = (params) async {
       return handler.appletDidOpen(params["appId"]);
@@ -660,8 +667,7 @@ class Mop {
   /// 设置小程序切换动画 安卓
   ///
   Future setActivityTransitionAnim(Anim anim) async {
-    await _channel
-        .invokeMethod("setActivityTransitionAnim", {"anim": ""});
+    await _channel.invokeMethod("setActivityTransitionAnim", {"anim": ""});
     return;
   }
 

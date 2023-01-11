@@ -44,8 +44,7 @@
     }];
 }
 
-- (NSDictionary *)getUserInfoWithAppletInfo:(FATAppletInfo *)appletInfo
-{
+- (NSDictionary *)getUserInfoWithAppletInfo:(FATAppletInfo *)appletInfo {
     NSLog(@"getUserInfoWithAppletInfo");
     __block NSDictionary *userInfo;
     FlutterMethodChannel *channel = [[MopPlugin instance] methodChannel];
@@ -77,8 +76,7 @@
         NSString *imageUrl = data[@"image"];
         if ([imageUrl hasPrefix:@"http"]) {
             // 需要异步加载，待优化！
-            NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageUrl]];
-            model.menuIconImage = [UIImage imageWithData:data];
+            model.menuIconImage = [UIImage fat_getImageWithUrl:imageUrl];
         } else {
             model.menuIconImage = [UIImage imageNamed:imageUrl];
         }
@@ -103,7 +101,8 @@
         @"appId": contentInfo[@"appId"],
         @"path": contentInfo[@"path"],
         @"menuId": contentInfo[@"menuId"],
-        @"appInfo": jsonString
+        @"appInfo": jsonString,
+        @"query" : contentInfo[@"query"]
     };
     FlutterMethodChannel *channel = [[MopPlugin instance] methodChannel];
     [channel invokeMethod:@"extensionApi:onCustomMenuClick" arguments:arguments result:^(id _Nullable result) {

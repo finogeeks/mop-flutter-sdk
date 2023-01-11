@@ -56,7 +56,7 @@ returnInsets = inset;\
                            @{@"lightImage":@"share_link",@"title":@"复制链接", @"type":@"links"}];
         self.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4f];
         
-        self.shareView = [[UIView alloc] initWithFrame:CGRectMake(52.5 , 46 + kFinoSafeAreaTop, 270, 380)];
+        self.shareView = [[UIView alloc] initWithFrame:CGRectMake((self.frame.size.width - 270) / 2 , 46 + kFinoSafeAreaTop, 270, 380)];
         self.shareView.layer.cornerRadius = 6;
         self.shareView.backgroundColor = UIColor.whiteColor;
 
