@@ -63,7 +63,7 @@ static MopPlugin *_instance;
         methodChannelWithName:@"plugins.finosprite.finogeeks.com/share_applet"
               binaryMessenger:[registrar messenger]];
     [registrar addMethodCallDelegate:_instance channel:appletShareChannel];
-    _instance.shareMethodChannel = appletShareChannel;
+    _instance.shareAppletMethodChannel = appletShareChannel;
 
 }
 

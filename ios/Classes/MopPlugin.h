@@ -8,6 +8,7 @@
 @property MopEventStream *mopEventStreamHandler;
 @property FlutterMethodChannel *methodChannel;
 @property FlutterMethodChannel *shareMethodChannel;
+@property FlutterMethodChannel *shareAppletMethodChannel;
 @property FlutterMethodChannel *appletMethodChannel;
 
 + (instancetype) instance;
