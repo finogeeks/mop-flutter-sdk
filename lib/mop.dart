@@ -588,20 +588,20 @@ class Mop {
     _appletHandlerApis["getUserInfo"] = (params) {
       return handler.getUserInfo();
     };
-    _appletHandlerApis["getCustomMenus"] = (params) async {
-      final res = await handler.getCustomMenus(params["appId"]);
-      List<Map<String, dynamic>> list = [];
-      res.forEach((element) {
-        Map<String, dynamic> map = Map();
-        map["menuId"] = element.menuId;
-        map["image"] = element.image;
-        map["title"] = element.title;
-        map["type"] = element.type;
-        list.add(map);
-      });
-      debugPrint("registerAppletHandler getCustomMenus list $list");
-      return list;
-    };
+    // _appletHandlerApis["getCustomMenus"] = (params) async {
+    //   final res = await handler.getCustomMenus(params["appId"]);
+    //   List<Map<String, dynamic>> list = [];
+    //   res.forEach((element) {
+    //     Map<String, dynamic> map = Map();
+    //     map["menuId"] = element.menuId;
+    //     map["image"] = element.image;
+    //     map["title"] = element.title;
+    //     map["type"] = element.type;
+    //     list.add(map);
+    //   });
+    //   debugPrint("registerAppletHandler getCustomMenus list $list");
+    //   return list;
+    // };
     _appletHandlerApis["onCustomMenuClick"] = (params) async {
       return handler.onCustomMenuClick(
         params["appId"],
