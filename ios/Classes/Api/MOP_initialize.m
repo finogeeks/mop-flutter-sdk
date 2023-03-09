@@ -78,6 +78,7 @@
     NSError* error = nil;
     FATUIConfig *uiconfig = [[FATUIConfig alloc]init];
     uiconfig.autoAdaptDarkMode = YES;
+    uiconfig.hideShareAppletMenu = NO;
     if (_uiConfig) {
         if (_uiConfig[@"navigationTitleTextAttributes"]) {
             uiconfig.navigationTitleTextAttributes = _uiConfig[@"navigationTitleTextAttributes"];
