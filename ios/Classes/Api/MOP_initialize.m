@@ -78,7 +78,6 @@
     NSError* error = nil;
     FATUIConfig *uiconfig = [[FATUIConfig alloc]init];
     uiconfig.autoAdaptDarkMode = YES;
-    uiconfig.hideShareAppletMenu = NO;
     if (_uiConfig) {
         if (_uiConfig[@"navigationTitleTextAttributes"]) {
             uiconfig.navigationTitleTextAttributes = _uiConfig[@"navigationTitleTextAttributes"];
@@ -89,7 +88,7 @@
         uiconfig.hideFeedbackMenu = [_uiConfig[@"isHideFeedbackAndComplaints"] boolValue];
         uiconfig.hideForwardMenu = [_uiConfig[@"isHideForwardMenu"] boolValue];
         uiconfig.autoAdaptDarkMode = [_uiConfig[@"autoAdaptDarkMode"] boolValue];
-        
+        uiconfig.hideShareAppletMenu = [_uiConfig[@"isHideShareAppletMenu"] boolValue];
         uiconfig.appletText = _uiConfig[@"appletText"];
         uiconfig.hideTransitionCloseButton = [_uiConfig[@"hideTransitionCloseButton"] boolValue];
         uiconfig.disableSlideCloseAppletGesture = [_uiConfig[@"disableSlideCloseAppletGesture"] boolValue];
