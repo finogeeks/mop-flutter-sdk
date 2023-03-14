@@ -125,7 +125,10 @@ public class BaseModule extends BaseApi {
                 .setDisableRequestPermissions(disablePermission)
                 .setBindAppletWithMainProcess(bindAppletWithMainProcess)
                 .setLogLevel(XLogLevel.LEVEL_VERBOSE)
-                .setXLogDir(new File(getContext().getExternalCacheDir(),"xlog"));
+                .setXLogDir(new File(getContext().getExternalCacheDir(),"xlog"))
+                .setUseLocalTbsCore(true)
+                .setTbsCoreUrl("https://www-cdn.finclip.com/sdk/x5/latest/");
+
 //                .setPageCountLimit(pageCountLimit);
 
         if (customWebViewUserAgent != null)
