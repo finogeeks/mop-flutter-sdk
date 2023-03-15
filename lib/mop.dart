@@ -431,6 +431,9 @@ class Mop {
     String? customWebViewUserAgent,
     int? appletIntervalUpdateLimit,
     int? maxRunningApplet,
+        bool useLocalTbsCore = false,
+        String? tbsCoreUrl
+
   }) async {
     List<Map<String, dynamic>>? storeConfigs =
         finStoreConfigs?.map((e) => e.toMap()).toList();
@@ -451,7 +454,9 @@ class Mop {
       "uiConfig": uiConfig?.toMap(),
       "customWebViewUserAgent": customWebViewUserAgent,
       "appletIntervalUpdateLimit": appletIntervalUpdateLimit,
-      "maxRunningApplet": maxRunningApplet
+      "maxRunningApplet": maxRunningApplet,
+      "useLocalTbsCore": useLocalTbsCore,
+      "tbsCoreUrl": tbsCoreUrl
     });
     return ret;
   }

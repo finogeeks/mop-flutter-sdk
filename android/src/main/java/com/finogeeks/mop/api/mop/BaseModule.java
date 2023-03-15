@@ -67,6 +67,17 @@ public class BaseModule extends BaseApi {
         if (disablePermission == null) {
             disablePermission = false;
         }
+
+        Boolean useLocalTbsCore = (Boolean) param.get("useLocalTbsCore");
+        if (useLocalTbsCore == null) {
+            useLocalTbsCore = false;
+        }
+
+        String tbsCoreUrl = "";
+        if (param.get("tbsCoreUrl") != null) {
+            tbsCoreUrl = (String) param.get("tbsCoreUrl");
+        }
+
         String userId = "";
         if (param.get("userId") != null) {
             userId = (String) param.get("userId");
@@ -126,8 +137,8 @@ public class BaseModule extends BaseApi {
                 .setBindAppletWithMainProcess(bindAppletWithMainProcess)
                 .setLogLevel(XLogLevel.LEVEL_VERBOSE)
                 .setXLogDir(new File(getContext().getExternalCacheDir(),"xlog"))
-                .setUseLocalTbsCore(true)
-                .setTbsCoreUrl("https://www-cdn.finclip.com/sdk/x5/latest/");
+                .setUseLocalTbsCore(useLocalTbsCore)
+                .setTbsCoreUrl(tbsCoreUrl);
 
 //                .setPageCountLimit(pageCountLimit);
 
