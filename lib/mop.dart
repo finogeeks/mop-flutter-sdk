@@ -69,6 +69,9 @@ class UIConfig {
   ///是否隐藏"更多"菜单中的"转发"按钮
   bool isHideForwardMenu = false;
 
+  ///是否隐藏"更多"菜单中的"分享"按钮
+  bool isHideShareAppletMenu = true;
+
   /// 加载小程序过程中（小程序Service层还未加载成功，基础库还没有向SDK传递小程序配置信息），是否隐藏导航栏的关闭按钮
   bool hideTransitionCloseButton = false;
 
@@ -103,6 +106,7 @@ class UIConfig {
       "isHideFeedbackAndComplaints": isHideFeedbackAndComplaints,
       "isHideBackHome": isHideBackHome,
       "isHideForwardMenu": isHideForwardMenu,
+      "isHideShareAppletMenu": isHideShareAppletMenu,
       "hideTransitionCloseButton": hideTransitionCloseButton,
       "disableSlideCloseAppletGesture": disableSlideCloseAppletGesture,
       "capsuleConfig": capsuleConfig?.toMap(),
