@@ -1,33 +1,26 @@
 //
-//  MOP_initialize.m
+//  Mop_newInitialize.m
 //  mop
 //
-//  Created by 杨涛 on 2020/2/27.
+//  Created by 滔 on 2023/3/17.
 //
 
-#import "MOP_initialize.h"
-#import <FinApplet/FinApplet.h>
-#import <FinAppletExt/FinAppletExt.h>
+#import "Mop_newInitialize.h"
 #import "MOPTools.h"
 
-@implementation MOP_initialize
+@implementation Mop_newInitialize
 
 - (void)setupApiWithSuccess:(void (^)(NSDictionary<NSString *,id> * _Nonnull))success failure:(void (^)(id _Nullable))failure cancel:(void (^)(void))cancel
 {
-    if (!self.appkey || !self.secret) {
-        failure(@"sdkkey 或 secret不能为空");
+    if (!self.config) {
+        failure(@"config不能为空");
         return;
     }
-    if (!self.apiServer || [self.apiServer isEqualToString:@""]) {
-        self.apiServer = @"https://api.finclip.com";
-    }
-    if (!self.apiPrefix|| [self.apiPrefix isEqualToString:@""]) {
-        self.apiPrefix = @"/api/v1/mop";
-    }
     FATConfig *config;
-    if (_finStoreConfigs && _finStoreConfigs.count > 0) {
+    NSArray *storeConfigList = self.config[@"storeConfigs"];
+    if (storeConfigList && storeConfigList.count > 0) {
         NSMutableArray *storeArrayM = [NSMutableArray array];
-        for (NSDictionary *dict in _finStoreConfigs) {
+        for (NSDictionary *dict in storeConfigList) {
             FATStoreConfig *storeConfig = [[FATStoreConfig alloc] init];
             storeConfig.sdkKey = dict[@"sdkKey"];
             storeConfig.sdkSecret = dict[@"sdkSecret"];
@@ -44,36 +37,33 @@
         }
         config = [FATConfig configWithStoreConfigs:storeArrayM];
     } else {
-        config = [FATConfig configWithAppSecret:self.secret appKey:self.appkey];
-        config.apiServer = [self.apiServer copy];
-        config.apiPrefix = [self.apiPrefix copy];
-        if([self.cryptType isEqualToString: @"SM"])
-        {
-            config.cryptType = FATApiCryptTypeSM;
-        }
-        else
-        {
-            config.cryptType = FATApiCryptTypeMD5;
-        }
-        
-        // encryptServerData
-        NSLog(@"encryptServerData:%d",self.encryptServerData);
-        config.encryptServerData = self.encryptServerData;
+        failure(@"storeConfigs不能为空");
+        return;
     }
     
-    NSLog(@"disablePermission:%d",self.disablePermission);
-    config.disableAuthorize = self.disablePermission;
-    config.currentUserId = [self.userId copy];
-    config.appletIntervalUpdateLimit = self.appletIntervalUpdateLimit;
+    config.currentUserId = self.config[@"currentUserId"];
+    config.productIdentification = self.config[@"productIdentification"];
+    config.disableAuthorize = [self.config[@"disableAuthorize"] boolValue];
+    config.appletAutoAuthorize = [self.config[@"appletAutoAuthorize"] boolValue];
+    config.disableGetSuperviseInfo = [self.config[@"disableGetSuperviseInfo"] boolValue];
+    config.ignoreWebviewCertAuth = [self.config[@"ignoreWebviewCertAuth"] boolValue];
+    config.appletIntervalUpdateLimit = [self.config[@"appletIntervalUpdateLimit"] integerValue];
+    config.startCrashProtection = [self.config[@"startCrashProtection"] boolValue];
+    config.enableApmDataCompression = [self.config[@"enableApmDataCompression"] boolValue];
+    config.encryptServerData = [self.config[@"encryptServerData"] boolValue];
+    config.enableAppletDebug = [self.config[@"enableAppletDebug"] integerValue];
+    config.enableWatermark = [self.config[@"enableWatermark"] boolValue];
+    config.watermarkPriority = [self.config[@"watermarkPriority"] integerValue];
+    config.baseLoadingViewClass = self.config[@"baseLoadingViewClass"];
+    config.baseLoadFailedViewClass = self.config[@"baseLoadFailedViewClass"];
+    config.header = self.config[@"header"];
+    config.headerPriority = [self.config[@"headerPriority"] integerValue];
+    config.enableH5AjaxHook = [self.config[@"enableH5AjaxHook"] boolValue];
+    config.h5AjaxHookRequestKey = self.config[@"h5AjaxHookRequestKey"];
+    config.pageCountLimit = [self.config[@"pageCountLimit"] integerValue];
+    config.schemes = self.config[@"schemes"];
     
-//    bool debug = false,
-//    bool bindAppletWithMainProcess = false,
-//    List<FinStoreConfig>? finStoreConfigs,
-//    UIConfig? uiConfig,
-//    String? customWebViewUserAgent,
-//    int appletIntervalUpdateLimit = 0,
-//    int maxRunningApplet = 5,
-
+    
     NSError* error = nil;
     FATUIConfig *uiconfig = [[FATUIConfig alloc]init];
     uiconfig.autoAdaptDarkMode = YES;
@@ -81,9 +71,32 @@
         if (_uiConfig[@"navigationTitleTextAttributes"]) {
             uiconfig.navigationTitleTextAttributes = _uiConfig[@"navigationTitleTextAttributes"];
         }
+        
+        uiconfig.navigationBarHeight = [_uiConfig[@"navigationBarHeight"] floatValue];
+        if (_uiConfig[@"navigationBarTitleLightColor"]) {
+            uiconfig.navigationBarTitleLightColor = [MOPTools colorWithRGBHex:[_uiConfig[@"navigationBarTitleLightColor"] intValue]];
+        }
+        if (_uiConfig[@"navigationBarTitleDarkColor"]) {
+            uiconfig.navigationBarTitleDarkColor = [MOPTools colorWithRGBHex:[_uiConfig[@"navigationBarTitleDarkColor"] intValue]];
+        }
+        if (_uiConfig[@"navigationBarBackBtnLightColor"]) {
+            uiconfig.navigationBarBackBtnLightColor = [MOPTools colorWithRGBHex:[_uiConfig[@"navigationBarBackBtnLightColor"] intValue]];
+        }
+        if (_uiConfig[@"navigationBarBackBtnDarkColor"]) {
+            uiconfig.navigationBarBackBtnDarkColor = [MOPTools colorWithRGBHex:[_uiConfig[@"navigationBarBackBtnDarkColor"] intValue]];
+        }
+        uiconfig.moreMenuStyle = [_uiConfig[@"moreMenuStyle"] integerValue];
+        uiconfig.hideBackToHomePriority = [_uiConfig[@"hideBackToHomePriority"] integerValue];
+        uiconfig.hideFeedbackMenu = [_uiConfig[@"isHideFeedbackAndComplaints"] boolValue];
+        uiconfig.hideBackToHome = [_uiConfig[@"isHideBackHome"] boolValue];
+        uiconfig.hideForwardMenu = [_uiConfig[@"isHideForwardMenu"] boolValue];
+//        uiconfig. = [_uiConfig[@"isHideRefreshMenu"] integerValue];
+        uiconfig.moreMenuStyle = [_uiConfig[@"moreMenuStyle"] integerValue];
+        uiconfig.moreMenuStyle = [_uiConfig[@"moreMenuStyle"] integerValue];
         if (_uiConfig[@"progressBarColor"]) {
             uiconfig.progressBarColor = [MOPTools colorWithRGBHex:[_uiConfig[@"progressBarColor"] intValue]];
         }
+        
         uiconfig.hideFeedbackMenu = [_uiConfig[@"isHideFeedbackAndComplaints"] boolValue];
         uiconfig.hideForwardMenu = [_uiConfig[@"isHideForwardMenu"] boolValue];
         uiconfig.autoAdaptDarkMode = [_uiConfig[@"autoAdaptDarkMode"] boolValue];
@@ -114,9 +127,9 @@
             uiconfig.capsuleConfig = capsuleConfig;
             
         }
-        
+        uiconfig.appendingCustomUserAgent = _uiConfig[@"customWebViewUserAgent"];
     }
-    uiconfig.appendingCustomUserAgent = self.customWebViewUserAgent;
+    
     
     // uiconfig.moreMenuStyle = FATMoreViewStyleNormal;
     [[FATClient sharedClient] initWithConfig:config uiConfig:uiconfig error:&error];
@@ -131,7 +144,6 @@
     [[FATClient sharedClient] setEnableLog:YES];
     
     success(@{});
-    
     
 }
 @end
