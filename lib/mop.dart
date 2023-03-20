@@ -53,73 +53,77 @@ class FinStoreConfig {
 
 class FATConfig {
   /**
+ 要初始化的服务器配置对象列表
+ */
+  List<FinStoreConfig> storeConfigs;
+  /**
  当前用户id，对应管理后台的用户管理->成员管理->用户id。
  若体验版本配置了体验成员，则需要设置正确的userId才能具备打开小程序的权限
  登录/切换用户/退出登录时，需要修改此值。
  小程序缓存信息会存储在以userId命名的不同目录下。
  */
-String? currentUserId;
+  String? currentUserId;
 
 /**
  产品的标识，非必传，默认为存储目录里的finclip，finogeeks和userAgent里的finogeeks
  */
-String? productIdentification;
+  String? productIdentification;
 
 /**
 是否不让SDK申请权限
 如果设置为true，则SDK内使用权限的api，不会主动申请权限
 */
-bool disableAuthorize = false;
+  bool disableAuthorize = false;
 
 /**
  小程序自动申请授权
  如果设置为true，则小程序申请权限时不会弹出用户确认提示框
  */
-bool appletAutoAuthorize = false;
+  bool appletAutoAuthorize = false;
 
 /**
  是否禁用SDK的监管接口API（默认开启：false）
  如果设置为true，则SDK禁用监管接口API
 */
-bool disableGetSuperviseInfo = false;
+  bool disableGetSuperviseInfo = false;
 
 /**
  是否忽略webview的证书校验，默认为false,进行校验
  如果设置为true，则忽略校验Https的证书
 */
-bool ignoreWebviewCertAuth = false;
+  bool ignoreWebviewCertAuth = false;
 
 /**
 后台自动检查更新的小程序个数
 初始化SDK成功后，如处于wifi网络下，更新最近使用的x个小程序
 取值范围：0~50。0代表不检查更新；不设置默认是3。
 */
-int appletIntervalUpdateLimit = 3;
+  int appletIntervalUpdateLimit = 3;
 
 /**
 apm 统计的扩展信息
 */
-Map<String,String>? apmExtension;
+  Map<String, String>? apmExtension;
 
 /** 是否开启Crash防崩溃，默认为false。(iOS支持)
  如果开启，可以防止如下类型的崩溃：UnrecognizedSelector、KVO、Notification、Timer、Container(数组越界，字典插入nil等)、String (越界、nil等)
  如果在开发阶段，建议关闭该属性，否则开发时不便于及时发现代码中的崩溃问题。
 */
-bool startCrashProtection = false;
+  bool startCrashProtection = false;
 
-Map? theme;
+  Map? theme;
 
 /**
  * 数据上报时，是否压缩请求的数据
  * 默认为false
  */
-bool enableApmDataCompression = false;
+  bool enableApmDataCompression = false;
 
 /**
 是否需要接口加密验证（初始化单服务器时使用）
 默认为不开启，当设置为YES时开启，接口返回加密数据并处理
 */
-bool encryptServerData = false;
+  bool encryptServerData = false;
 
 /**
  是否开启小程序的debug模式。
@@ -128,43 +132,43 @@ bool encryptServerData = false;
  当设置为FATBOOLStateFalse时，非正式版会在更多菜单里显示打开和关闭调试的菜单。
  当设置为FATBOOLStateForbidden时，所有版本强制关闭vconsole，且不可调api开启，多面板不展示打开、关闭调试菜单
  */
-@property (nonatomic, assign) FATBOOLState enableAppletDebug;
+  FATBOOLState enableAppletDebug = FATBOOLState.FATBOOLStateUndefined;
 
 /**
  是否显示水印
  */
-bool enableWatermark = false;
+  bool enableWatermark = false;
 
 /**
  显示水印优先级设置，默认全局配置优先
  */
-ConfigPriority watermarkPriority = ConfigPriority.ConfigGlobalPriority;
+  ConfigPriority watermarkPriority = ConfigPriority.ConfigGlobalPriority;
 
 /**
  小程序的自定义启动加载页，非必填。
  自定义启动加载页必须继承自FATBaseLoadingView
  注意：swift中的类名带有命名空间，需要在前拼接项目文件名，如：“SwiftDemo.FCloadingView”。其中SwiftDemo是项目名，FCloadingView是类名
 */
-String? baseLoadingViewClass;
+  String? baseLoadingViewClass;
 
 /**
  小程序的自定义启动失败页，非必填。
  自定义启动失败页必须继承自FATBaseLoadFailedView
  注意：swift中的类名带有命名空间，需要在前拼接项目文件名，如：“SwiftDemo.FCloadingView”。其中SwiftDemo是项目名，FCloadingView是类名
 */
-String? baseLoadFailedViewClass;
+  String? baseLoadFailedViewClass;
 
 /**
  统一设置小程序中网络请求的header。
  注意，如果小程序调用api时也传递了相同的key，则会用小程序传递的参数覆盖。
  对ft.request、ft.downloadFile、ft.uploadFile均会生效
  */
-Map<String,dynamic>? header;
+  Map<String, dynamic>? header;
 
 /**
  header优先级设置，默认全局配置优先
  */
-ConfigPriority headerPriority = ConfigPriority.ConfigGlobalPriority;
+  ConfigPriority headerPriority = ConfigPriority.ConfigGlobalPriority;
 
 /**
  是否开启小程序中加载的H5页面hook功能，非必填。
@@ -172,30 +176,34 @@ ConfigPriority headerPriority = ConfigPriority.ConfigGlobalPriority;
  在发起请求之前，先将body中的参数，通过代理方法传递给宿主App。宿主App可自行存储每个request的body，然后在
  自定义的URLProtocol里发起请求之前，组装上body内容。
  */
-bool enableH5AjaxHook = false;
+  bool enableH5AjaxHook = false;
 
 /**
  开启enableH5AjaxHook后，会hook request请求，会在原request 的url 后拼上一个FinClipHookBridge-RequestId=xxx的参数。
  而该参数可设置参数名，比如您可以设置Key 为 FinClip-RequestId，这样会拼接FinClip-RequestId=xxx的参数。
  */
-String? h5AjaxHookRequestKey;
+  String? h5AjaxHookRequestKey;
 
 /**
  小程序中页面栈的最大限制。默认值为0，标识不限制。
  例如，设置为5，则表示页面栈中最多可有5个页面。从主页最多可再navigateTo 4 层页面。
  */
-int pageCountLimit = 0;
+  int pageCountLimit = 0;
 
 /**
  自定义的scheme数组
  */
-List<String> schemes = [];
+  List<String> schemes = [];
 
-   Map<String, dynamic> toMap() {
+  FATConfig(this.storeConfigs);
+
+  Map<String, dynamic> toMap() {
+    List<Map<String, dynamic>>? finStoreConfigs =
+        storeConfigs.map((e) => e.toMap()).toList();
     return {
+      "storeConfigs": finStoreConfigs,
       "currentUserId": currentUserId,
       "productIdentification": productIdentification,
-
       "disableAuthorize": disableAuthorize,
       "appletAutoAuthorize": appletAutoAuthorize,
       "disableGetSuperviseInfo": disableGetSuperviseInfo,
@@ -204,7 +212,7 @@ List<String> schemes = [];
       "apmExtension": apmExtension,
       "enableApmDataCompression": enableApmDataCompression,
       "encryptServerData": encryptServerData,
-      "enableAppletDebug": enableAppletDebug,
+      "enableAppletDebug": enableAppletDebug.index,
       "enableWatermark": enableWatermark,
       "watermarkPriority": watermarkPriority.index,
       "baseLoadingViewClass": baseLoadingViewClass,
@@ -215,7 +223,7 @@ List<String> schemes = [];
       "pageCountLimit": pageCountLimit,
       "schemes": schemes,
     };
-   }
+  }
 }
 
 class UIConfig {
@@ -234,19 +242,19 @@ class UIConfig {
   int navigationBarBackBtnLightColor = 0xffffffff;
 
   //导航栏的返回按钮颜色（明亮主题），默认值为黑色
-  int navigationBarBackBtnDarkColor 0xff000000;
+  int navigationBarBackBtnDarkColor = 0xff000000;
 
   // int? navigationBackImage;
   //弹出的菜单视图的样式 0:默认 1:
   int moreMenuStyle = 0;
 
   //隐藏导航栏返回首页按钮的优先级设置，默认全局配置优先 不支持FATConfigAppletFilePriority
-  ConfigPriority hideBackToHomePriority = ConfigPriority.ConfigGlobalPriority
+  ConfigPriority hideBackToHomePriority = ConfigPriority.ConfigGlobalPriority;
 
-  ///当导航栏为默认导航栏时，是否始终显示返回按钮
+  ///当导航栏为默认导航栏时，是否始终显示返回按钮 ios未发现该属性
   bool isAlwaysShowBackInDefaultNavigationBar = false;
 
-  ///是否清除导航栏导航按钮的背景
+  ///是否清除导航栏导航按钮的背景 ios未发现该属性
   bool isClearNavigationBarNavButtonBackground = false;
 
   ///是否隐藏"更多"菜单中的"反馈与投诉"菜单入口
@@ -258,9 +266,6 @@ class UIConfig {
   //隐藏...弹出菜单中的 【转发】 的菜单，默认为false
   bool isHideForwardMenu = false;
 
-  //隐藏...弹出菜单中的 【反馈与投诉】 的菜单，默认为false
-  bool isHideFeedbackMenu = false;
-
   //隐藏...弹出菜单中的 【分享】 的菜单，默认为true
   bool isHideShareAppletMenu = true;
 
@@ -269,12 +274,6 @@ class UIConfig {
 
   //隐藏...弹出菜单中的 【设置】 的菜单，默认为false
   bool isHideSettingMenu = false;
-
-  /// 加载小程序过程中（小程序Service层还未加载成功，基础库还没有向SDK传递小程序配置信息），是否隐藏导航栏的关闭按钮
-  bool hideTransitionCloseButton = false;
-
-  /// 禁用侧滑关闭小程序手势
-  bool disableSlideCloseAppletGesture = false;
 
   /// 胶囊按钮配置
   CapsuleConfig? capsuleConfig;
@@ -294,8 +293,6 @@ class UIConfig {
   //隐藏小程序里加载H5时进度条，默认为false
   bool hideWebViewProgressBar = false;
 
-  
-
   //是否自适应暗黑模式。如果设置为true，则更多页面、关于等原生页面会随着手机切换暗黑，也自动调整为暗黑模式
   bool autoAdaptDarkMode = true;
 
@@ -310,7 +307,7 @@ class UIConfig {
  */
   TranstionStyle transtionStyle = TranstionStyle.TranstionStyleUp;
 
-  //是否隐藏转场页的关闭按钮。默认为false
+  /// 加载小程序过程中（小程序Service层还未加载成功，基础库还没有向SDK传递小程序配置信息），是否隐藏导航栏的关闭按钮
   bool hideTransitionCloseButton = false;
 
   /**
@@ -338,23 +335,20 @@ class UIConfig {
       "isHideBackHome": isHideBackHome,
       "isHideForwardMenu": isHideForwardMenu,
       "isHideRefreshMenu": isHideRefreshMenu,
-      "isHideFeedbackMenu": isHideFeedbackMenu,
       "isHideShareAppletMenu": isHideShareAppletMenu,
       "isHideSettingMenu": isHideSettingMenu,
       "hideTransitionCloseButton": hideTransitionCloseButton,
-      "disableSlideCloseAppletGesture": disableSlideCloseAppletGesture,
       "capsuleConfig": capsuleConfig?.toMap(),
       "navHomeConfig": navHomeConfig?.toMap(),
-      "authViewConfig": authViewConfig,toMap(,)
+      "authViewConfig": authViewConfig?.toMap(),
       "floatWindowConfig": floatWindowConfig?.toMap(),
       "progressBarColor": progressBarColor,
       "hideWebViewProgressBar": hideWebViewProgressBar,
       "moreMenuStyle": moreMenuStyle,
-      "hideBackToHomePriority": hideBackToHomePriority,
+      "hideBackToHomePriority": hideBackToHomePriority.index,
       "autoAdaptDarkMode": autoAdaptDarkMode,
       "appendingCustomUserAgent": appendingCustomUserAgent,
-      "transtionStyle":transtionStyle.index,
-      "hideTransitionCloseButton": hideTransitionCloseButton,
+      "transtionStyle": transtionStyle.index,
       "disableSlideCloseAppletGesture": disableSlideCloseAppletGesture,
       "appletText": appletText
     };
@@ -482,29 +476,17 @@ class NavHomeConfig {
 /**
  返回首页按钮的左边距，默认值为10
  */
-  double leftMargin;
+  double leftMargin = 10;
 
 /**
  返回首页按钮的圆角半径，默认值为5
  */
-  double cornerRadius;
+  double cornerRadius = 5;
 
 /**
  返回首页按钮的边框宽度，默认值为0.8
  */
-  double borderWidth;
-
-/**
- 浅色返回首页按钮的图片对象，如果不传，会使用默认图标
- （暗黑模式）
-*/
-//  int? lightImage;
-
-/**
- 深色返回首页按钮的图片对象，如果不传，会使用默认图标
- （明亮模式）
-*/
-// int? darkImage;
+  double borderWidth = 0.8;
 
 /**
  返回首页按钮的边框浅色颜色
@@ -530,6 +512,9 @@ class NavHomeConfig {
  */
   int bgDarkColor;
 
+  NavHomeConfig(this.width, this.height, this.borderLightColor,
+      this.borderDarkColor, this.bgLightColor, this.bgDarkColor);
+
   Map<String, dynamic> toMap() {
     return {
       "width": width,
@@ -549,110 +534,90 @@ class AuthViewConfig {
 /**
  小程序名称字体大小，默认字体为PingFangSC-Regular，默认大小16
  */
-int appletNameFont;
+  int appletNameFont = 16;
 
 /**
  小程序名称的浅色颜色（明亮模式），默认#202020
  */
-int appletNameLightColor;
+  int appletNameLightColor = 0xff202020;
 
 /**
  小程序名称的深色颜色（暗黑模式），默认#D0D0D0
  */
-int appletNameDarkColor;
-
-/**
- 隐私协议入口icon（明亮模式），大小：22pt（@2× @3×）
- */
-int agreementLightImage;
-
-/**
- 隐私协议入口icon（暗黑模式），大小：22pt（@2× @3×）
- */
-int agreementDarkImage;
+  int appletNameDarkColor = 0xffd0d0d0;
 
 /**
  权限标题字体大小，默认字体为PingFangSC-Medium，默认大小17
  备注：权限选项文字字体大小使用该配置项，但字体固定为PingFangSC-Regular
  */
-int authorizeTitleFont;
+  int authorizeTitleFont = 17;
 
 /**
  权限标题的浅色颜色（明亮模式），默认#202020
  备注：权限选项文字字体颜色使用该配置项
  */
-int authorizeTitleLightColor;
+  int authorizeTitleLightColor = 0xff202020;
 
 /**
  权限标题的深色颜色（暗黑模式），默认#D0D0D0
  备注：权限选项文字字体颜色使用该配置项
  */
-int authorizeTitleDarkColor;
+  int authorizeTitleDarkColor = 0xffd0d0d0;
 
 /**
  权限描述字体大小，默认字体为PingFangSC-Regular，默认大小14
  */
-int authorizeDescriptionFont;
+  int authorizeDescriptionFont = 14;
 
 /**
  权限描述的浅色颜色（明亮模式），默认#666666
  */
-int authorizeDescriptionLightColor;
+  int authorizeDescriptionLightColor = 0xff666666;
 
 /**
  权限描述的深色颜色（暗黑模式），默认#8C8C8C
  */
-int authorizeDescriptionDarkColor;
+  int authorizeDescriptionDarkColor = 0xff8c8c8c;
 
 /**
  协议标题字体大小，默认字体为PingFangSC-Regular，默认大小16
  */
-int agreementTitleFont;
+  int agreementTitleFont = 16;
 
 /**
  协议标题的浅色颜色（明亮模式），默认#202020
  */
-int agreementTitleLightColor;
+  int agreementTitleLightColor = 0xff202020;
 
 /**
  协议标题的深色颜色（暗黑模式），默认#D0D0D0
  */
-int agreementTitleDarkColor;
+  int agreementTitleDarkColor = 0xffd0d0d0;
 
 /**
  协议描述字体大小，默认字体为PingFangSC-Regular，默认大小14
  */
-int agreementDescriptionFont;
+  int agreementDescriptionFont = 14;
 
 /**
  协议描述的浅色颜色（明亮模式），默认#202020
  */
-int agreementDescriptionLightColor;
+  int agreementDescriptionLightColor = 0xff202020;
 
 /**
  协议描述的深色颜色（暗黑模式），默认#D0D0D0
  */
-int agreementDescriptionDarkColor;
-
-/**
- 权限选项选中时的icon（明亮模式），大小：22pt（@2× @3×）
- */
-int authorizeSelectedLightImage;
-
-/**
- 权限选项选中时的icon（暗黑模式），大小：22pt（@2× @3×）
- */
-int authorizeSelectedDarkImage;
+  int agreementDescriptionDarkColor = 0xffd0d0d0;
 
 /**
  链接的浅色颜色（明亮模式），默认#409EFF
  */
-int linkLightColor;
+  int linkLightColor = 0xff409eff;
 
 /**
  链接的深色颜色（暗黑模式），默认#368CE4
  */
-int linkDarkColor;
+  int linkDarkColor = 0xff368ce4;
 
 /**
  同意按钮配置（明亮模式），默认配置如下：
@@ -664,7 +629,7 @@ int linkDarkColor;
  按下默认描边：#3B77DB
  按下文字颜色：#FFFFFF
  */
-AuthButtonConfig allowButtonLightConfig;
+  AuthButtonConfig? allowButtonLightConfig;
 
 /**
  同意按钮配置（暗黑模式），默认配置如下：
@@ -676,7 +641,7 @@ AuthButtonConfig allowButtonLightConfig;
  按下默认描边：#5E97F5
  按下文字颜色：#FFFFFF
  */
-AuthButtonConfig allowButtonDarkConfig;
+  AuthButtonConfig? allowButtonDarkConfig;
 
 /**
  拒绝按钮配置（明亮模式），默认配置如下：
@@ -688,7 +653,7 @@ AuthButtonConfig allowButtonDarkConfig;
  按下默认描边：#D8D8D8
  按下文字颜色：#222222
  */
-AuthButtonConfig rejectButtonLightConfig;
+  AuthButtonConfig? rejectButtonLightConfig;
 
 /**
  拒绝按钮配置（暗黑模式），默认配置如下：
@@ -700,9 +665,9 @@ AuthButtonConfig rejectButtonLightConfig;
  按下默认描边：#414141
  按下文字颜色：#D0D0D0
  */
-AuthButtonConfig rejectButtonDarkConfig;
+  AuthButtonConfig? rejectButtonDarkConfig;
 
-Map<String, dynamic> toMap() {
+  Map<String, dynamic> toMap() {
     return {
       "appletNameFont": appletNameFont,
       "appletNameLightColor": appletNameLightColor,
@@ -713,7 +678,6 @@ Map<String, dynamic> toMap() {
       "authorizeDescriptionFont": authorizeDescriptionFont,
       "authorizeDescriptionLightColor": authorizeDescriptionLightColor,
       "authorizeDescriptionDarkColor": authorizeDescriptionDarkColor,
-
       "agreementTitleFont": agreementTitleFont,
       "agreementTitleLightColor": agreementTitleLightColor,
       "agreementTitleDarkColor": agreementTitleDarkColor,
@@ -721,10 +685,10 @@ Map<String, dynamic> toMap() {
       "agreementDescriptionDarkColor": agreementDescriptionDarkColor,
       "linkLightColor": linkLightColor,
       "linkDarkColor": linkDarkColor,
-      "allowButtonLightConfig": allowButtonLightConfig.toMap(),
-      "allowButtonDarkConfig": allowButtonDarkConfig.toMap(),
-      "rejectButtonLightConfig": rejectButtonLightConfig.toMap(),
-      "rejectButtonDarkConfig": rejectButtonDarkConfig.toMap(),
+      "allowButtonLightConfig": allowButtonLightConfig?.toMap(),
+      "allowButtonDarkConfig": allowButtonDarkConfig?.toMap(),
+      "rejectButtonLightConfig": rejectButtonLightConfig?.toMap(),
+      "rejectButtonDarkConfig": rejectButtonDarkConfig?.toMap(),
     };
   }
 }
@@ -733,39 +697,48 @@ class AuthButtonConfig {
   /**
  按钮的圆角半径
  */
-double cornerRadius;
+  double cornerRadius;
 
 /**
  按钮默认背景颜色
  */
-int normalBackgroundColor;
+  int normalBackgroundColor;
 
 /**
  按钮按下背景颜色
  */
-int pressedBackgroundColor;
+  int pressedBackgroundColor;
 
 /**
  按钮默认文字颜色
  */
-int normalTextColor;
+  int normalTextColor;
 
 /**
  按钮按下文字颜色
  */
-int pressedTextColor;
+  int pressedTextColor;
 
 /**
  按钮默认边框颜色
  */
-int normalBorderColor;
+  int normalBorderColor;
 
 /**
  按钮按下边框颜色
  */
-int pressedBorderColor;
+  int pressedBorderColor;
 
-Map<String, dynamic> toMap() {
+  AuthButtonConfig(
+      this.cornerRadius,
+      this.normalBackgroundColor,
+      this.pressedBackgroundColor,
+      this.normalTextColor,
+      this.pressedTextColor,
+      this.normalBorderColor,
+      this.pressedBorderColor);
+
+  Map<String, dynamic> toMap() {
     return {
       "cornerRadius": cornerRadius,
       "normalBackgroundColor": normalBackgroundColor,
@@ -886,14 +859,22 @@ enum Anim {
 }
 
 enum ConfigPriority {
-  ConfigGlobalPriority , //全局配置优先
-  ConfigSpecifiedPriority,  // 单个配置优先
+  ConfigGlobalPriority, //全局配置优先
+  ConfigSpecifiedPriority, // 单个配置优先
   ConfigAppletFilePriority, // 小程序配置文件优先，小程序app.ext.json文件中配置
 }
 
 enum TranstionStyle {
-  TranstionStyleUp,   // 页面从下往上弹出，类似present效果
+  TranstionStyleUp, // 页面从下往上弹出，类似present效果
   TranstionStylePush, // 页面从右往左弹出，类似push效果
+}
+
+enum FATBOOLState {
+  FATBOOLStateUndefined, // 未设置
+  FATBOOLStateTrue, // 所有版本强制开启vconsole，且不可调api关闭，更多面板不展示打开、关闭调试菜单
+  FATBOOLStateFalse, // 正式版更多面板不展示打开、关闭调试菜单；非正式版更多面板展示打开、关闭调试菜单；所有版本均可调setEnableDebug开启vconsole。
+  FATBOOLStateForbidden, // 所有版本强制关闭vconsole，且不可调api开启，多面板不展示打开、关闭调试菜单
+
 }
 
 class Mop {
@@ -1024,18 +1005,10 @@ class Mop {
     return ret;
   }
 
-  Future<Map> newInitialize(
-   FATConfig config,
-   {
-    UIConfig? uiConfig
-   }
-  }) async {
-    List<Map<String, dynamic>>? storeConfigs =
-        finStoreConfigs?.map((e) => e.toMap()).toList();
-
+  Future<Map> newInitialize(FATConfig config, {UIConfig? uiConfig}) async {
     final Map ret = await _channel.invokeMethod('newInitialize', {
-      'config': config,
-      'uiConfig': uiConfig,
+      'config': config.toMap(),
+      'uiConfig': uiConfig?.toMap(),
     });
     return ret;
   }

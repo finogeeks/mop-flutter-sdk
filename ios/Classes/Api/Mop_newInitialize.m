@@ -90,9 +90,10 @@
         uiconfig.hideFeedbackMenu = [_uiConfig[@"isHideFeedbackAndComplaints"] boolValue];
         uiconfig.hideBackToHome = [_uiConfig[@"isHideBackHome"] boolValue];
         uiconfig.hideForwardMenu = [_uiConfig[@"isHideForwardMenu"] boolValue];
-//        uiconfig. = [_uiConfig[@"isHideRefreshMenu"] integerValue];
-        uiconfig.moreMenuStyle = [_uiConfig[@"moreMenuStyle"] integerValue];
-        uiconfig.moreMenuStyle = [_uiConfig[@"moreMenuStyle"] integerValue];
+        uiconfig.hideShareAppletMenu = [_uiConfig[@"isHideShareAppletMenu"] boolValue];
+        uiconfig.hideRefreshMenu = [_uiConfig[@"isHideRefreshMenu"] boolValue];
+        uiconfig.hideTransitionCloseButton = [_uiConfig[@"hideTransitionCloseButton"] integerValue];
+        uiconfig.disableSlideCloseAppletGesture = [_uiConfig[@"disableSlideCloseAppletGesture"] boolValue];
         if (_uiConfig[@"progressBarColor"]) {
             uiconfig.progressBarColor = [MOPTools colorWithRGBHex:[_uiConfig[@"progressBarColor"] intValue]];
         }
@@ -102,7 +103,6 @@
         uiconfig.autoAdaptDarkMode = [_uiConfig[@"autoAdaptDarkMode"] boolValue];
         
         uiconfig.appletText = _uiConfig[@"appletText"];
-        uiconfig.hideTransitionCloseButton = [_uiConfig[@"hideTransitionCloseButton"] boolValue];
         uiconfig.disableSlideCloseAppletGesture = [_uiConfig[@"disableSlideCloseAppletGesture"] boolValue];
         if (_uiConfig[@"capsuleConfig"]) {
             NSDictionary *capsuleConfigDic = _uiConfig[@"capsuleConfig"];
@@ -127,8 +127,120 @@
             uiconfig.capsuleConfig = capsuleConfig;
             
         }
+        
+        if (_uiConfig[@"navHomeConfig"]) {
+            NSDictionary *navHomeConfigDic = _uiConfig[@"navHomeConfig"];
+            FATNavHomeConfig *navHomeConfig = [[FATNavHomeConfig alloc]init];
+            navHomeConfig.width = [navHomeConfigDic[@"width"] floatValue];
+            navHomeConfig.height = [navHomeConfigDic[@"height"] floatValue];
+            navHomeConfig.leftMargin = [navHomeConfigDic[@"leftMargin"] floatValue];
+            navHomeConfig.cornerRadius = [navHomeConfigDic[@"cornerRadius"] floatValue];
+            navHomeConfig.borderWidth = [navHomeConfigDic[@"width"] floatValue];
+            if (navHomeConfigDic[@"borderLightColor"]) {
+                navHomeConfig.borderLightColor = [MOPTools colorWithRGBHex:[navHomeConfigDic[@"borderLightColor"] intValue]];
+            }
+            if (navHomeConfigDic[@"borderDarkColor"]) {
+                navHomeConfig.borderDarkColor = [MOPTools colorWithRGBHex:[navHomeConfigDic[@"borderDarkColor"] intValue]];
+            }
+            if (navHomeConfigDic[@"bgLightColor"]) {
+                navHomeConfig.bgLightColor = [MOPTools colorWithRGBHex:[navHomeConfigDic[@"bgLightColor"] intValue]];
+            }
+            if (navHomeConfigDic[@"bgDarkColor"]) {
+                navHomeConfig.bgDarkColor = [MOPTools colorWithRGBHex:[navHomeConfigDic[@"bgDarkColor"] intValue]];
+            }
+            uiconfig.navHomeConfig = navHomeConfig;
+        }
+        
+        if (_uiConfig[@"authViewConfig"]) {
+            NSDictionary *authViewConfigDic = _uiConfig[@"authViewConfig"];
+            FATAuthViewConfig *authViewConfig = [[FATAuthViewConfig alloc]init];
+            authViewConfig.appletNameFont = [UIFont systemFontOfSize:[authViewConfigDic[@"appletNameFont"] integerValue]];
+            if (authViewConfigDic[@"appletNameLightColor"]) {
+                authViewConfig.appletNameLightColor = [MOPTools colorWithRGBHex:[authViewConfigDic[@"appletNameLightColor"] intValue]];
+            }
+            
+            if (authViewConfigDic[@"appletNameDarkColor"]) {
+                authViewConfig.appletNameDarkColor = [MOPTools colorWithRGBHex:[authViewConfigDic[@"appletNameDarkColor"] intValue]];
+            }
+            
+            authViewConfig.authorizeTitleFont = [UIFont systemFontOfSize:[authViewConfigDic[@"authorizeTitleFont"] integerValue] weight:UIFontWeightMedium];
+            
+            if (authViewConfigDic[@"authorizeTitleLightColor"]) {
+                authViewConfig.authorizeTitleLightColor = [MOPTools colorWithRGBHex:[authViewConfigDic[@"authorizeTitleLightColor"] intValue]];
+            }
+            
+            if (authViewConfigDic[@"authorizeTitleDarkColor"]) {
+                authViewConfig.authorizeTitleDarkColor = [MOPTools colorWithRGBHex:[authViewConfigDic[@"authorizeTitleDarkColor"] intValue]];
+            }
+            
+            authViewConfig.authorizeDescriptionFont = [UIFont systemFontOfSize:[authViewConfigDic[@"authorizeDescriptionFont"] integerValue]];
+            
+            if (authViewConfigDic[@"authorizeDescriptionLightColor"]) {
+                authViewConfig.authorizeDescriptionLightColor = [MOPTools colorWithRGBHex:[authViewConfigDic[@"authorizeDescriptionLightColor"] intValue]];
+            }
+            
+            if (authViewConfigDic[@"authorizeDescriptionDarkColor"]) {
+                authViewConfig.authorizeDescriptionDarkColor = [MOPTools colorWithRGBHex:[authViewConfigDic[@"authorizeDescriptionDarkColor"] intValue]];
+            }
+            
+            authViewConfig.agreementTitleFont = [UIFont systemFontOfSize:[authViewConfigDic[@"agreementTitleFont"] integerValue]];
+            
+            if (authViewConfigDic[@"agreementTitleLightColor"]) {
+                authViewConfig.agreementTitleLightColor = [MOPTools colorWithRGBHex:[authViewConfigDic[@"agreementTitleLightColor"] intValue]];
+            }
+            
+            if (authViewConfigDic[@"agreementTitleDarkColor"]) {
+                authViewConfig.agreementTitleDarkColor = [MOPTools colorWithRGBHex:[authViewConfigDic[@"agreementTitleDarkColor"] intValue]];
+            }
+            
+            authViewConfig.agreementDescriptionFont = [UIFont systemFontOfSize:[authViewConfigDic[@"agreementDescriptionFont"] integerValue]];
+            
+            if (authViewConfigDic[@"agreementDescriptionLightColor"]) {
+                authViewConfig.agreementDescriptionLightColor = [MOPTools colorWithRGBHex:[authViewConfigDic[@"agreementDescriptionLightColor"] intValue]];
+            }
+            
+            if (authViewConfigDic[@"agreementDescriptionDarkColor"]) {
+                authViewConfig.agreementDescriptionDarkColor = [MOPTools colorWithRGBHex:[authViewConfigDic[@"agreementDescriptionDarkColor"] intValue]];
+            }
+            
+            if (authViewConfigDic[@"linkLightColor"]) {
+                authViewConfig.linkLightColor = [MOPTools colorWithRGBHex:[authViewConfigDic[@"linkLightColor"] intValue]];
+            }
+            
+            if (authViewConfigDic[@"linkDarkColor"]) {
+                authViewConfig.linkDarkColor = [MOPTools colorWithRGBHex:[authViewConfigDic[@"linkDarkColor"] intValue]];
+            }
+            
+            if (authViewConfigDic[@"allowButtonLightConfig"]) {
+                FATAuthButtonConfig *allowButtonLightConfig = [self createAuthButtonConfigWithDic:authViewConfigDic[@"allowButtonLightConfig"]];
+                authViewConfig.allowButtonLightConfig = allowButtonLightConfig;
+                
+            }
+            
+            if (authViewConfigDic[@"allowButtonDarkConfig"]) {
+                FATAuthButtonConfig *allowButtonDarkConfig = [self createAuthButtonConfigWithDic:authViewConfigDic[@"allowButtonDarkConfig"]];
+                authViewConfig.allowButtonDarkConfig = allowButtonDarkConfig;
+                
+            }
+            if (authViewConfigDic[@"rejectButtonLightConfig"]) {
+                FATAuthButtonConfig *rejectButtonLightConfig = [self createAuthButtonConfigWithDic:authViewConfigDic[@"rejectButtonLightConfig"]];
+                authViewConfig.rejectButtonLightConfig = rejectButtonLightConfig;
+                
+            }
+            if (authViewConfigDic[@"rejectButtonDarkConfig"]) {
+                FATAuthButtonConfig *rejectButtonDarkConfig = [self createAuthButtonConfigWithDic:authViewConfigDic[@"rejectButtonDarkConfig"]];
+                authViewConfig.rejectButtonDarkConfig = rejectButtonDarkConfig;
+                
+            }
+            
+            uiconfig.authViewConfig = authViewConfig;
+        }
         uiconfig.appendingCustomUserAgent = _uiConfig[@"customWebViewUserAgent"];
+        uiconfig.hideWebViewProgressBar = [_uiConfig[@"hideWebViewProgressBar"] boolValue];
+        uiconfig.autoAdaptDarkMode = [_uiConfig[@"autoAdaptDarkMode"] boolValue];
+        uiconfig.transtionStyle = [_uiConfig[@"transtionStyle"] integerValue];
     }
+    
     
     
     // uiconfig.moreMenuStyle = FATMoreViewStyleNormal;
@@ -145,5 +257,35 @@
     
     success(@{});
     
+}
+
+- (FATAuthButtonConfig *)createAuthButtonConfigWithDic:(NSDictionary *)dic {
+    if (!dic) {
+        return nil;
+    }
+    FATAuthButtonConfig * authButtonConfig = [[FATAuthButtonConfig alloc]init];
+    if (dic[@"cornerRadius"]) {
+        authButtonConfig.cornerRadius = [dic[@"cornerRadius"] floatValue];
+    }
+    if (dic[@"normalBackgroundColor"]) {
+        authButtonConfig.normalBackgroundColor = [MOPTools colorWithRGBHex:[dic[@"normalBackgroundColor"] intValue]];
+    }
+    if (dic[@"pressedBackgroundColor"]) {
+        authButtonConfig.pressedBackgroundColor = [MOPTools colorWithRGBHex:[dic[@"pressedBackgroundColor"] intValue]];
+    }
+    if (dic[@"normalTextColor"]) {
+        authButtonConfig.normalTextColor = [MOPTools colorWithRGBHex:[dic[@"normalTextColor"] intValue]];
+    }
+    if (dic[@"pressedTextColor"]) {
+        authButtonConfig.pressedTextColor = [MOPTools colorWithRGBHex:[dic[@"pressedTextColor"] intValue]];
+    }
+    if (dic[@"normalBorderColor"]) {
+        authButtonConfig.normalBorderColor = [MOPTools colorWithRGBHex:[dic[@"normalBorderColor"] intValue]];
+    }
+    if (dic[@"pressedBorderColor"]) {
+        authButtonConfig.pressedBorderColor = [MOPTools colorWithRGBHex:[dic[@"pressedBorderColor"] intValue]];
+    }
+    
+    return authButtonConfig;
 }
 @end
