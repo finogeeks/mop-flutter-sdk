@@ -1005,7 +1005,7 @@ class Mop {
     return ret;
   }
 
-  Future<Map> newInitialize(FATConfig config, {UIConfig? uiConfig}) async {
+  Future<Map> initSDK(FATConfig config, {UIConfig? uiConfig}) async {
     final Map ret = await _channel.invokeMethod('initSDK', {
       'config': config.toMap(),
       'uiConfig': uiConfig?.toMap(),
