@@ -8,6 +8,7 @@ import com.finogeeks.mop.api.mop.AppletManageModule;
 import com.finogeeks.mop.api.mop.AppletModule;
 import com.finogeeks.mop.api.mop.BaseModule;
 import com.finogeeks.mop.api.mop.ExtensionApiModule;
+import com.finogeeks.mop.api.mop.InitSDKModule;
 import com.finogeeks.mop.api.mop.VersionModule;
 import com.finogeeks.mop.api.mop.SmSignModule;
 import com.finogeeks.mop.api.mop.WXQrCodeModule;
@@ -65,6 +66,7 @@ public class ApisManager {
     }
 
     private void initSdkApi(Activity activity) {
+        add(new InitSDKModule(activity));
         add(new BaseModule(activity));
         add(new AppletModule(activity));
         add(new AppletManageModule(activity));

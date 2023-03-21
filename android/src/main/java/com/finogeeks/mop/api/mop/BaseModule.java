@@ -4,7 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
-import com.finogeeks.lib.applet.BuildConfig;
 import com.finogeeks.lib.applet.client.FinAppClient;
 import com.finogeeks.lib.applet.client.FinAppConfig;
 import com.finogeeks.lib.applet.client.FinStoreConfig;
@@ -14,7 +13,6 @@ import com.finogeeks.mop.interfaces.ICallback;
 import com.finogeeks.mop.service.MopPluginService;
 import com.finogeeks.xlog.XLogLevel;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -22,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 public class BaseModule extends BaseApi {
-    private final static String TAG = BaseModule.class.getSimpleName();
+    private final static String TAG = "BaseModule";
 
     public BaseModule(Context context) {
         super(context);

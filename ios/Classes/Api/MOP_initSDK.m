@@ -17,7 +17,7 @@
         return;
     }
     FATConfig *config;
-    NSArray *storeConfigList = self.config[@"storeConfigs"];
+    NSArray *storeConfigList = self.config[@"finStoreConfigs"];
     if (storeConfigList && storeConfigList.count > 0) {
         NSMutableArray *storeArrayM = [NSMutableArray array];
         for (NSDictionary *dict in storeConfigList) {
@@ -41,9 +41,9 @@
         return;
     }
     
-    config.currentUserId = self.config[@"currentUserId"];
+    config.currentUserId = self.config[@"userId"];
     config.productIdentification = self.config[@"productIdentification"];
-    config.disableAuthorize = [self.config[@"disableAuthorize"] boolValue];
+    config.disableAuthorize = [self.config[@"disableRequestPermissions"] boolValue];
     config.appletAutoAuthorize = [self.config[@"appletAutoAuthorize"] boolValue];
     config.disableGetSuperviseInfo = [self.config[@"disableGetSuperviseInfo"] boolValue];
     config.ignoreWebviewCertAuth = [self.config[@"ignoreWebviewCertAuth"] boolValue];
@@ -51,7 +51,7 @@
     config.startCrashProtection = [self.config[@"startCrashProtection"] boolValue];
     config.enableApmDataCompression = [self.config[@"enableApmDataCompression"] boolValue];
     config.encryptServerData = [self.config[@"encryptServerData"] boolValue];
-    config.enableAppletDebug = [self.config[@"enableAppletDebug"] integerValue];
+    config.enableAppletDebug = [self.config[@"appletDebugMode"] integerValue];
     config.enableWatermark = [self.config[@"enableWatermark"] boolValue];
     config.watermarkPriority = [self.config[@"watermarkPriority"] integerValue];
     config.baseLoadingViewClass = self.config[@"baseLoadingViewClass"];
@@ -86,7 +86,7 @@
             uiconfig.navigationBarBackBtnDarkColor = [MOPTools colorWithRGBHex:[_uiConfig[@"navigationBarBackBtnDarkColor"] intValue]];
         }
         uiconfig.moreMenuStyle = [_uiConfig[@"moreMenuStyle"] integerValue];
-        uiconfig.hideBackToHomePriority = [_uiConfig[@"hideBackToHomePriority"] integerValue];
+        uiconfig.hideBackToHomePriority = [_uiConfig[@"isHideBackHomePriority"] integerValue];
         uiconfig.hideFeedbackMenu = [_uiConfig[@"isHideFeedbackAndComplaints"] boolValue];
         uiconfig.hideBackToHome = [_uiConfig[@"isHideBackHome"] boolValue];
         uiconfig.hideForwardMenu = [_uiConfig[@"isHideForwardMenu"] boolValue];
@@ -94,8 +94,8 @@
         uiconfig.hideRefreshMenu = [_uiConfig[@"isHideRefreshMenu"] boolValue];
         uiconfig.hideTransitionCloseButton = [_uiConfig[@"hideTransitionCloseButton"] boolValue];
         uiconfig.disableSlideCloseAppletGesture = [_uiConfig[@"disableSlideCloseAppletGesture"] boolValue];
-        if (_uiConfig[@"progressBarColor"]) {
-            uiconfig.progressBarColor = [MOPTools colorWithRGBHex:[_uiConfig[@"progressBarColor"] intValue]];
+        if (_uiConfig[@"webViewProgressBarColor"]) {
+            uiconfig.progressBarColor = [MOPTools colorWithRGBHex:[_uiConfig[@"webViewProgressBarColor"] intValue]];
         }
         
         uiconfig.hideFeedbackMenu = [_uiConfig[@"isHideFeedbackAndComplaints"] boolValue];
@@ -154,7 +154,7 @@
         if (_uiConfig[@"authViewConfig"]) {
             NSDictionary *authViewConfigDic = _uiConfig[@"authViewConfig"];
             FATAuthViewConfig *authViewConfig = [[FATAuthViewConfig alloc]init];
-            authViewConfig.appletNameFont = [UIFont systemFontOfSize:[authViewConfigDic[@"appletNameFont"] integerValue]];
+            authViewConfig.appletNameFont = [UIFont systemFontOfSize:[authViewConfigDic[@"appletNameTextSize"] floatValue]];
             if (authViewConfigDic[@"appletNameLightColor"]) {
                 authViewConfig.appletNameLightColor = [MOPTools colorWithRGBHex:[authViewConfigDic[@"appletNameLightColor"] intValue]];
             }
@@ -163,7 +163,7 @@
                 authViewConfig.appletNameDarkColor = [MOPTools colorWithRGBHex:[authViewConfigDic[@"appletNameDarkColor"] intValue]];
             }
             
-            authViewConfig.authorizeTitleFont = [UIFont systemFontOfSize:[authViewConfigDic[@"authorizeTitleFont"] integerValue] weight:UIFontWeightMedium];
+            authViewConfig.authorizeTitleFont = [UIFont systemFontOfSize:[authViewConfigDic[@"authorizeTitleTextSize"] floatValue] weight:UIFontWeightMedium];
             
             if (authViewConfigDic[@"authorizeTitleLightColor"]) {
                 authViewConfig.authorizeTitleLightColor = [MOPTools colorWithRGBHex:[authViewConfigDic[@"authorizeTitleLightColor"] intValue]];
@@ -173,7 +173,7 @@
                 authViewConfig.authorizeTitleDarkColor = [MOPTools colorWithRGBHex:[authViewConfigDic[@"authorizeTitleDarkColor"] intValue]];
             }
             
-            authViewConfig.authorizeDescriptionFont = [UIFont systemFontOfSize:[authViewConfigDic[@"authorizeDescriptionFont"] integerValue]];
+            authViewConfig.authorizeDescriptionFont = [UIFont systemFontOfSize:[authViewConfigDic[@"authorizeDescriptionTextSize"] floatValue]];
             
             if (authViewConfigDic[@"authorizeDescriptionLightColor"]) {
                 authViewConfig.authorizeDescriptionLightColor = [MOPTools colorWithRGBHex:[authViewConfigDic[@"authorizeDescriptionLightColor"] intValue]];
@@ -183,7 +183,7 @@
                 authViewConfig.authorizeDescriptionDarkColor = [MOPTools colorWithRGBHex:[authViewConfigDic[@"authorizeDescriptionDarkColor"] intValue]];
             }
             
-            authViewConfig.agreementTitleFont = [UIFont systemFontOfSize:[authViewConfigDic[@"agreementTitleFont"] integerValue]];
+            authViewConfig.agreementTitleFont = [UIFont systemFontOfSize:[authViewConfigDic[@"agreementTitleTextSize"] floatValue]];
             
             if (authViewConfigDic[@"agreementTitleLightColor"]) {
                 authViewConfig.agreementTitleLightColor = [MOPTools colorWithRGBHex:[authViewConfigDic[@"agreementTitleLightColor"] intValue]];
@@ -193,7 +193,7 @@
                 authViewConfig.agreementTitleDarkColor = [MOPTools colorWithRGBHex:[authViewConfigDic[@"agreementTitleDarkColor"] intValue]];
             }
             
-            authViewConfig.agreementDescriptionFont = [UIFont systemFontOfSize:[authViewConfigDic[@"agreementDescriptionFont"] integerValue]];
+            authViewConfig.agreementDescriptionFont = [UIFont systemFontOfSize:[authViewConfigDic[@"agreementDescriptionTextSize"] floatValue]];
             
             if (authViewConfigDic[@"agreementDescriptionLightColor"]) {
                 authViewConfig.agreementDescriptionLightColor = [MOPTools colorWithRGBHex:[authViewConfigDic[@"agreementDescriptionLightColor"] intValue]];
