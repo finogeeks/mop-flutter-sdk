@@ -1,5 +1,5 @@
 //
-//  Mop_newInitialize.h
+//  Mop_initSDK.h
 //  mop
 //
 //  Created by 滔 on 2023/3/17.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface Mop_newInitialize : MOPBaseApi
+@interface MOP_initSDK : MOPBaseApi
 @property (nonatomic, strong) NSDictionary *config;
 @property (nonatomic, strong) NSDictionary *uiConfig;
 @end

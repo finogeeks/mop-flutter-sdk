@@ -20,7 +20,7 @@
     Class ApiClass = NSClassFromString(apiMethod);
     
     if (!ApiClass) {
-        NSLog(@"MOPybridExtensionConverter Error");
+        NSLog(@"MOPybridExtensionConverter Error %@",apiMethod);
         return nil;
     }
     

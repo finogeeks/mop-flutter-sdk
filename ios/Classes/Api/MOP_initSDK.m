@@ -5,10 +5,10 @@
 //  Created by 滔 on 2023/3/17.
 //
 
-#import "Mop_newInitialize.h"
+#import "Mop_initSDK.h"
 #import "MOPTools.h"
 
-@implementation Mop_newInitialize
+@implementation MOP_initSDK
 
 - (void)setupApiWithSuccess:(void (^)(NSDictionary<NSString *,id> * _Nonnull))success failure:(void (^)(id _Nullable))failure cancel:(void (^)(void))cancel
 {
@@ -92,7 +92,7 @@
         uiconfig.hideForwardMenu = [_uiConfig[@"isHideForwardMenu"] boolValue];
         uiconfig.hideShareAppletMenu = [_uiConfig[@"isHideShareAppletMenu"] boolValue];
         uiconfig.hideRefreshMenu = [_uiConfig[@"isHideRefreshMenu"] boolValue];
-        uiconfig.hideTransitionCloseButton = [_uiConfig[@"hideTransitionCloseButton"] integerValue];
+        uiconfig.hideTransitionCloseButton = [_uiConfig[@"hideTransitionCloseButton"] boolValue];
         uiconfig.disableSlideCloseAppletGesture = [_uiConfig[@"disableSlideCloseAppletGesture"] boolValue];
         if (_uiConfig[@"progressBarColor"]) {
             uiconfig.progressBarColor = [MOPTools colorWithRGBHex:[_uiConfig[@"progressBarColor"] intValue]];
