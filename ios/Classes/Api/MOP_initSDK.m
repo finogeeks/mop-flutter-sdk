@@ -101,6 +101,7 @@
         uiconfig.hideFeedbackMenu = [_uiConfig[@"isHideFeedbackAndComplaints"] boolValue];
         uiconfig.hideForwardMenu = [_uiConfig[@"isHideForwardMenu"] boolValue];
         uiconfig.autoAdaptDarkMode = [_uiConfig[@"autoAdaptDarkMode"] boolValue];
+        uiconfig.hideSettingMenu = [_uiConfig[@"isHideSettingMenu"] boolValue];
         
         uiconfig.appletText = _uiConfig[@"appletText"];
         uiconfig.disableSlideCloseAppletGesture = [_uiConfig[@"disableSlideCloseAppletGesture"] boolValue];
