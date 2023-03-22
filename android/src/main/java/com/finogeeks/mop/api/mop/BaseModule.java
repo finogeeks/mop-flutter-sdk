@@ -9,6 +9,7 @@ import com.finogeeks.lib.applet.client.FinAppConfig;
 import com.finogeeks.lib.applet.client.FinStoreConfig;
 import com.finogeeks.lib.applet.interfaces.FinCallback;
 import com.finogeeks.mop.api.BaseApi;
+import com.finogeeks.mop.api.mop.util.InitUtils;
 import com.finogeeks.mop.interfaces.ICallback;
 import com.finogeeks.mop.service.MopPluginService;
 import com.finogeeks.xlog.XLogLevel;
@@ -105,11 +106,9 @@ public class BaseModule extends BaseApi {
                 }
             }
         }
-        FinAppConfig.UIConfig uiConfig = null;
-        if (param.get("uiConfig") != null) {
-            uiConfig = gson.fromJson(gson.toJson(param.get("uiConfig")), FinAppConfig.UIConfig.class);
-        }
 
+        // uiConfig
+        FinAppConfig.UIConfig uiConfig = InitUtils.createUIConfigFromMap((Map<Object, Object>) param.get("uiConfig"));
 
         FinAppConfig.Builder builder = new FinAppConfig.Builder()
                 .setSdkKey(appkey)
@@ -123,8 +122,8 @@ public class BaseModule extends BaseApi {
                 .setDisableRequestPermissions(disablePermission)
                 .setBindAppletWithMainProcess(bindAppletWithMainProcess)
                 .setLogLevel(XLogLevel.LEVEL_VERBOSE)
-                .setXLogDir(new File(getContext().getExternalCacheDir(),"xlog"));
-//                .setPageCountLimit(pageCountLimit);
+                .setXLogDir(new File(getContext().getExternalCacheDir(),"xlog"))
+                .setPageCountLimit(pageCountLimit);
 
         if (customWebViewUserAgent != null)
             builder.setCustomWebViewUserAgent(customWebViewUserAgent);
