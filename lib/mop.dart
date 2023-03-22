@@ -23,7 +23,7 @@ class FinStoreConfig {
   String apiServer;
 
   /// apm统计服务器的地址,如果不填，则默认与apiServer一致
-  String apmServer;
+  String? apmServer;
 
   /// 网络接口加密类型，默认为MD5 国密SM
   String cryptType;
@@ -34,8 +34,9 @@ class FinStoreConfig {
   /// 是否需要接口加密验证（初始化多服务器时使用）默认为不开启，当设置为YES时开启，接口返回加密数据并处理
   bool encryptServerData;
 
-  FinStoreConfig(this.sdkKey, this.sdkSecret, this.apiServer, this.apmServer,
-      {this.cryptType = "MD5",
+  FinStoreConfig(this.sdkKey, this.sdkSecret, this.apiServer,
+      {this.apmServer,
+      this.cryptType = "MD5",
       this.fingerprint,
       this.encryptServerData = false});
 
@@ -152,7 +153,7 @@ class Config {
   int pageCountLimit = 0;
 
   /// 自定义的scheme数组
-  List<String> schemes = [];
+  List<String>? schemes;
 
   Config(this.finStoreConfigs);
 
