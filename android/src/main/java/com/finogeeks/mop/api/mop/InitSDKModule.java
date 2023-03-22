@@ -13,6 +13,7 @@ import com.finogeeks.mop.api.BaseApi;
 import com.finogeeks.mop.api.mop.util.InitUtils;
 import com.finogeeks.mop.interfaces.ICallback;
 import com.finogeeks.mop.service.MopPluginService;
+import com.finogeeks.xlog.XLogLevel;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -121,6 +122,54 @@ public class InitSDKModule extends BaseApi {
         if (schemes != null) {
             configBuilder.setSchemes(schemes);
         }
+        configBuilder.setDebugMode((Boolean) configMap.get("debug"));
+        Integer maxRunningApplet = (Integer) configMap.get("maxRunningApplet");
+        if (maxRunningApplet != null) {
+            configBuilder.setMaxRunningApplet(maxRunningApplet);
+        }
+        Integer webViewMixedContentMode = (Integer) configMap.get("webViewMixedContentMode");
+        if (webViewMixedContentMode != null) {
+            configBuilder.setWebViewMixedContentMode(webViewMixedContentMode);
+        }
+        configBuilder.setBindAppletWithMainProcess((Boolean) configMap.get("bindAppletWithMainProcess"));
+        String killAppletProcessNotice = (String) configMap.get("killAppletProcessNotice");
+        if (killAppletProcessNotice != null) {
+            configBuilder.setKillAppletProcessNotice(killAppletProcessNotice);
+        }
+        configBuilder.setMinAndroidSdkVersion((Integer) configMap.get("minAndroidSdkVersion"));
+        configBuilder.setEnableScreenShot((Boolean) configMap.get("enableScreenShot"));
+        int screenShotPriorityIndex = (Integer) configMap.get("screenShotPriority");
+        if (screenShotPriorityIndex == 0) {
+            configBuilder.setScreenShotPriority(FinAppConfigPriority.GLOBAL);
+        } else if (screenShotPriorityIndex == 1) {
+            configBuilder.setScreenShotPriority(FinAppConfigPriority.SPECIFIED);
+        } else if (screenShotPriorityIndex == 2) {
+            configBuilder.setScreenShotPriority(FinAppConfigPriority.APPLET_FILE);
+        }
+        int logLevelIndex = (Integer) configMap.get("logLevel");
+        if (logLevelIndex == 0) {
+            configBuilder.setLogLevel(XLogLevel.LEVEL_VERBOSE);
+        } else if (logLevelIndex == 1) {
+            configBuilder.setLogLevel(XLogLevel.LEVEL_DEBUG);
+        } else if (logLevelIndex == 2) {
+            configBuilder.setLogLevel(XLogLevel.LEVEL_INFO);
+        } else if (logLevelIndex == 3) {
+            configBuilder.setLogLevel(XLogLevel.LEVEL_WARNING);
+        } else if (logLevelIndex == 4) {
+            configBuilder.setLogLevel(XLogLevel.LEVEL_ERROR);
+        } else if (logLevelIndex == 5) {
+            configBuilder.setLogLevel(XLogLevel.LEVEL_NONE);
+        }
+        Integer logMaxAliveSec = (Integer) configMap.get("logMaxAliveSec");
+        if (logMaxAliveSec != null) {
+            configBuilder.setLogMaxAliveSec(logMaxAliveSec);
+        }
+        String logDir = (String) configMap.get("logDir");
+        if (logDir != null) {
+            configBuilder.setXLogDir(logDir);
+        }
+        configBuilder.setEnablePreNewProcess((Boolean) configMap.get("enablePreNewProcess"));
+
         Map<Object, Object> uiConfigMap = (Map<Object, Object>) param.get("uiConfig");
         String appendingCustomUserAgent = (String) uiConfigMap.get("appendingCustomUserAgent");
         if (appendingCustomUserAgent != null) {
