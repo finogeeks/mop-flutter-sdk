@@ -190,6 +190,7 @@ class Config {
   /// 日志记录等级
   LogLevel logLevel = LogLevel.LEVEL_NONE;
 
+  /// Android属性
   /// 日志文件最长缓存时间，单位秒。
   /// 最小不能小于1天，即不能小于 1 * 24 * 60 * 60 秒。
   int? logMaxAliveSec;
