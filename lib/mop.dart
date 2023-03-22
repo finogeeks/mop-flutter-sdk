@@ -133,7 +133,7 @@ class Config {
   /// 对ft.request、ft.downloadFile、ft.uploadFile均会生效
   Map<String, String>? header;
 
-  ///  header优先级设置，默认全局配置优先
+  /// header优先级设置，默认全局配置优先
   ConfigPriority headerPriority = ConfigPriority.ConfigGlobalPriority;
 
   /// iOS属性
@@ -154,6 +154,52 @@ class Config {
 
   /// 自定义的scheme数组
   List<String>? schemes;
+
+  /// Android属性
+  /// 设置debug模式，影响调试和日志。
+  bool debug = false;
+
+  /// Android属性
+  /// 设置最大同时运行小程序个数
+  int? maxRunningApplet;
+
+  /// Android属性
+  /// WebView mixed content mode
+  int? webViewMixedContentMode;
+
+  /// Android属性
+  /// 小程序与app进程绑定，App被杀死，小程序同步关闭
+  bool bindAppletWithMainProcess = false;
+
+  /// Android属性
+  /// App被杀后关闭小程序的提示文案
+  String? killAppletProcessNotice;
+
+  /// Android属性
+  /// 最低支持的Android SDK版本
+  int minAndroidSdkVersion = 21; // Build.VERSION_CODES.LOLLIPOP
+
+  /// Android属性
+  /// 是否允许截屏录屏，默认允许
+  bool enableScreenShot = false;
+
+  /// Android属性
+  /// 截屏录屏配置项的优先级，默认GLOBAL
+  ConfigPriority screenShotPriority = ConfigPriority.ConfigGlobalPriority;
+
+  /// 日志记录等级
+  LogLevel logLevel = LogLevel.LEVEL_NONE;
+
+  /// 日志文件最长缓存时间，单位秒。
+  /// 最小不能小于1天，即不能小于 1 * 24 * 60 * 60 秒。
+  int? logMaxAliveSec;
+
+  /// XLog日志文件路径
+  String? logDir;
+
+  /// Android属性
+  /// 是否提前创建进程
+  bool enablePreNewProcess = false;
 
   Config(this.finStoreConfigs);
 
@@ -184,6 +230,18 @@ class Config {
       "h5AjaxHookRequestKey": h5AjaxHookRequestKey,
       "pageCountLimit": pageCountLimit,
       "schemes": schemes,
+      "debug": debug,
+      "maxRunningApplet": maxRunningApplet,
+      "webViewMixedContentMode": webViewMixedContentMode,
+      "bindAppletWithMainProcess": bindAppletWithMainProcess,
+      "killAppletProcessNotice": killAppletProcessNotice,
+      "minAndroidSdkVersion": minAndroidSdkVersion,
+      "enableScreenShot": enableScreenShot,
+      "screenShotPriority": screenShotPriority.index,
+      "logLevel": logLevel.index,
+      "logMaxAliveSec": logMaxAliveSec,
+      "logDir": logDir,
+      "enablePreNewProcess": enablePreNewProcess,
     };
   }
 }
@@ -784,6 +842,15 @@ enum BOOLState {
   BOOLStateTrue, // 所有版本强制开启vconsole，且不可调api关闭，更多面板不展示打开、关闭调试菜单
   BOOLStateFalse, // 正式版更多面板不展示打开、关闭调试菜单；非正式版更多面板展示打开、关闭调试菜单；所有版本均可调setEnableDebug开启vconsole。
   BOOLStateForbidden, // 所有版本强制关闭vconsole，且不可调api开启，多面板不展示打开、关闭调试菜单
+}
+
+enum LogLevel {
+  LEVEL_VERBOSE,
+  LEVEL_DEBUG,
+  LEVEL_INFO,
+  LEVEL_WARNING,
+  LEVEL_ERROR,
+  LEVEL_NONE
 }
 
 class Mop {
