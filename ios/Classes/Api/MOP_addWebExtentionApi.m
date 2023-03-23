@@ -5,11 +5,11 @@
 //  Created by 王滔 on 2021/12/21.
 //
 
-#import "MOB_addWebExtentionApi.h"
+#import "MOP_addWebExtentionApi.h"
 #import "MopPlugin.h"
 #import <FinApplet/FinApplet.h>
 
-@implementation MOB_addWebExtentionApi
+@implementation MOP_addWebExtentionApi
 
 - (void)setupApiWithSuccess:(void (^)(NSDictionary<NSString *,id> * _Nonnull))success failure:(void (^)(id _Nullable))failure cancel:(void (^)(void))cancel
 {

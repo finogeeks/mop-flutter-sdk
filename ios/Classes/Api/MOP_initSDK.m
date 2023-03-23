@@ -250,10 +250,16 @@
         failure(@"初始化失败");
         return;
     }
-    FATLogLevel logLevel = [self.config[@"logLevel"] integerValue];
-    NSString *logDir = self.config[@"logDir"];
-//    [[FATExtClient sharedClient] fat_prepareExtensionApis];
-    [[FATClient sharedClient].logManager initLogWithLogDir:logDir logLevel:logLevel consoleLog:YES];
+    
+    NSInteger logLevelIntValue = [self.config[@"logLevel"] integerValue];
+    if (logLevelIntValue >= 5) {
+        [[FATClient sharedClient].logManager closeLog];
+    } else {
+        FATLogLevel logLevel = logLevelIntValue;
+        NSString *logDir = self.config[@"logDir"];
+        [[FATClient sharedClient].logManager initLogWithLogDir:logDir logLevel:logLevel consoleLog:YES];
+    }
+    
     
     
     [[FATClient sharedClient] setEnableLog:YES];
