@@ -148,15 +148,15 @@ public class InitSDKModule extends BaseApi {
         }
         int logLevelIndex = (Integer) configMap.get("logLevel");
         if (logLevelIndex == 0) {
-            configBuilder.setLogLevel(XLogLevel.LEVEL_VERBOSE);
+            configBuilder.setLogLevel(XLogLevel.LEVEL_ERROR);
         } else if (logLevelIndex == 1) {
-            configBuilder.setLogLevel(XLogLevel.LEVEL_DEBUG);
+            configBuilder.setLogLevel(XLogLevel.LEVEL_WARNING);
         } else if (logLevelIndex == 2) {
             configBuilder.setLogLevel(XLogLevel.LEVEL_INFO);
         } else if (logLevelIndex == 3) {
-            configBuilder.setLogLevel(XLogLevel.LEVEL_WARNING);
+            configBuilder.setLogLevel(XLogLevel.LEVEL_DEBUG);
         } else if (logLevelIndex == 4) {
-            configBuilder.setLogLevel(XLogLevel.LEVEL_ERROR);
+            configBuilder.setLogLevel(XLogLevel.LEVEL_VERBOSE);
         } else if (logLevelIndex == 5) {
             configBuilder.setLogLevel(XLogLevel.LEVEL_NONE);
         }
