@@ -846,11 +846,11 @@ enum BOOLState {
 }
 
 enum LogLevel {
-  LEVEL_VERBOSE,
-  LEVEL_DEBUG,
-  LEVEL_INFO,
-  LEVEL_WARNING,
-  LEVEL_ERROR,
+  LEVEL_ERROR, // 设置为该等级，将会记录ERROR级别的日志
+  LEVEL_WARNING, // 设置为该等级，将会记录ERROR和WARNING级别的日志
+  LEVEL_INFO, // 设置为该等级，将会记录ERROR、WARNING和INFO级别的日志
+  LEVEL_DEBUG, // 设置为该等级，将会记录ERROR、WARING、INFO和DEBUG级别的日志
+  LEVEL_VERBOSE, // 设置为该等级，将会记录ERROR、WARING、INFO、DEBUG和VERBOSE级别的日志
   LEVEL_NONE
 }
 
