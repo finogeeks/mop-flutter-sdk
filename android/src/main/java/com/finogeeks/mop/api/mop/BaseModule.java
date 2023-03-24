@@ -124,7 +124,7 @@ public class BaseModule extends BaseApi {
                 .setBindAppletWithMainProcess(bindAppletWithMainProcess)
                 .setLogLevel(XLogLevel.LEVEL_VERBOSE)
                 .setXLogDir(new File(getContext().getExternalCacheDir(),"xlog"))
-                .setPageCountLimit(pageCountLimit)
+                .setPageCountLimit(pageCountLimit);
 
         if (customWebViewUserAgent != null)
             builder.setCustomWebViewUserAgent(customWebViewUserAgent);
