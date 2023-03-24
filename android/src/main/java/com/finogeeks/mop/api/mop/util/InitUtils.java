@@ -24,6 +24,7 @@ public class InitUtils {
             uiConfig.setHideFavoriteMenu((Boolean) map.get("isHideFavoriteMenu"));
             uiConfig.setHideSettingMenu((Boolean) map.get("isHideSettingMenu"));
             uiConfig.setHideTransitionCloseButton((Boolean) map.get("hideTransitionCloseButton"));
+            uiConfig.setUseNativeLiveComponent((Boolean) map.get("useNativeLiveComponent"));
             Map<Object, Object> capsuleConfigMap = (Map<Object, Object>) map.get("capsuleConfig");
             if (capsuleConfigMap != null) {
                 FinAppConfig.UIConfig.CapsuleConfig capsuleConfig = new FinAppConfig.UIConfig.CapsuleConfig();
