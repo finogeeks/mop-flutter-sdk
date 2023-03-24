@@ -279,22 +279,28 @@ class UIConfig {
   /// 是否清除导航栏导航按钮的背景 ios未发现该属性
   bool isClearNavigationBarNavButtonBackground = false;
 
-  /// 是否隐藏"更多"菜单中的"反馈与投诉"菜单入口
+  /// 隐藏...弹出菜单中的 【反馈与投诉】 菜单
   bool isHideFeedbackAndComplaints = false;
 
-  /// 是否隐藏"更多"菜单中的"返回首页"菜单入口
+  /// 隐藏...弹出菜单中的 【返回首页】 菜单
   bool isHideBackHome = false;
 
-  // 隐藏...弹出菜单中的 【转发】 的菜单，默认为false
+  /// 隐藏...弹出菜单中的 【转发】 的菜单，默认为false
   bool isHideForwardMenu = false;
 
-  // 隐藏...弹出菜单中的 【分享】 的菜单，默认为true
+  /// 隐藏...弹出菜单中的 【分享】 的菜单，默认为true
   bool isHideShareAppletMenu = true;
 
-  // 隐藏...弹出菜单中的 【重新进入小程序】 的菜单，默认为false
+  /// 隐藏...弹出菜单中的 【添加到桌面】 菜单
+  bool isHideAddToDesktopMenu = true;
+
+  /// 隐藏...弹出菜单中的 【收藏】 菜单
+  bool isHideFavoriteMenu = true;
+
+  // 隐藏...弹出菜单中的 【重新进入小程序】 菜单，默认为false
   bool isHideRefreshMenu = false;
 
-  // 隐藏...弹出菜单中的 【设置】 的菜单，默认为false
+  // 隐藏...弹出菜单中的 【设置】 菜单，默认为false
   bool isHideSettingMenu = false;
 
   /// 胶囊按钮配置
@@ -364,6 +370,8 @@ class UIConfig {
       "isHideRefreshMenu": isHideRefreshMenu,
       "isHideShareAppletMenu": isHideShareAppletMenu,
       "isHideSettingMenu": isHideSettingMenu,
+      "isHideAddToDesktopMenu": isHideAddToDesktopMenu,
+      "isHideFavoriteMenu": isHideFavoriteMenu,
       "hideTransitionCloseButton": hideTransitionCloseButton,
       "capsuleConfig": capsuleConfig?.toMap(),
       "navHomeConfig": navHomeConfig?.toMap(),
@@ -932,7 +940,6 @@ class Mop {
   /// [userId] 用户id
   /// [finStoreConfigs] 多服务配置
   /// [uiConfig] UI配置
-  /// [config]   小程序相关配置
   /// [debug] 设置debug模式，影响调试和日志
   /// [customWebViewUserAgent] 设置自定义webview ua
   /// [appletIntervalUpdateLimit] 设置小程序批量更新周期
@@ -1106,20 +1113,20 @@ class Mop {
     _appletHandlerApis["getUserInfo"] = (params) {
       return handler.getUserInfo();
     };
-    _appletHandlerApis["getCustomMenus"] = (params) async {
-      final res = await handler.getCustomMenus(params["appId"]);
-      List<Map<String, dynamic>> list = [];
-      res.forEach((element) {
-        Map<String, dynamic> map = Map();
-        map["menuId"] = element.menuId;
-        map["image"] = element.image;
-        map["title"] = element.title;
-        map["type"] = element.type;
-        list.add(map);
-      });
-      debugPrint("registerAppletHandler getCustomMenus list $list");
-      return list;
-    };
+    // _appletHandlerApis["getCustomMenus"] = (params) async {
+    //   final res = await handler.getCustomMenus(params["appId"]);
+    //   List<Map<String, dynamic>> list = [];
+    //   res.forEach((element) {
+    //     Map<String, dynamic> map = Map();
+    //     map["menuId"] = element.menuId;
+    //     map["image"] = element.image;
+    //     map["title"] = element.title;
+    //     map["type"] = element.type;
+    //     list.add(map);
+    //   });
+    //   debugPrint("registerAppletHandler getCustomMenus list $list");
+    //   return list;
+    // };
     _appletHandlerApis["onCustomMenuClick"] = (params) async {
       return handler.onCustomMenuClick(
         params["appId"],
