@@ -30,7 +30,6 @@
         for (NSDictionary *dict in _finStoreConfigs) {
             FATStoreConfig *storeConfig = [[FATStoreConfig alloc] init];
             storeConfig.sdkKey = dict[@"sdkKey"];
-    //        storeConfig.sdkKey = @"22LyZEib0gLTQdU3MUauAb4V4W8Uxd/gMgmH8Hg1bGQ=";
             storeConfig.sdkSecret = dict[@"sdkSecret"];
             storeConfig.apiServer = dict[@"apiServer"];
             storeConfig.apmServer = dict[@"apmServer"];
@@ -82,8 +81,8 @@
         if (_uiConfig[@"navigationTitleTextAttributes"]) {
             uiconfig.navigationTitleTextAttributes = _uiConfig[@"navigationTitleTextAttributes"];
         }
-        if (_uiConfig[@"progressBarColor"]) {
-            uiconfig.progressBarColor = [MOPTools colorWithRGBHex:[_uiConfig[@"progressBarColor"] intValue]];
+        if (_uiConfig[@"webViewProgressBarColor"]) {
+            uiconfig.progressBarColor = [MOPTools colorWithRGBHex:[_uiConfig[@"webViewProgressBarColor"] intValue]];
         }
         uiconfig.hideFeedbackMenu = [_uiConfig[@"isHideFeedbackAndComplaints"] boolValue];
         uiconfig.hideForwardMenu = [_uiConfig[@"isHideForwardMenu"] boolValue];

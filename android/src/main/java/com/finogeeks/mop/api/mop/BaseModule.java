@@ -4,17 +4,16 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
-import com.finogeeks.lib.applet.BuildConfig;
 import com.finogeeks.lib.applet.client.FinAppClient;
 import com.finogeeks.lib.applet.client.FinAppConfig;
 import com.finogeeks.lib.applet.client.FinStoreConfig;
 import com.finogeeks.lib.applet.interfaces.FinCallback;
 import com.finogeeks.mop.api.BaseApi;
+import com.finogeeks.mop.api.mop.util.InitUtils;
 import com.finogeeks.mop.interfaces.ICallback;
 import com.finogeeks.mop.service.MopPluginService;
 import com.finogeeks.xlog.XLogLevel;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 public class BaseModule extends BaseApi {
-    private final static String TAG = BaseModule.class.getSimpleName();
+    private final static String TAG = "BaseModule";
 
     public BaseModule(Context context) {
         super(context);
@@ -118,11 +117,9 @@ public class BaseModule extends BaseApi {
                 }
             }
         }
-        FinAppConfig.UIConfig uiConfig = null;
-        if (param.get("uiConfig") != null) {
-            uiConfig = gson.fromJson(gson.toJson(param.get("uiConfig")), FinAppConfig.UIConfig.class);
-        }
 
+        // uiConfig
+        FinAppConfig.UIConfig uiConfig = InitUtils.createUIConfigFromMap((Map<Object, Object>) param.get("uiConfig"));
 
         FinAppConfig.Builder builder = new FinAppConfig.Builder()
                 .setSdkKey(appkey)
@@ -137,10 +134,9 @@ public class BaseModule extends BaseApi {
                 .setBindAppletWithMainProcess(bindAppletWithMainProcess)
                 .setLogLevel(XLogLevel.LEVEL_VERBOSE)
                 .setXLogDir(new File(getContext().getExternalCacheDir(),"xlog"))
+                .setPageCountLimit(pageCountLimit)
                 .setUseLocalTbsCore(useLocalTbsCore)
                 .setTbsCoreUrl(tbsCoreUrl);
-
-//                .setPageCountLimit(pageCountLimit);
 
         if (customWebViewUserAgent != null)
             builder.setCustomWebViewUserAgent(customWebViewUserAgent);

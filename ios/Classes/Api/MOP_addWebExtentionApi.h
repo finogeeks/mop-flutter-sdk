@@ -9,7 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MOB_addWebExtentionApi : MOPBaseApi
+@interface MOP_addWebExtentionApi : MOPBaseApi
 @property(nonatomic, copy) NSString* name;
 @end
 
