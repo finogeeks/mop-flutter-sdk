@@ -202,6 +202,14 @@ class Config {
   /// 是否提前创建进程
   bool enablePreNewProcess = false;
 
+  /// Android属性
+  /// 是否使用本地加载tbs内核
+  bool useLocalTbsCore = false;
+
+  /// Android属性
+  /// tbs内核的下载地址，不包含文件名
+  String? tbsCoreUrl;
+
   Config(this.finStoreConfigs);
 
   Map<String, dynamic> toMap() {
@@ -243,6 +251,8 @@ class Config {
       "logMaxAliveSec": logMaxAliveSec,
       "logDir": logDir,
       "enablePreNewProcess": enablePreNewProcess,
+      "useLocalTbsCore": useLocalTbsCore,
+      "tbsCoreUrl": tbsCoreUrl,
     };
   }
 }
@@ -964,9 +974,7 @@ class Mop {
     UIConfig? uiConfig,
     String? customWebViewUserAgent,
     int? appletIntervalUpdateLimit,
-    int? maxRunningApplet,
-    bool useLocalTbsCore = false,
-    String? tbsCoreUrl,
+    int? maxRunningApplet
   }) async {
     List<Map<String, dynamic>>? storeConfigs =
         finStoreConfigs?.map((e) => e.toMap()).toList();
@@ -988,8 +996,6 @@ class Mop {
       "customWebViewUserAgent": customWebViewUserAgent,
       "appletIntervalUpdateLimit": appletIntervalUpdateLimit,
       "maxRunningApplet": maxRunningApplet,
-      "useLocalTbsCore": useLocalTbsCore,
-      "tbsCoreUrl": tbsCoreUrl
     });
     return ret;
   }

@@ -67,16 +67,6 @@ public class BaseModule extends BaseApi {
             disablePermission = false;
         }
 
-        Boolean useLocalTbsCore = (Boolean) param.get("useLocalTbsCore");
-        if (useLocalTbsCore == null) {
-            useLocalTbsCore = false;
-        }
-
-        String tbsCoreUrl = "";
-        if (param.get("tbsCoreUrl") != null) {
-            tbsCoreUrl = (String) param.get("tbsCoreUrl");
-        }
-
         String userId = "";
         if (param.get("userId") != null) {
             userId = (String) param.get("userId");
@@ -135,8 +125,6 @@ public class BaseModule extends BaseApi {
                 .setLogLevel(XLogLevel.LEVEL_VERBOSE)
                 .setXLogDir(new File(getContext().getExternalCacheDir(),"xlog"))
                 .setPageCountLimit(pageCountLimit)
-                .setUseLocalTbsCore(useLocalTbsCore)
-                .setTbsCoreUrl(tbsCoreUrl);
 
         if (customWebViewUserAgent != null)
             builder.setCustomWebViewUserAgent(customWebViewUserAgent);
