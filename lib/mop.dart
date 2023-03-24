@@ -181,7 +181,7 @@ class Config {
 
   /// Android属性
   /// 是否允许截屏录屏，默认允许
-  bool enableScreenShot = false;
+  bool enableScreenShot = true;
 
   /// Android属性
   /// 截屏录屏配置项的优先级，默认GLOBAL
@@ -200,7 +200,7 @@ class Config {
 
   /// Android属性
   /// 是否提前创建进程
-  bool enablePreNewProcess = false;
+  bool enablePreNewProcess = true;
 
   /// Android属性
   /// 是否使用本地加载tbs内核
