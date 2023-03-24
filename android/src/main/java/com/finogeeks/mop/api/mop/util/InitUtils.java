@@ -20,6 +20,8 @@ public class InitUtils {
             uiConfig.setHideForwardMenu((Boolean) map.get("isHideForwardMenu"));
             uiConfig.setHideRefreshMenu((Boolean) map.get("isHideRefreshMenu"));
             uiConfig.setHideShareAppletMenu((Boolean) map.get("isHideShareAppletMenu"));
+            uiConfig.setHideAddToDesktopMenu((Boolean) map.get("isHideAddToDesktopMenu"));
+            uiConfig.setHideFavoriteMenu((Boolean) map.get("isHideFavoriteMenu"));
             uiConfig.setHideSettingMenu((Boolean) map.get("isHideSettingMenu"));
             uiConfig.setHideTransitionCloseButton((Boolean) map.get("hideTransitionCloseButton"));
             Map<Object, Object> capsuleConfigMap = (Map<Object, Object>) map.get("capsuleConfig");
