@@ -1046,18 +1046,30 @@ class Mop {
     return ret;
   }
 
-  /// get current using applet
-  /// 获取当前正在使用的小程序信息
-  /// {appId,name,icon,description,version,thumbnail}
-  Future<Map<String, dynamic>> currentApplet() async {
-    final ret = await _channel.invokeMapMethod("currentApplet");
-    return Map<String, dynamic>.from(ret!);
+  /// 通过二维码打开小程序
+  /// [qrcode] 二维码内容
+  Future qrcodeOpenApplet(String qrcode, {bool isSingleProcess = false}) async {
+    Map<String, Object> params = {
+      'qrcode': qrcode,
+      'isSingleProcess': isSingleProcess,
+    };
+    return await _channel.invokeMapMethod("qrcodeOpenApplet", params);
   }
 
-  Future<Map<String, dynamic>> changeUserId(String userId) async {
-    Map<String, Object> params = {'userId': userId};
-    final ret = await _channel.invokeMapMethod("changeUserId", params);
-    return Map<String, dynamic>.from(ret!);
+  /// （扫码后）解密-鉴权-打开小程序
+  Future scanOpenApplet(String info, {bool isSingleProcess = false}) async {
+    Map<String, Object> params = {
+      'info': info,
+      'isSingleProcess': isSingleProcess,
+    };
+    return await _channel.invokeMapMethod("scanOpenApplet", params);
+  }
+
+  /// 关闭小程序 小程序会在内存中存在
+  Future<void> closeApplet(String appletId, bool animated) async {
+    await _channel.invokeMethod(
+        "closeApplet", {"appletId": appletId, "animated": animated});
+    return;
   }
 
   /// close all running applets
@@ -1066,10 +1078,11 @@ class Mop {
     return await _channel.invokeMethod("closeAllApplets");
   }
 
-  /// clear applets cache
-  /// 清除缓存的小程序
-  Future clearApplets() async {
-    return await _channel.invokeMethod("clearApplets");
+  /// 结束小程序 小程序会从内存中清除
+  Future<void> finishRunningApplet(String appletId, bool animated) async {
+    await _channel.invokeMethod(
+        "finishRunningApplet", {"appletId": appletId, "animated": animated});
+    return;
   }
 
   /// 清除指定的小程序本体缓存
@@ -1084,30 +1097,18 @@ class Mop {
     return await _channel.invokeMethod("removeAllUsedApplets", params);
   }
 
-  /// 获取运行时版本号
-  Future<String> sdkVersion() async {
-    return await _channel
-        .invokeMapMethod("sdkVersion")
-        .then((value) => value?["data"]);
+  /// clear applets cache
+  /// 清除缓存的小程序
+  Future clearApplets() async {
+    return await _channel.invokeMethod("clearApplets");
   }
 
-  /// （扫码后）解密-鉴权-打开小程序
-  Future scanOpenApplet(String info, {bool isSingleProcess = false}) async {
-    Map<String, Object> params = {
-      'info': info,
-      'isSingleProcess': isSingleProcess,
-    };
-    return await _channel.invokeMapMethod("scanOpenApplet", params);
-  }
-
-  /// 通过二维码打开小程序
-  /// [qrcode] 二维码内容
-  Future qrcodeOpenApplet(String qrcode, {bool isSingleProcess = false}) async {
-    Map<String, Object> params = {
-      'qrcode': qrcode,
-      'isSingleProcess': isSingleProcess,
-    };
-    return await _channel.invokeMapMethod("qrcodeOpenApplet", params);
+  /// get current using applet
+  /// 获取当前正在使用的小程序信息
+  /// {appId,name,icon,description,version,thumbnail}
+  Future<Map<String, dynamic>> currentApplet() async {
+    final ret = await _channel.invokeMapMethod("currentApplet");
+    return Map<String, dynamic>.from(ret!);
   }
 
   /// 根据微信QrCode信息解析小程序信息
@@ -1166,49 +1167,11 @@ class Mop {
     _channel.invokeMethod("registerExtensionApi", {"name": name});
   }
 
-  /// 获取国密加密
-  Future<String> getSMSign(String plainText) async {
-    var result =
-        await _channel.invokeMapMethod("smsign", {'plainText': plainText});
-    var data = result?['data']['data'];
-    debugPrint(data);
-    return data;
-  }
-
-  /// WKWebView的弹性设置
-  void webViewBounces(bool bounces) async {
-    await _channel.invokeMapMethod("webViewBounces", {'bounces': bounces});
-    return;
-  }
-
-  /// 关闭小程序 小程序会在内存中存在
-  Future<void> closeApplet(String appletId, bool animated) async {
-    await _channel.invokeMethod(
-        "closeApplet", {"appletId": appletId, "animated": animated});
-    return;
-  }
-
-  /// 结束小程序 小程序会从内存中清除
-  Future<void> finishRunningApplet(String appletId, bool animated) async {
-    await _channel.invokeMethod(
-        "finishRunningApplet", {"appletId": appletId, "animated": animated});
-    return;
-  }
-
-  /// 设置小程序切换动画 安卓
-  Future setActivityTransitionAnim(Anim anim) async {
-    await _channel.invokeMethod("setActivityTransitionAnim", {"anim": ""});
-    return;
-  }
-
-  /// 原生发送事件给小程序
-  /// [appId] 小程序id
-  /// [eventData] 事件对象
-  Future<void> sendCustomEvent(
-      String appId, Map<String, dynamic> eventData) async {
-    await _channel.invokeMethod(
-        "sendCustomEvent", {"appId": appId, "eventData": eventData});
-    return;
+  /// register webview extension api
+  /// 注册webview拓展api
+  void addWebExtentionApi(String name, ExtensionApiHandler handler) {
+    _webExtensionApis[name] = handler;
+    _channel.invokeMethod("addWebExtentionApi", {"name": name});
   }
 
   /// 原生调用webview中的js方法
@@ -1227,14 +1190,51 @@ class Mop {
     return;
   }
 
-  /// register webview extension api
-  /// 注册webview拓展api
-  void addWebExtentionApi(String name, ExtensionApiHandler handler) {
-    _webExtensionApis[name] = handler;
-    _channel.invokeMethod("addWebExtentionApi", {"name": name});
+  /// 原生发送事件给小程序
+  /// [appId] 小程序id
+  /// [eventData] 事件对象
+  Future<void> sendCustomEvent(
+      String appId, Map<String, dynamic> eventData) async {
+    await _channel.invokeMethod(
+        "sendCustomEvent", {"appId": appId, "eventData": eventData});
+    return;
   }
 
-  /// 将当前正在运行的最后一个打开的小程序移至任务栈前台
+  Future<Map<String, dynamic>> changeUserId(String userId) async {
+    Map<String, Object> params = {'userId': userId};
+    final ret = await _channel.invokeMapMethod("changeUserId", params);
+    return Map<String, dynamic>.from(ret!);
+  }
+
+  /// 获取运行时版本号
+  Future<String> sdkVersion() async {
+    return await _channel
+        .invokeMapMethod("sdkVersion")
+        .then((value) => value?["data"]);
+  }
+  
+  /// 获取国密加密
+  Future<String> getSMSign(String plainText) async {
+    var result =
+        await _channel.invokeMapMethod("smsign", {'plainText': plainText});
+    var data = result?['data']['data'];
+    debugPrint(data);
+    return data;
+  }
+
+  /// WKWebView的弹性设置，仅iOS生效
+  void webViewBounces(bool bounces) async {
+    await _channel.invokeMapMethod("webViewBounces", {'bounces': bounces});
+    return;
+  }
+
+  /// 设置小程序切换动画，仅Android生效
+  Future setActivityTransitionAnim(Anim anim) async {
+    await _channel.invokeMethod("setActivityTransitionAnim", {"anim": ""});
+    return;
+  }
+
+  /// 将当前正在运行的最后一个打开的小程序移至任务栈前台，仅Android生效
   void moveCurrentAppletToFront() async {
     return await _channel.invokeMethod("moveCurrentAppletToFront");
   }
