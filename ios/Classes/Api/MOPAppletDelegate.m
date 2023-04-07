@@ -56,6 +56,21 @@
     return userInfo;
 }
 
+- (BOOL)appletInfo:(FATAppletInfo *)appletInfo didClickMoreBtnAtPath:(NSString *)path {
+    NSLog(@"appletInfo:didClickMoreBtnAtPath");
+    __block BOOL flag;
+    FlutterMethodChannel *channel = [[MopPlugin instance] methodChannel];
+    [channel invokeMethod:@"extensionApi:customCapsuleMoreButtonClick" arguments:@{@"appId": appletInfo.appId} result:^(id _Nullable result) {
+        CFRunLoopStop(CFRunLoopGetMain());
+        if ([result isKindOfClass:[NSNumber class]]) {
+            flag = [result boolValue];
+        }
+    }];
+    CFRunLoopRun();
+
+    return flag;
+}
+
 - (NSArray<id<FATAppletMenuProtocol>> *)customMenusInApplet:(FATAppletInfo *)appletInfo atPath:(NSString *)path {
     NSLog(@"customMenusInApplet");
     __block NSArray *list;

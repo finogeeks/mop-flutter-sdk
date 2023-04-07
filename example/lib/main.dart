@@ -3,6 +3,7 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:mop/api.dart';
 import 'dart:async';
 import 'dart:io';
 import 'package:mop/mop.dart';
@@ -23,50 +24,56 @@ class _MyAppState extends State<MyApp> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> init() async {
-    UIConfig uiconfig = UIConfig();
-    //多服务器配置
 
+    //多服务器配置
     FinStoreConfig storeConfigA = FinStoreConfig(
-      "2LyZEib0gLTQdU3MUauATBwgfnTCJjdr7FCnywmAEM=",
-      "bdfd76cae24d4313",
+      "22LyZEib0gLTQdU3MUauAfJ/xujwNfM6OvvEqQyH4igA",
+      "703b9026be3d6bc5",
       "https://api.finclip.com",
-      "https://api.finclip.com",
+      cryptType: "SM",
     );
 
     FinStoreConfig storeConfigB = FinStoreConfig(
-      "2LyZEib0gLTQdU3MUauATBwgfnTCJjdr7FCnywmAEM=",
-      "bdfd76cae24d4313",
-      "https://finchat-mop-b.finogeeks.club",
-      "https://finchat-mop-b.finogeeks.club",
+      "22LyZEib0gLTQdU3MUauAfJ/xujwNfM6OvvEqQyH4igA",
+      "703b9026be3d6bc5",
+      "https://finchat-mop-b.finogeeks.club"
     );
     List<FinStoreConfig> storeConfigs = [storeConfigA];
+    Config config = Config(storeConfigs);
+    config.language = LanguageType.English;
+    
+    UIConfig uiconfig = UIConfig();
     uiconfig.isAlwaysShowBackInDefaultNavigationBar = false;
     uiconfig.isClearNavigationBarNavButtonBackground = false;
     uiconfig.isHideFeedbackAndComplaints = true;
     uiconfig.isHideBackHome = true;
     uiconfig.isHideForwardMenu = true;
-    uiconfig.hideTransitionCloseButton = true;
-    uiconfig.disableSlideCloseAppletGesture = true;
     CapsuleConfig capsuleConfig = CapsuleConfig();
-    capsuleConfig.capsuleBgLightColor = 0x33ff00ee;
-    capsuleConfig.capsuleRightMargin = 25;
+    // capsuleConfig.capsuleBgLightColor = 0x33ff00ee;
+    capsuleConfig.capsuleCornerRadius = 16;
+    // capsuleConfig.capsuleRightMargin = 25;
     uiconfig.capsuleConfig = capsuleConfig;
     uiconfig.appletText = "applet";
 
-    if (Platform.isIOS) {
-      final res = await Mop.instance.initialize(
-          '22LyZEib0gLTQdU3MUauATBwgfnTCJjdr7FCnywmAEM=', 'bdfd76cae24d4313',
-          apiServer: 'https://api.finclip.com',
-          apiPrefix: '/api/v1/mop',
-          uiConfig: uiconfig,
-          finStoreConfigs: storeConfigs);
-      print(res);
-    } else if (Platform.isAndroid) {
-      final res = await Mop.instance.initialize(
-          '22LyZEib0gLTQdU3MUauATBwgfnTCJjdr7FCnywmAEM=', 'bdfd76cae24d4313',
-          apiServer: 'https://api.finclip.com', apiPrefix: '/api/v1/mop');
-      print(res);
-    }
+    // if (Platform.isIOS) {
+    //   final res = await Mop.instance.initialize(
+    //       '22LyZEib0gLTQdU3MUauATBwgfnTCJjdr7FCnywmAEM=', 'bdfd76cae24d4313',
+    //       apiServer: 'https://api.finclip.com',
+    //       apiPrefix: '/api/v1/mop',
+    //       uiConfig: uiconfig,
+    //       finStoreConfigs: storeConfigs);
+    //   print(res);
+    // } else if (Platform.isAndroid) {
+    //   final res = await Mop.instance.initialize(
+    //       '22LyZEib0gLTQdU3MUauATBwgfnTCJjdr7FCnywmAEM=', 'bdfd76cae24d4313',
+    //       apiServer: 'https://api.finclip.com', apiPrefix: '/api/v1/mop');
+    //   print(res);
+    // }
+
+    final res = await Mop.instance.initSDK(config, uiConfig: uiconfig);
+    print(res);
+    Mop.instance.registerAppletHandler(MyAppletHandler());
+
     if (!mounted) return;
   }
 
@@ -117,8 +124,10 @@ class _MyAppState extends State<MyApp> {
               // physics: NeverScrollableScrollPhysics(),
               children: [
                 _buildAppletItem(appletId, "打开小程序", () {
-                  Mop.instance.openApplet(appletId,
-                      path: 'pages/index/index', query: '');
+                  // Mop.instance.openApplet(appletId,
+                  //     path: 'pages/index/index', query: '');
+                  RemoteAppletRequest request = RemoteAppletRequest(apiServer: 'https://api.finclip.com', appletId: appletId);
+                  Mop.instance.startApplet(request);
                 }),
                 _buildAppletItem(appletId, "finishRunningApplet", () {
                   Mop.instance.finishRunningApplet(appletId, true);
@@ -148,11 +157,53 @@ class _MyAppState extends State<MyApp> {
         body: Column(
           children: <Widget>[
             _buildAppletWidget("5facb3a52dcbff00017469bd", "画图小程序"),
-            _buildAppletWidget("5fa214a29a6a7900019b5cc1", "官方小程序"),
+            _buildAppletWidget("5f72e3559a6a7900019b5baa", "官方小程序"),
             _buildAppletWidget("5fa215459a6a7900019b5cc3", "我的对账单"),
           ],
         ),
       ),
     );
   }
+}
+
+class MyAppletHandler extends AppletHandler {
+  @override
+  Future<void> appletDidOpen(String appId) async {
+    print("appletDidOpen appId:$appId");
+  }
+
+  @override
+  bool customCapsuleMoreButtonClick(String appId) {
+    return false;
+  }
+
+  @override
+  void forwardApplet(Map<String, dynamic> appletInfo) {
+    print("forwardApplet ---");
+  }
+
+  @override
+  Future<List<CustomMenu>> getCustomMenus(String appId) {
+    List<CustomMenu> customMenus = [];
+    return Future.value(customMenus);
+  }
+
+  @override
+  Future<void> getMobileNumber(Function(dynamic params) param0) {
+    // TODO: implement getMobileNumber
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Map<String, dynamic>> getUserInfo() {
+    // TODO: implement getUserInfo
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> onCustomMenuClick(String appId, String path, String menuId, String appInfo) {
+    // TODO: implement onCustomMenuClick
+    throw UnimplementedError();
+  }
+
 }

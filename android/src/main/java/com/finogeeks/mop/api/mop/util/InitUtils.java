@@ -7,6 +7,23 @@ import java.util.Map;
 
 public class InitUtils {
 
+    private static float covertNumToFloat(Object obj) {
+        if (obj instanceof Float) {
+            return ((Float) obj).floatValue();
+        } else if (float.class.isInstance(obj)) {
+            return (float) obj;
+        } else  if (obj instanceof Double) {
+            return ((Double) obj).floatValue();
+        } else if (double.class.isInstance(obj)) {
+            return (float) obj;
+        } else if (obj instanceof Integer) {
+            return ((Integer) obj).floatValue();
+        } else if (int.class.isInstance(obj)) {
+            return (float) obj;
+        }
+        throw new IllegalArgumentException("Unsupported argument type " + obj.getClass().getName());
+    }
+
     public static FinAppConfig.UIConfig createUIConfigFromMap(Map<Object, Object> map) {
         if (map != null) {
             FinAppConfig.UIConfig uiConfig = new FinAppConfig.UIConfig();
@@ -28,11 +45,11 @@ public class InitUtils {
             Map<Object, Object> capsuleConfigMap = (Map<Object, Object>) map.get("capsuleConfig");
             if (capsuleConfigMap != null) {
                 FinAppConfig.UIConfig.CapsuleConfig capsuleConfig = new FinAppConfig.UIConfig.CapsuleConfig();
-                capsuleConfig.capsuleWidth = (float) capsuleConfigMap.get("capsuleWidth");
-                capsuleConfig.capsuleHeight = (float) capsuleConfigMap.get("capsuleHeight");
-                capsuleConfig.capsuleRightMargin = (float) capsuleConfigMap.get("capsuleRightMargin");
-                capsuleConfig.capsuleCornerRadius = (float) capsuleConfigMap.get("capsuleCornerRadius");
-                capsuleConfig.capsuleBorderWidth = (float) capsuleConfigMap.get("capsuleBorderWidth");
+                capsuleConfig.capsuleWidth = covertNumToFloat(capsuleConfigMap.get("capsuleWidth"));
+                capsuleConfig.capsuleHeight = covertNumToFloat(capsuleConfigMap.get("capsuleHeight"));
+                capsuleConfig.capsuleRightMargin = covertNumToFloat(capsuleConfigMap.get("capsuleRightMargin"));
+                capsuleConfig.capsuleCornerRadius = covertNumToFloat(capsuleConfigMap.get("capsuleCornerRadius"));
+                capsuleConfig.capsuleBorderWidth = covertNumToFloat(capsuleConfigMap.get("capsuleBorderWidth"));
                 capsuleConfig.capsuleBgLightColor = (int) capsuleConfigMap.get("capsuleBgLightColor");
                 capsuleConfig.capsuleBgDarkColor = (int) capsuleConfigMap.get("capsuleBgDarkColor");
                 capsuleConfig.capsuleBorderLightColor = (int) capsuleConfigMap.get("capsuleBorderLightColor");
@@ -47,8 +64,8 @@ public class InitUtils {
                 if (moreDarkImage != null) {
                     capsuleConfig.moreDarkImage = moreDarkImage;
                 }
-                capsuleConfig.moreBtnWidth = (float) capsuleConfigMap.get("moreBtnWidth");
-                capsuleConfig.moreBtnLeftMargin = (float) capsuleConfigMap.get("moreBtnLeftMargin");
+                capsuleConfig.moreBtnWidth = covertNumToFloat(capsuleConfigMap.get("moreBtnWidth"));
+                capsuleConfig.moreBtnLeftMargin = covertNumToFloat(capsuleConfigMap.get("moreBtnLeftMargin"));
                 Integer closeLightImage = (Integer) capsuleConfigMap.get("closeLightImage");
                 if (closeLightImage != null) {
                     capsuleConfig.closeLightImage = closeLightImage;
@@ -57,18 +74,18 @@ public class InitUtils {
                 if (closeDarkImage != null) {
                     capsuleConfig.closeDarkImage = closeDarkImage;
                 }
-                capsuleConfig.closeBtnWidth = (float) capsuleConfigMap.get("closeBtnWidth");
-                capsuleConfig.closeBtnLeftMargin = (float) capsuleConfigMap.get("closeBtnLeftMargin");
+                capsuleConfig.closeBtnWidth = covertNumToFloat(capsuleConfigMap.get("closeBtnWidth"));
+                capsuleConfig.closeBtnLeftMargin = covertNumToFloat(capsuleConfigMap.get("closeBtnLeftMargin"));
                 uiConfig.setCapsuleConfig(capsuleConfig);
             }
             Map<Object, Object> navHomeConfigMap = (Map<Object, Object>) map.get("navHomeConfig");
             if (navHomeConfigMap != null) {
                 FinAppConfig.UIConfig.NavHomeConfig navHomeConfig = new FinAppConfig.UIConfig.NavHomeConfig();
-                navHomeConfig.width = (float) navHomeConfigMap.get("width");
-                navHomeConfig.height = (float) navHomeConfigMap.get("height");
-                navHomeConfig.leftMargin = (float) navHomeConfigMap.get("leftMargin");
-                navHomeConfig.cornerRadius = (float) navHomeConfigMap.get("cornerRadius");
-                navHomeConfig.borderWidth = (float) navHomeConfigMap.get("borderWidth");
+                navHomeConfig.width = covertNumToFloat(navHomeConfigMap.get("width"));
+                navHomeConfig.height = covertNumToFloat(navHomeConfigMap.get("height"));
+                navHomeConfig.leftMargin = covertNumToFloat(navHomeConfigMap.get("leftMargin"));
+                navHomeConfig.cornerRadius = covertNumToFloat(navHomeConfigMap.get("cornerRadius"));
+                navHomeConfig.borderWidth = covertNumToFloat(navHomeConfigMap.get("borderWidth"));
                 navHomeConfig.borderLightColor = (int) navHomeConfigMap.get("borderLightColor");
                 navHomeConfig.borderDarkColor = (int) navHomeConfigMap.get("borderDarkColor");
                 navHomeConfig.bgLightColor = (int) navHomeConfigMap.get("bgLightColor");
@@ -78,19 +95,19 @@ public class InitUtils {
             Map<Object, Object> authViewConfigMap = (Map<Object, Object>) map.get("authViewConfig");
             if (authViewConfigMap != null) {
                 FinAppConfig.UIConfig.AuthViewConfig authViewConfig = new FinAppConfig.UIConfig.AuthViewConfig();
-                authViewConfig.appletNameTextSize = (float) authViewConfigMap.get("appletNameTextSize");
+                authViewConfig.appletNameTextSize = covertNumToFloat(authViewConfigMap.get("appletNameTextSize"));
                 authViewConfig.appletNameLightColor = (int) authViewConfigMap.get("appletNameLightColor");
                 authViewConfig.appletNameDarkColor = (int) authViewConfigMap.get("appletNameDarkColor");
-                authViewConfig.authorizeTitleTextSize = (float) authViewConfigMap.get("authorizeTitleTextSize");
+                authViewConfig.authorizeTitleTextSize = covertNumToFloat(authViewConfigMap.get("authorizeTitleTextSize"));
                 authViewConfig.authorizeTitleLightColor = (int) authViewConfigMap.get("authorizeTitleLightColor");
                 authViewConfig.authorizeTitleDarkColor = (int) authViewConfigMap.get("authorizeTitleDarkColor");
-                authViewConfig.authorizeDescriptionTextSize = (float) authViewConfigMap.get("authorizeDescriptionTextSize");
+                authViewConfig.authorizeDescriptionTextSize = covertNumToFloat(authViewConfigMap.get("authorizeDescriptionTextSize"));
                 authViewConfig.authorizeDescriptionLightColor = (int) authViewConfigMap.get("authorizeDescriptionLightColor");
                 authViewConfig.authorizeDescriptionDarkColor = (int) authViewConfigMap.get("authorizeDescriptionDarkColor");
-                authViewConfig.agreementTitleTextSize = (float) authViewConfigMap.get("agreementTitleTextSize");
+                authViewConfig.agreementTitleTextSize = covertNumToFloat(authViewConfigMap.get("agreementTitleTextSize"));
                 authViewConfig.agreementTitleLightColor = (int) authViewConfigMap.get("agreementTitleLightColor");
                 authViewConfig.agreementTitleDarkColor = (int) authViewConfigMap.get("agreementTitleDarkColor");
-                authViewConfig.agreementDescriptionTextSize = (float) authViewConfigMap.get("agreementDescriptionTextSize");
+                authViewConfig.agreementDescriptionTextSize = covertNumToFloat(authViewConfigMap.get("agreementDescriptionTextSize"));
                 authViewConfig.agreementDescriptionLightColor = (int) authViewConfigMap.get("agreementDescriptionLightColor");
                 authViewConfig.agreementDescriptionDarkColor = (int) authViewConfigMap.get("agreementDescriptionDarkColor");
                 authViewConfig.linkLightColor = (int) authViewConfigMap.get("linkLightColor");

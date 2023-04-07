@@ -141,6 +141,9 @@ public class AppletModule extends BaseApi {
         String appId = String.valueOf(param.get("appletId"));
         Integer sequence = (Integer) param.get("sequence");
         Map<String, String> params = (Map) param.get("startParams");
+        if (params == null) {
+            params = new HashMap<>();
+        }
         String apiServer = (String) param.get("apiServer");
         String offlineMiniprogramZipPath = (String) param.get("offlineMiniprogramZipPath");
         String offlineFrameworkZipPath = (String) param.get("offlineFrameworkZipPath");

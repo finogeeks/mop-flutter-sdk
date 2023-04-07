@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.finogeeks.mop_example">
    <application
+        android:name=".MainApplication"
         android:label="mop_example"
         android:icon="@mipmap/ic_launcher">
         <activity

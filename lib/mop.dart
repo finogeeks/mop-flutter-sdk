@@ -202,6 +202,9 @@ class Config {
   /// 是否提前创建进程
   bool enablePreNewProcess = true;
 
+  /// SDK的语言类型，默认为中文
+  LanguageType language = LanguageType.Chinese;
+
   /// Android属性
   /// 是否使用本地加载tbs内核
   bool useLocalTbsCore = false;
@@ -251,6 +254,7 @@ class Config {
       "logMaxAliveSec": logMaxAliveSec,
       "logDir": logDir,
       "enablePreNewProcess": enablePreNewProcess,
+      "language":language.index,
       "useLocalTbsCore": useLocalTbsCore,
       "tbsCoreUrl": tbsCoreUrl,
     };
@@ -349,7 +353,7 @@ class UIConfig {
   /// 加载小程序过程中（小程序Service层还未加载成功，基础库还没有向SDK传递小程序配置信息），是否隐藏导航栏的关闭按钮
   bool hideTransitionCloseButton = false;
 
-  /// 是否禁用侧滑关闭小程序的手势。默认为NO
+  /// 是否禁用侧滑关闭小程序的手势。默认为false
   /// 该手势禁用，不影响小程序里页面的侧滑返回上一页的功能
   bool disableSlideCloseAppletGesture = false;
 
@@ -419,14 +423,20 @@ class CapsuleConfig {
   /// 右上角胶囊视图的圆角半径，默认值为5
   double capsuleCornerRadius = 5;
 
-  /// 右上角胶囊视图的边框宽度，默认值为0.8
+  /// 右上角胶囊视图的边框宽度，默认值为1
   double capsuleBorderWidth = 1;
 
+  // /// 胶囊背景颜色浅色
+  // int capsuleBgLightColor = 0x80ffffff;
+
+  // /// 胶囊背景颜色深色
+  // int capsuleBgDarkColor = 0x33000000;
+
   /// 胶囊背景颜色浅色
-  int capsuleBgLightColor = 0x33000000;
+  int capsuleBgLightColor = Platform.isAndroid ? 0x33000000 : 0x80ffffff;
 
   /// 胶囊背景颜色深色
-  int capsuleBgDarkColor = 0x80ffffff;
+  int capsuleBgDarkColor = Platform.isAndroid ? 0x80ffffff : 0x33000000;
 
   /// 右上角胶囊视图的边框浅色颜色
   int capsuleBorderLightColor = 0x80ffffff;
@@ -446,11 +456,11 @@ class CapsuleConfig {
   /// 胶囊里的深色更多按钮的图片对象，如果不传，会使用默认图标
   int? moreDarkImage;
 
-  /// 胶囊里的更多按钮的宽度，高度与宽度相等
-  double moreBtnWidth = 32;
+  /// 胶囊里的更多按钮的宽度，高度与宽度相等。android默认值为32；ios默认值为20
+  double moreBtnWidth = Platform.isAndroid ? 32 : 20;
 
-  /// 胶囊里的更多按钮的左边距
-  double moreBtnLeftMargin = 6;
+  /// 胶囊里的更多按钮的左边距。android默认值为6；ios默认值为12
+  double moreBtnLeftMargin = Platform.isAndroid ? 6 : 12;
 
   /// 胶囊里的浅色更多按钮的图片对象，如果不传，会使用默认图标
   int? closeLightImage;
@@ -458,11 +468,11 @@ class CapsuleConfig {
   /// 胶囊里的深色更多按钮的图片对象，如果不传，会使用默认图标
   int? closeDarkImage;
 
-  /// 胶囊里的关闭按钮的宽度，高度与宽度相等
-  double closeBtnWidth = 32;
+  /// 胶囊里的关闭按钮的宽度，高度与宽度相等。android默认值为32；ios默认值为20
+  double closeBtnWidth = Platform.isAndroid ? 32 : 20;
 
-  /// 胶囊里的关闭按钮的左边距
-  double closeBtnLeftMargin = 6;
+  /// 胶囊里的关闭按钮的左边距。android默认值为6；ios默认值为12
+  double closeBtnLeftMargin = Platform.isAndroid ? 6 : 12;
 
   Map<String, dynamic> toMap() {
     return {
@@ -772,6 +782,7 @@ class RemoteAppletRequest {
   String appletId;
 
   // 小程序的启动参数，非必填
+  // key 仅支持 'path' 和 'query'
   Map<String, String>? startParams;
 
   // 小程序的索引，（审核小程序时必填）
@@ -865,6 +876,11 @@ enum BOOLState {
   BOOLStateTrue, // 所有版本强制开启vconsole，且不可调api关闭，更多面板不展示打开、关闭调试菜单
   BOOLStateFalse, // 正式版更多面板不展示打开、关闭调试菜单；非正式版更多面板展示打开、关闭调试菜单；所有版本均可调setEnableDebug开启vconsole。
   BOOLStateForbidden, // 所有版本强制关闭vconsole，且不可调api开启，多面板不展示打开、关闭调试菜单
+}
+
+enum LanguageType {
+  Chinese,    // 中文
+  English,    // 英文
 }
 
 enum LogLevel {
@@ -1127,6 +1143,9 @@ class Mop {
     };
     _appletHandlerApis["getUserInfo"] = (params) {
       return handler.getUserInfo();
+    };
+    _appletHandlerApis["customCapsuleMoreButtonClick"] = (params) async {
+      return handler.customCapsuleMoreButtonClick(params["appId"]);
     };
     _appletHandlerApis["getCustomMenus"] = (params) async {
       final res = await handler.getCustomMenus(params["appId"]);

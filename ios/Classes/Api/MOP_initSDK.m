@@ -62,6 +62,12 @@
     config.h5AjaxHookRequestKey = self.config[@"h5AjaxHookRequestKey"];
     config.pageCountLimit = [self.config[@"pageCountLimit"] integerValue];
     config.schemes = self.config[@"schemes"];
+    NSInteger languageInteger = [self.config[@"language"] integerValue];
+    if (languageInteger == 1) {
+        config.language = FATPreferredLanguageEnglish;
+    } else {
+        config.language = FATPreferredLanguageSimplifiedChinese;
+    }
     
     
     NSError* error = nil;
