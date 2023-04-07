@@ -10,6 +10,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.finogeeks.lib.applet.client.FinAppProcessClient;
 import com.finogeeks.lib.applet.client.FinAppClient;
 import com.finogeeks.lib.applet.client.FinAppTrace;
 import com.finogeeks.lib.applet.interfaces.FinCallback;

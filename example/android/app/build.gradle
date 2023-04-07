@@ -25,8 +25,7 @@ apply plugin: 'com.android.application'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    compileSdkVersion 30
-
+    compileSdkVersion 33
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -34,7 +33,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.finogeeks.finclip.demo"
+        applicationId "com.finogeeks.finosprite"
         minSdkVersion 21
         targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
@@ -48,8 +47,30 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+    packagingOptions {
+        // libsdkcore.so、libyuvutil.so是被加固过的，不能被压缩，否则加载动态库时会报错
+        doNotStrip "*/x86/libsdkcore.so"
+        doNotStrip "*/x86_64/libsdkcore.so"
+        doNotStrip "*/armeabi/libsdkcore.so"
+        doNotStrip "*/armeabi-v7a/libsdkcore.so"
+        doNotStrip "*/arm64-v8a/libsdkcore.so"
+
+        doNotStrip "*/x86/libfin-yuvutil.so"
+        doNotStrip "*/x86_64/libfin-yuvutil.so"
+        doNotStrip "*/armeabi/libfin-yuvutil.so"
+        doNotStrip "*/armeabi-v7a/libfin-yuvutil.so"
+        doNotStrip "*/arm64-v8a/libfin-yuvutil.so"
+
+        exclude 'META-INF/beans.xml'
+    }
 }
 
 flutter {
     source '../..'
+}
+
+dependencies {
+    def sdk_version = "2.40.1"
+    compileOnly "com.finogeeks.lib:finapplet:${sdk_version}"
+    implementation "com.finogeeks.mop:plugins:${sdk_version}"
 }

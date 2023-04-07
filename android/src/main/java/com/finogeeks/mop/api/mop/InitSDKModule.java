@@ -19,6 +19,7 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Locale;
 
 public class InitSDKModule extends BaseApi {
 
@@ -178,6 +179,12 @@ public class InitSDKModule extends BaseApi {
         String appletText = (String) uiConfigMap.get("appletText");
         if (appletText != null) {
             configBuilder.setAppletText(appletText);
+        }
+        Integer languageInteger = (Integer) configMap.get("language");
+        if (languageInteger == 1) {
+            configBuilder.setLocale(Locale.ENGLISH);
+        } else {
+            configBuilder.setLocale(Locale.SIMPLIFIED_CHINESE);
         }
 
         // uiConfig
