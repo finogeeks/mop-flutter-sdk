@@ -41,6 +41,7 @@ class _MyAppState extends State<MyApp> {
     List<FinStoreConfig> storeConfigs = [storeConfigA];
     Config config = Config(storeConfigs);
     config.language = LanguageType.English;
+    config.baseLoadingViewClass = "LoadingView";
     
     UIConfig uiconfig = UIConfig();
     uiconfig.isAlwaysShowBackInDefaultNavigationBar = false;
@@ -54,6 +55,7 @@ class _MyAppState extends State<MyApp> {
     // capsuleConfig.capsuleRightMargin = 25;
     uiconfig.capsuleConfig = capsuleConfig;
     uiconfig.appletText = "applet";
+    uiconfig.loadingLayoutCls = "LoadingView";
 
     // if (Platform.isIOS) {
     //   final res = await Mop.instance.initialize(
