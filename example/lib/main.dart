@@ -55,7 +55,7 @@ class _MyAppState extends State<MyApp> {
     // capsuleConfig.capsuleRightMargin = 25;
     uiconfig.capsuleConfig = capsuleConfig;
     uiconfig.appletText = "applet";
-    uiconfig.loadingLayoutCls = "LoadingView";
+    uiconfig.loadingLayoutCls = "com.finogeeks.mop_example.CustomLoadingPage";
 
     // if (Platform.isIOS) {
     //   final res = await Mop.instance.initialize(
