@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 
 import com.finogeeks.lib.applet.client.FinAppProcessClient;
 import com.finogeeks.lib.applet.client.FinAppClient;
-import com.finogeeks.lib.applet.client.FinAppTrace;
+import com.finogeeks.lib.applet.modules.log.FLog;
 import com.finogeeks.lib.applet.interfaces.FinCallback;
 import com.finogeeks.lib.applet.page.view.moremenu.MoreMenuItem;
 import com.finogeeks.lib.applet.page.view.moremenu.MoreMenuType;
@@ -58,7 +58,7 @@ public class AppletHandlerModule extends BaseApi {
     public void invoke(String event, Map param, ICallback callback) {
 
         if ("getPhoneNumberResult".equals(event)) {
-            FinAppTrace.d("AppletHandlerModule", "getPhoneNumberResult");
+            FLog.d("AppletHandlerModule", "getPhoneNumberResult");
             getPhoneNumberResult(event, param, callback);
             return;
         }
@@ -203,13 +203,13 @@ public class AppletHandlerModule extends BaseApi {
 
                         @Override
                         public void error(String errorCode, String errorMessage, Object errorDetails) {
-                            FinAppTrace.e(TAG, "getCustomMenus errorCode : " + errorCode + " errorMessage : " + errorMessage);
+                            FLog.e(TAG, "getCustomMenus errorCode : " + errorCode + " errorMessage : " + errorMessage);
                             latch.countDown();
                         }
 
                         @Override
                         public void notImplemented() {
-                            FinAppTrace.d(TAG, "getCustomMenus notImplemented");
+                            FLog.d(TAG, "getCustomMenus notImplemented");
                             latch.countDown();
                         }
                     });
@@ -219,7 +219,7 @@ public class AppletHandlerModule extends BaseApi {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                FinAppTrace.d(TAG, "getRegisteredMoreMenuItems moreMenuItems : " + moreMenuItems + " size : " + moreMenuItems.size());
+                FLog.d(TAG, "getRegisteredMoreMenuItems moreMenuItems : " + moreMenuItems + " size : " + moreMenuItems.size());
                 return moreMenuItems;
             }
 
@@ -234,19 +234,19 @@ public class AppletHandlerModule extends BaseApi {
                     channel.invokeMethod("extensionApi:onCustomMenuClick", params, new MethodChannel.Result() {
                         @Override
                         public void success(Object result) {
-                            FinAppTrace.d(TAG, "onCustomMenuClick success");
+                            FLog.d(TAG, "onCustomMenuClick success");
                             iAppletCallback.onSuccess(null);
                         }
 
                         @Override
                         public void error(String errorCode, String errorMessage, Object errorDetails) {
-                            FinAppTrace.e(TAG, "onCustomMenuClick errorCode : " + errorCode + " errorMessage : " + errorMessage);
+                            FLog.e(TAG, "onCustomMenuClick errorCode : " + errorCode + " errorMessage : " + errorMessage);
                             iAppletCallback.onFailure();
                         }
 
                         @Override
                         public void notImplemented() {
-                            FinAppTrace.d(TAG, "onCustomMenuClick notImplemented");
+                            FLog.d(TAG, "onCustomMenuClick notImplemented");
                             iAppletCallback.onFailure();
                         }
                     });
@@ -303,20 +303,20 @@ public class AppletHandlerModule extends BaseApi {
                     channel.invokeMethod("extensionApi:getPhoneNumber", params, new MethodChannel.Result() {
                         @Override
                         public void success(Object result) {
-                            FinAppTrace.d(TAG, "onCustomMenuClick success");
+                            FLog.d(TAG, "onCustomMenuClick success");
 //                            callback.onSuccess(null);
                             phoneNumberCallback = callback;
                         }
 
                         @Override
                         public void error(String errorCode, String errorMessage, Object errorDetails) {
-                            FinAppTrace.e(TAG, "onCustomMenuClick errorCode : " + errorCode + " errorMessage : " + errorMessage);
+                            FLog.e(TAG, "onCustomMenuClick errorCode : " + errorCode + " errorMessage : " + errorMessage);
                             callback.onFailure();
                         }
 
                         @Override
                         public void notImplemented() {
-                            FinAppTrace.d(TAG, "onCustomMenuClick notImplemented");
+                            FLog.d(TAG, "onCustomMenuClick notImplemented");
                             callback.onFailure();
                         }
                     });
@@ -368,7 +368,7 @@ public class AppletHandlerModule extends BaseApi {
     }
 
     private void getPhoneNumberResult(String event, Map param, ICallback callback) {
-        FinAppTrace.d("AppletHandlerModule", "getPhoneNumberResult,param:" + param.toString());
+        FLog.d("AppletHandlerModule", "getPhoneNumberResult,param:" + param.toString());
         callback.onSuccess(null);
         if (phoneNumberCallback != null) {
             try {
