@@ -1,6 +1,8 @@
 package com.finogeeks.mop_example;
 
+import android.app.AlertDialog;
 import android.app.Application;
+import android.app.Dialog;
 import android.content.Context;
 // import android.support.annotation.NonNull;
 import androidx.annotation.NonNull;
@@ -27,11 +29,16 @@ public class MainApplication extends Application {
         FinAppProcessClient.INSTANCE.getAppletProcessApiManager().setAppletProcessHandler(new IAppletProcessHandler(){
             @Override
             public boolean onNavigationBarMoreButtonClicked(@NonNull Context context, @NonNull String appId) {
-                // 返回true表示要自行处理更多视图；返回false表示使用默认的更多视图
-
                 // 在这里弹出自定义的更多视图
-                
-                return false; 
+                new AlertDialog.Builder(context)
+                        .setTitle("更多视图")
+                        .setMessage(appId)
+                        .setPositiveButton("菜单", null)
+                        .setNegativeButton("取消", null)
+                        .show();
+
+                // 返回true表示要自行处理更多视图；返回false表示使用默认的更多视图
+                return true;
             }
         });
     }

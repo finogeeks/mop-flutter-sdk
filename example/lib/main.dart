@@ -3,12 +3,15 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mop/api.dart';
 import 'dart:async';
 import 'dart:io';
 import 'package:mop/mop.dart';
 
 void main() => runApp(MyApp());
+
+const toAppMessageChannel = MethodChannel("com.message.flutter_to_app");
 
 class MyApp extends StatefulWidget {
   @override
@@ -176,7 +179,9 @@ class MyAppletHandler extends AppletHandler {
 
   @override
   bool customCapsuleMoreButtonClick(String appId) {
-    return false;
+    print("customCapsuleMoreButtonClick---");
+    toAppMessageChannel.invokeMethod("showCustomMoreView", {"appId": appId});
+    return true;
   }
 
   @override
