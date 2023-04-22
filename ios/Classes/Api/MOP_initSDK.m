@@ -73,6 +73,7 @@
     NSError* error = nil;
     FATUIConfig *uiconfig = [[FATUIConfig alloc]init];
     if (_uiConfig) {
+        // 导航栏配置
         if (_uiConfig[@"navigationTitleTextAttributes"]) {
             uiconfig.navigationTitleTextAttributes = _uiConfig[@"navigationTitleTextAttributes"];
         }
@@ -90,28 +91,20 @@
         if (_uiConfig[@"navigationBarBackBtnDarkColor"]) {
             uiconfig.navigationBarBackBtnDarkColor = [MOPTools colorWithRGBHex:[_uiConfig[@"navigationBarBackBtnDarkColor"] intValue]];
         }
+
+        // 更多视图配置
         uiconfig.moreMenuStyle = [_uiConfig[@"moreMenuStyle"] integerValue];
         uiconfig.hideBackToHomePriority = [_uiConfig[@"isHideBackHomePriority"] integerValue];
-        uiconfig.hideFeedbackMenu = [_uiConfig[@"isHideFeedbackAndComplaints"] boolValue];
         uiconfig.hideBackToHome = [_uiConfig[@"isHideBackHome"] boolValue];
-        uiconfig.hideForwardMenu = [_uiConfig[@"isHideForwardMenu"] boolValue];
         uiconfig.hideShareAppletMenu = [_uiConfig[@"isHideShareAppletMenu"] boolValue];
-        uiconfig.hideRefreshMenu = [_uiConfig[@"isHideRefreshMenu"] boolValue];
-        uiconfig.hideTransitionCloseButton = [_uiConfig[@"hideTransitionCloseButton"] boolValue];
-        uiconfig.disableSlideCloseAppletGesture = [_uiConfig[@"disableSlideCloseAppletGesture"] boolValue];
-        if (_uiConfig[@"webViewProgressBarColor"]) {
-            uiconfig.progressBarColor = [MOPTools colorWithRGBHex:[_uiConfig[@"webViewProgressBarColor"] intValue]];
-        }
-        
-        uiconfig.hideFeedbackMenu = [_uiConfig[@"isHideFeedbackAndComplaints"] boolValue];
         uiconfig.hideForwardMenu = [_uiConfig[@"isHideForwardMenu"] boolValue];
-        uiconfig.autoAdaptDarkMode = [_uiConfig[@"autoAdaptDarkMode"] boolValue];
         uiconfig.hideSettingMenu = [_uiConfig[@"isHideSettingMenu"] boolValue];
+        uiconfig.hideFeedbackMenu = [_uiConfig[@"isHideFeedbackAndComplaints"] boolValue];
+        uiconfig.hideRefreshMenu = [_uiConfig[@"isHideRefreshMenu"] boolValue];
         uiconfig.hideFavoriteMenu = [_uiConfig[@"isHideFavoriteMenu"] boolValue];
         uiconfig.hideAddToDesktopMenu = [_uiConfig[@"isHideAddToDesktopMenu"] boolValue];
-        
-        uiconfig.appletText = _uiConfig[@"appletText"];
-        uiconfig.disableSlideCloseAppletGesture = [_uiConfig[@"disableSlideCloseAppletGesture"] boolValue];
+
+        // 胶囊配置
         if (_uiConfig[@"capsuleConfig"]) {
             NSDictionary *capsuleConfigDic = _uiConfig[@"capsuleConfig"];
             FATCapsuleConfig *capsuleConfig = [[FATCapsuleConfig alloc]init];
@@ -133,8 +126,8 @@
             capsuleConfig.capsuleDividerLightColor = [MOPTools colorWithRGBHex:[capsuleConfigDic[@"capsuleDividerLightColor"] intValue]];
             capsuleConfig.capsuleDividerDarkColor = [MOPTools colorWithRGBHex:[capsuleConfigDic[@"capsuleDividerDarkColor"] intValue]];
             uiconfig.capsuleConfig = capsuleConfig;
-            
         }
+        uiconfig.hideTransitionCloseButton = [_uiConfig[@"hideTransitionCloseButton"] boolValue];
         
         if (_uiConfig[@"navHomeConfig"]) {
             NSDictionary *navHomeConfigDic = _uiConfig[@"navHomeConfig"];
@@ -243,15 +236,19 @@
             
             uiconfig.authViewConfig = authViewConfig;
         }
-        uiconfig.appendingCustomUserAgent = _uiConfig[@"customWebViewUserAgent"];
-        uiconfig.hideWebViewProgressBar = [_uiConfig[@"hideWebViewProgressBar"] boolValue];
-        uiconfig.autoAdaptDarkMode = [_uiConfig[@"autoAdaptDarkMode"] boolValue];
         uiconfig.transtionStyle = [_uiConfig[@"transtionStyle"] integerValue];
+        uiconfig.disableSlideCloseAppletGesture = [_uiConfig[@"disableSlideCloseAppletGesture"] boolValue];
+        if (_uiConfig[@"webViewProgressBarColor"]) {
+            uiconfig.progressBarColor = [MOPTools colorWithRGBHex:[_uiConfig[@"webViewProgressBarColor"] intValue]];
+        }
+        uiconfig.hideWebViewProgressBar = [_uiConfig[@"hideWebViewProgressBar"] boolValue];
+        
+        uiconfig.appletText = _uiConfig[@"appletText"];
+        uiconfig.appendingCustomUserAgent = _uiConfig[@"customWebViewUserAgent"];
+        uiconfig.autoAdaptDarkMode = [_uiConfig[@"autoAdaptDarkMode"] boolValue];
+        uiConfig.useNativeLiveComponent = [_uiConfig[@"useNativeLiveComponent"] boolValue];
     }
     
-    
-    
-    // uiconfig.moreMenuStyle = FATMoreViewStyleNormal;
     [[FATClient sharedClient] initWithConfig:config uiConfig:uiconfig error:&error];
     if (error) {
         failure(@"初始化失败");
@@ -266,8 +263,6 @@
         NSString *logDir = self.config[@"logDir"];
         [[FATClient sharedClient].logManager initLogWithLogDir:logDir logLevel:logLevel consoleLog:YES];
     }
-    
-    
     
     [[FATClient sharedClient] setEnableLog:YES];
     
