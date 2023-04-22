@@ -246,7 +246,7 @@
         uiconfig.appletText = _uiConfig[@"appletText"];
         uiconfig.appendingCustomUserAgent = _uiConfig[@"customWebViewUserAgent"];
         uiconfig.autoAdaptDarkMode = [_uiConfig[@"autoAdaptDarkMode"] boolValue];
-        uiConfig.useNativeLiveComponent = [_uiConfig[@"useNativeLiveComponent"] boolValue];
+        uiconfig.useNativeLiveComponent = [_uiConfig[@"useNativeLiveComponent"] boolValue];
     }
     
     [[FATClient sharedClient] initWithConfig:config uiConfig:uiconfig error:&error];
