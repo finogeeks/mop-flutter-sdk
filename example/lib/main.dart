@@ -3,12 +3,15 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mop/api.dart';
 import 'dart:async';
 import 'dart:io';
 import 'package:mop/mop.dart';
 
 void main() => runApp(MyApp());
+
+const toAppMessageChannel = MethodChannel("com.message.flutter_to_app");
 
 class MyApp extends StatefulWidget {
   @override
@@ -41,6 +44,7 @@ class _MyAppState extends State<MyApp> {
     List<FinStoreConfig> storeConfigs = [storeConfigA];
     Config config = Config(storeConfigs);
     config.language = LanguageType.English;
+    config.baseLoadingViewClass = "LoadingView";
     
     UIConfig uiconfig = UIConfig();
     uiconfig.isAlwaysShowBackInDefaultNavigationBar = false;
@@ -54,6 +58,7 @@ class _MyAppState extends State<MyApp> {
     // capsuleConfig.capsuleRightMargin = 25;
     uiconfig.capsuleConfig = capsuleConfig;
     uiconfig.appletText = "applet";
+    uiconfig.loadingLayoutCls = "com.finogeeks.mop_example.CustomLoadingPage";
 
     // if (Platform.isIOS) {
     //   final res = await Mop.instance.initialize(
@@ -174,7 +179,9 @@ class MyAppletHandler extends AppletHandler {
 
   @override
   bool customCapsuleMoreButtonClick(String appId) {
-    return false;
+    print("customCapsuleMoreButtonClick---");
+    toAppMessageChannel.invokeMethod("showCustomMoreView", {"appId": appId});
+    return true;
   }
 
   @override

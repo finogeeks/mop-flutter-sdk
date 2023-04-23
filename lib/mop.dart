@@ -338,6 +338,10 @@ class UIConfig {
   // 是否自适应暗黑模式。如果设置为true，则更多页面、关于等原生页面会随着手机切换暗黑，也自动调整为暗黑模式
   bool autoAdaptDarkMode = false;
 
+  // 是否使用内置的live组件，默认为false。(目前仅iOS支持)
+  // 配置为true时，需要依赖Live扩展SDK。
+  bool useNativeLiveComponent = false;
+
   // 要拼接的userAgent字符串
   String? appendingCustomUserAgent;
 
@@ -399,6 +403,7 @@ class UIConfig {
       "moreMenuStyle": moreMenuStyle,
       "isHideBackHomePriority": isHideBackHomePriority.index,
       "autoAdaptDarkMode": autoAdaptDarkMode,
+      "useNativeLiveComponent": useNativeLiveComponent,
       "appendingCustomUserAgent": appendingCustomUserAgent,
       "transtionStyle": transtionStyle.index,
       "disableSlideCloseAppletGesture": disableSlideCloseAppletGesture,

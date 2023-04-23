@@ -16,7 +16,6 @@
 {
     NSLog(@"MOP_registerAppletHandler");
     [FATClient sharedClient].delegate = [MOPAppletDelegate instance];
-    [FATClient sharedClient].shareItemDelegate = [MOPAppletDelegate instance];
 }
 
 @end

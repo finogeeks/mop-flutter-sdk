@@ -6,7 +6,7 @@ import android.os.Looper;
 import android.util.Log;
 
 import com.finogeeks.lib.applet.client.FinAppClient;
-import com.finogeeks.lib.applet.client.FinAppTrace;
+import com.finogeeks.lib.applet.modules.log.FLog;
 import com.finogeeks.mop.api.BaseApi;
 import com.finogeeks.mop.interfaces.ICallback;
 import com.finogeeks.mop.service.MopPluginService;
@@ -57,7 +57,7 @@ public class ExtensionApiModule extends BaseApi {
                             @Override
                             public void success(Object result) {
                                 String json = GsonUtil.gson.toJson(result);
-                                FinAppTrace.d(ExtensionApiModule.TAG, "channel invokeMethod:" + name
+                                FLog.d(ExtensionApiModule.TAG, "channel invokeMethod:" + name
                                         + " success, result=" + result + ", json=" + json);
                                 JSONObject ret = null;
                                 if (json != null && !json.equals("null")) {
@@ -80,7 +80,7 @@ public class ExtensionApiModule extends BaseApi {
 
                             @Override
                             public void error(String errorCode, String errorMessage, Object errorDetails) {
-                                FinAppTrace.e(ExtensionApiModule.TAG, "channel invokeMethod:" + name
+                                FLog.e(ExtensionApiModule.TAG, "channel invokeMethod:" + name
                                         + " error, errorCode=" + errorCode
                                         + ", errorMessage=" + errorMessage
                                         + ", errorDetails=" + errorDetails);
@@ -114,7 +114,7 @@ public class ExtensionApiModule extends BaseApi {
                             @Override
                             public void success(Object result) {
                                 String json = GsonUtil.gson.toJson(result);
-                                FinAppTrace.d(ExtensionApiModule.TAG, "channel invokeMethod:" + name
+                                FLog.d(ExtensionApiModule.TAG, "channel invokeMethod:" + name
                                         + " success, result=" + result + ", json=" + json);
                                 JSONObject ret = null;
                                 if (json != null && !json.equals("null")) {
@@ -137,7 +137,7 @@ public class ExtensionApiModule extends BaseApi {
 
                             @Override
                             public void error(String errorCode, String errorMessage, Object errorDetails) {
-                                FinAppTrace.e(ExtensionApiModule.TAG, "channel invokeMethod:" + name
+                                FLog.e(ExtensionApiModule.TAG, "channel invokeMethod:" + name
                                         + " error, errorCode=" + errorCode
                                         + ", errorMessage=" + errorMessage
                                         + ", errorDetails=" + errorDetails);
