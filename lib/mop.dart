@@ -368,9 +368,6 @@ class UIConfig {
   /// Loading页回调Class
   String? loadingLayoutCls;
 
-  /// 是否使用我们内部实现的live组件（直播组件）
-  bool useNativeLiveComponent = false;
-
   Map<String, dynamic> toMap() {
     return {
       "navigationTitleTextAttributes": navigationTitleTextAttributes,
