@@ -121,8 +121,6 @@ public class BaseModule extends BaseApi {
                 .setDebugMode(debug)
                 .setDisableRequestPermissions(disablePermission)
                 .setBindAppletWithMainProcess(bindAppletWithMainProcess)
-                .setLogLevel(XLogLevel.LEVEL_VERBOSE)
-                .setXLogDir(new File(getContext().getExternalCacheDir(),"xlog"))
                 .setPageCountLimit(pageCountLimit);
 
         if (customWebViewUserAgent != null)
