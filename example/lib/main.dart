@@ -51,7 +51,6 @@ class _MyAppState extends State<MyApp> {
     uiconfig.isClearNavigationBarNavButtonBackground = false;
     uiconfig.isHideFeedbackAndComplaints = true;
     uiconfig.isHideBackHome = true;
-    uiconfig.isHideForwardMenu = true;
     CapsuleConfig capsuleConfig = CapsuleConfig();
     // capsuleConfig.capsuleBgLightColor = 0x33ff00ee;
     capsuleConfig.capsuleCornerRadius = 16;
