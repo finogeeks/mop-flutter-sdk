@@ -289,8 +289,8 @@ class UIConfig {
   /// 隐藏...弹出菜单中的 【返回首页】 菜单
   bool isHideBackHome = false;
 
-  /// 隐藏...弹出菜单中的 【转发】 菜单，默认为true（新需求：凡泰助手默认值为true，但是SDK还是默认为false）
-  bool isHideForwardMenu = true;
+  /// 隐藏...弹出菜单中的 【转发】 菜单，默认为false
+  bool isHideForwardMenu = false;
 
   /// 隐藏...弹出菜单中的 【分享】 菜单，默认为true
   bool isHideShareAppletMenu = true;
