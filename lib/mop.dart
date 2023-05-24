@@ -788,6 +788,9 @@ class RemoteAppletRequest {
   // iOS端打开小程序时是否显示动画，默认为true。
   bool animated;
 
+  // iOS端打开小程序时的动画方式
+  TranstionStyle transitionStyle;
+
   // 是否以单进程模式运行，仅限android，默认为false
   bool isSingleProcess;
 
@@ -799,6 +802,7 @@ class RemoteAppletRequest {
     this.offlineMiniprogramZipPath,
     this.offlineFrameworkZipPath,
     this.animated = true,
+    this.transitionStyle = TranstionStyle.TranstionStyleUp,
     this.isSingleProcess = false,
   });
 
@@ -809,6 +813,7 @@ class RemoteAppletRequest {
       "appletId": appletId,
       "animated": animated,
       "isSingleProcess": isSingleProcess,
+      "transitionStyle":transitionStyle.index,
     };
     if (startParams != null) result["startParams"] = startParams;
     if (offlineMiniprogramZipPath != null)
