@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *offlineMiniprogramZipPath;
 @property (nonatomic, copy) NSString *offlineFrameworkZipPath;
 @property (nonatomic, strong) NSString *animated;
+@property (nonatomic, strong) NSString *transitionStyle;
 
 @end
 
