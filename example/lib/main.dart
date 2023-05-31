@@ -131,7 +131,11 @@ class _MyAppState extends State<MyApp> {
                 _buildAppletItem(appletId, "打开小程序", () {
                   // Mop.instance.openApplet(appletId,
                   //     path: 'pages/index/index', query: '');
-                  RemoteAppletRequest request = RemoteAppletRequest(apiServer: 'https://api.finclip.com', appletId: appletId, transitionStyle: TranstionStyle.TranstionStyleUp);
+                  TranstionStyle style = TranstionStyle.TranstionStyleUp;
+                  if (appletId == "5f72e3559a6a7900019b5baa") {
+                    style = TranstionStyle.TranstionStylePush;
+                  }
+                  RemoteAppletRequest request = RemoteAppletRequest(apiServer: 'https://api.finclip.com', appletId: appletId, transitionStyle: style);
                   Mop.instance.startApplet(request);
                 }),
                 _buildAppletItem(appletId, "finishRunningApplet", () {
