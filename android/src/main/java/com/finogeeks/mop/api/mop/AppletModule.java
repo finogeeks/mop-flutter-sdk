@@ -68,7 +68,7 @@ public class AppletModule extends BaseApi {
         // 在Android 6.0、7.0系统的部分设备中热启动小程序时，如果context参数用mContext，会出现无法启动小程序的问题
         // 所以这里使用Application Context
         Context context = mContext.getApplicationContext();
-        FinAppInfo.StartParams startParams = params == null ? null : new FinAppInfo.StartParams(params.get("path"), params.get("query"), params.get("scene"));
+        FinAppInfo.StartParams startParams = params == null ? null : new FinAppInfo.StartParams(params);
         Log.d(TAG, "openApplet:" + appId + "," + param + "," + sequence + "," + apiServer + ", isSingleProcess:" + isSingleProcess);
 
         if (apiServer != null) {

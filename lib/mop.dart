@@ -1037,6 +1037,7 @@ class Mop {
     final int? sequence,
     final String? apiServer,
     final String? scene,
+    final String? shareDepth,
     final bool isSingleProcess = false,
   }) async {
     Map<String, Object> params = {'appId': appId};
@@ -1047,6 +1048,7 @@ class Mop {
     if (sequence != null) params["sequence"] = sequence;
     if (apiServer != null) params["apiServer"] = apiServer;
     if (scene != null) param["scene"] = scene;
+    if (shareDepth != null) param["shareDepth"] = shareDepth;
     params["isSingleProcess"] = isSingleProcess;
     final Map ret = await _channel.invokeMethod('openApplet', params);
     return ret;
