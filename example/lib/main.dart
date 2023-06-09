@@ -196,11 +196,6 @@ class MyAppletHandler extends AppletHandler {
 
   @override
   Future<List<CustomMenu>> getCustomMenus(String appId) {
-    String icon1 = 'https://img1.baidu.com/it/u=2878938773,1765835171&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500';
-    if (Platform.isIOS) {
-      icon1 = 'minipro_list_service';
-    }
-
     List<CustomMenu> customMenus = [
       CustomMenu('WXShareAPPFriends', 'https://img1.baidu.com/it/u=2878938773,1765835171&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500', '微信好朋友', 'common'),
       CustomMenu('WXShareAPPMoments', 'minipro_list_collect', '微信朋友圈', 'common'),
