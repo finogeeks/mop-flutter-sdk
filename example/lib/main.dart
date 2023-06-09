@@ -129,16 +129,14 @@ class _MyAppState extends State<MyApp> {
               // physics: NeverScrollableScrollPhysics(),
               children: [
                 _buildAppletItem(appletId, "打开小程序", () {
-                  // Mop.instance.openApplet(appletId,
-                  //     path: 'pages/index/index', query: '');
-                  // TranstionStyle style = TranstionStyle.TranstionStyleUp;
-                  // if (appletId == "5f72e3559a6a7900019b5baa") {
-                  //   style = TranstionStyle.TranstionStylePush;
-                  // }
-                  // RemoteAppletRequest request = RemoteAppletRequest(apiServer: 'https://api.finclip.com', appletId: appletId, transitionStyle: style);
-                  // Mop.instance.startApplet(request);
+                  TranstionStyle style = TranstionStyle.TranstionStyleUp;
+                  if (appletId == "5f72e3559a6a7900019b5baa") {
+                    style = TranstionStyle.TranstionStylePush;
+                  }
+                  RemoteAppletRequest request = RemoteAppletRequest(apiServer: 'https://api.finclip.com', appletId: appletId, transitionStyle: style);
+                  Mop.instance.startApplet(request);
 
-                  Mop.instance.qrcodeOpenApplet('https://api.finclip.com/api/v1/mop/runtime/applet/-f-MGYzN2Q1YTYzMmI2MWIyZg--');
+                  // Mop.instance.qrcodeOpenApplet('https://api.finclip.com/api/v1/mop/runtime/applet/-f-MGYzN2Q1YTYzMmI2MWIyZg--');
 
                 }),
                 _buildAppletItem(appletId, "finishRunningApplet", () {
@@ -198,9 +196,18 @@ class MyAppletHandler extends AppletHandler {
 
   @override
   Future<List<CustomMenu>> getCustomMenus(String appId) {
+    String icon1 = 'https://img1.baidu.com/it/u=2878938773,1765835171&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500';
+    if (Platform.isIOS) {
+      icon1 = 'minipro_list_service';
+    }
+
     List<CustomMenu> customMenus = [
       CustomMenu('WXShareAPPFriends', 'https://img1.baidu.com/it/u=2878938773,1765835171&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500', '微信好朋友', 'common'),
-      CustomMenu('WXShareAPPMoments', 'https://img2.baidu.com/it/u=3113705544,436318069&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500', '微信朋友圈', 'common'),
+      CustomMenu('WXShareAPPMoments', 'minipro_list_collect', '微信朋友圈', 'common'),
+      CustomMenu('MyFriends', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpvugSNLs9R7iopz_noeotAelvgzYj-74iCg&usqp=CAU', '我的好友', 'common'),
+
+      // CustomMenu('WXShareAPPFriends', 'https://img1.baidu.com/it/u=2878938773,1765835171&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500', '微信好朋友', 'common'),
+      // CustomMenu('WXShareAPPMoments', 'https://img2.baidu.com/it/u=3113705544,436318069&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500', '微信朋友圈', 'common'),
 
       // CustomMenu('WXShareAPPFriends', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpvugSNLs9R7iopz_noeotAelvgzYj-74iCg&usqp=CAU', '微信好朋友', 'common'),
       // CustomMenu('WXShareAPPMoments', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7cO4KB4e5-Ugdcq4pIyWunliH7LZRZzguKQ&usqp=CAU', '微信朋友圈', 'common'),

@@ -91,7 +91,7 @@
         NSString *imageUrl = data[@"image"];
         if ([imageUrl hasPrefix:@"http"]) {
             // 需要异步加载，待优化！
-            model.menuIconImage = [UIImage fat_getImageWithUrl:imageUrl];
+            model.menuIconUrl = imageUrl;
         } else {
             model.menuIconImage = [UIImage imageNamed:imageUrl];
         }
