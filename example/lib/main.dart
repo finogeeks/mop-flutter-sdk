@@ -45,6 +45,7 @@ class _MyAppState extends State<MyApp> {
     Config config = Config(storeConfigs);
     config.language = LanguageType.English;
     config.baseLoadingViewClass = "LoadingView";
+    config.appletDebugMode = BOOLState.BOOLStateTrue;
     
     UIConfig uiconfig = UIConfig();
     uiconfig.isAlwaysShowBackInDefaultNavigationBar = false;
@@ -168,7 +169,7 @@ class _MyAppState extends State<MyApp> {
           children: <Widget>[
             _buildAppletWidget("5facb3a52dcbff00017469bd", "画图小程序"),
             _buildAppletWidget("5f72e3559a6a7900019b5baa", "官方小程序"),
-            _buildAppletWidget("5fa215459a6a7900019b5cc3", "我的对账单"),
+            _buildAppletWidget("5f17f457297b540001e06ebb", "测试小程序"),
           ],
         ),
       ),
@@ -197,9 +198,9 @@ class MyAppletHandler extends AppletHandler {
   @override
   Future<List<CustomMenu>> getCustomMenus(String appId) {
     List<CustomMenu> customMenus = [
-      CustomMenu('WXShareAPPFriends', 'https://img1.baidu.com/it/u=2878938773,1765835171&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500', '微信好朋友', 'common'),
-      CustomMenu('WXShareAPPMoments', 'minipro_list_collect', '微信朋友圈', 'common'),
-      CustomMenu('MyFriends', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpvugSNLs9R7iopz_noeotAelvgzYj-74iCg&usqp=CAU', '我的好友', 'common'),
+      CustomMenu('CustomMenu1', 'https://img1.baidu.com/it/u=2878938773,1765835171&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500', '百度图标', 'common'),
+      CustomMenu('CustomMenu2', 'minipro_list_collect', '工程图标', 'common'),
+      CustomMenu('MyFriends', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpvugSNLs9R7iopz_noeotAelvgzYj-74iCg&usqp=CAU', '谷歌图标', 'common'),
 
       // CustomMenu('WXShareAPPFriends', 'https://img1.baidu.com/it/u=2878938773,1765835171&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500', '微信好朋友', 'common'),
       // CustomMenu('WXShareAPPMoments', 'https://img2.baidu.com/it/u=3113705544,436318069&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500', '微信朋友圈', 'common'),
