@@ -187,6 +187,13 @@ public class InitSDKModule extends BaseApi {
             configBuilder.setLocale(Locale.SIMPLIFIED_CHINESE);
         }
 
+        if(configMap.get("disableTbs") != null){
+            configBuilder.setDisableTbs((Boolean) configMap.get("disableTbs"));
+            Log.d(TAG,"disableTbs:"+configMap.get("disableTbs"));
+        }else{
+            Log.d(TAG,"disableTbs:"+false);
+        }
+
         // uiConfig
         FinAppConfig.UIConfig uiConfig = InitUtils.createUIConfigFromMap(uiConfigMap);
         if (uiConfig != null) {

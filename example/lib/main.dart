@@ -44,6 +44,8 @@ class _MyAppState extends State<MyApp> {
     List<FinStoreConfig> storeConfigs = [storeConfigA];
     Config config = Config(storeConfigs);
     config.language = LanguageType.English;
+    config.disableTbs = true;
+    // config.bindAppletWithMainProcess = true;
     config.baseLoadingViewClass = "LoadingView";
     
     UIConfig uiconfig = UIConfig();

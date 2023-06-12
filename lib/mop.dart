@@ -103,6 +103,9 @@ class Config {
   /// 默认为不开启，当设置为YES时开启，接口返回加密数据并处理
   bool encryptServerData = false;
 
+  /// 设置是否禁止启用Tbs SDK
+  bool disableTbs = false;
+
   /// 是否开启小程序的debug模式。
   ///  默认为BOOLStateUndefined，此时为旧版通过app.json 中 debug:true 开启vconsole。
   /// 当设置为BOOLStateTrue时，强制所有的小程序都会开启vconsole。
@@ -213,6 +216,7 @@ class Config {
     return {
       "finStoreConfigs": storeConfigs,
       "userId": userId,
+      "disableTbs": disableTbs,
       "productIdentification": productIdentification,
       "disableRequestPermissions": disableRequestPermissions,
       "appletAutoAuthorize": appletAutoAuthorize,
