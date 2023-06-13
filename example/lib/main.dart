@@ -53,7 +53,8 @@ class _MyAppState extends State<MyApp> {
     uiconfig.isClearNavigationBarNavButtonBackground = false;
     uiconfig.isHideFeedbackAndComplaints = true;
     uiconfig.isHideBackHome = true;
-    uiconfig.isHideForwardMenu = true;
+    uiconfig.isHideForwardMenu = false;
+    uiconfig.forwadMenuTitle="分享-转发";
     CapsuleConfig capsuleConfig = CapsuleConfig();
     // capsuleConfig.capsuleBgLightColor = 0x33ff00ee;
     capsuleConfig.capsuleCornerRadius = 16;
@@ -80,6 +81,8 @@ class _MyAppState extends State<MyApp> {
     final res = await Mop.instance.initSDK(config, uiConfig: uiconfig);
     print(res);
     Mop.instance.registerAppletHandler(MyAppletHandler());
+
+
 
     if (!mounted) return;
   }

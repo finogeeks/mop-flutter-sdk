@@ -293,6 +293,9 @@ class UIConfig {
   /// 隐藏...弹出菜单中的 【返回首页】 菜单
   bool isHideBackHome = false;
 
+  /// 转发文案修改
+  String? forwadMenuTitle;
+
   /// 隐藏...弹出菜单中的 【转发】 菜单，默认为false
   bool isHideForwardMenu = false;
 
@@ -370,6 +373,7 @@ class UIConfig {
       "navigationBarTitleDarkColor": navigationBarTitleDarkColor.toSigned(32),
       "navigationBarBackBtnLightColor":
           navigationBarBackBtnLightColor.toSigned(32),
+      "forwadMenuTitle" : forwadMenuTitle,
       "navigationBarBackBtnDarkColor":
           navigationBarBackBtnDarkColor.toSigned(32),
       "isAlwaysShowBackInDefaultNavigationBar":

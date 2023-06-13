@@ -40,6 +40,7 @@ public class InitUtils {
             uiConfig.setHideAddToDesktopMenu((Boolean) map.get("isHideAddToDesktopMenu"));
             uiConfig.setHideFavoriteMenu((Boolean) map.get("isHideFavoriteMenu"));
             uiConfig.setHideSettingMenu((Boolean) map.get("isHideSettingMenu"));
+            uiConfig.setForwadMenuTitle((String)map.get("forwadMenuTitle"));
             uiConfig.setHideTransitionCloseButton((Boolean) map.get("hideTransitionCloseButton"));
             Map<Object, Object> capsuleConfigMap = (Map<Object, Object>) map.get("capsuleConfig");
             if (capsuleConfigMap != null) {
