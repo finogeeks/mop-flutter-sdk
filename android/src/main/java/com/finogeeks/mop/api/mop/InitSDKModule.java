@@ -2,6 +2,7 @@ package com.finogeeks.mop.api.mop;
 
 import android.app.Application;
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.finogeeks.lib.applet.client.FinAppClient;
@@ -63,8 +64,15 @@ public class InitSDKModule extends BaseApi {
             }
             String cryptType = (String) store.get("cryptType");
             Boolean encryptServerData = (Boolean) store.get("encryptServerData");
+            Boolean enablePreloadFramework = (Boolean) store.get("enablePreloadFramework");
+            //凡泰助手里，服务器是https://api.finclip.com，默认开启预加载基础库
+            if (!TextUtils.isEmpty(apiServer) && apiServer.equals("https://api.finclip.com")) {
+                enablePreloadFramework = true;
+            }
+
+
             storeConfigs.add(new FinStoreConfig(sdkKey, sdkSecret, apiServer, apmServer, "",
-                    fingerprint, cryptType, encryptServerData));
+                    fingerprint, cryptType, encryptServerData, enablePreloadFramework));
         }
         configBuilder.setFinStoreConfigs(storeConfigs);
         String userId = (String) configMap.get("userId");
@@ -216,6 +224,7 @@ public class InitSDKModule extends BaseApi {
 
             }
         };
+        FinAppClient.INSTANCE.preloadFramework(finAppConfig, application);
         FinAppClient.INSTANCE.init(application, finAppConfig, cb);
     }
 

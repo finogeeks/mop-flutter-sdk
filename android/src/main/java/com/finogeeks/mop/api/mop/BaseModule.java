@@ -2,6 +2,7 @@ package com.finogeeks.mop.api.mop;
 
 import android.app.Application;
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.finogeeks.lib.applet.client.FinAppClient;
@@ -101,8 +102,14 @@ public class BaseModule extends BaseApi {
                     if (fingerprint == null) fingerprint = "";
                     String encryptType = (String) config.get("cryptType");
                     Boolean encryptServerData1 = (Boolean) config.get("encryptServerData");
+                    Boolean enablePreloadFramework = (Boolean) config.get("enablePreloadFramework");
+                    //凡泰助手里，服务器是https://api.finclip.com，默认开启预加载基础库
+                    if(!TextUtils.isEmpty(apiServer) && apiServer.equals("https://api.finclip.com")) {
+                        enablePreloadFramework = true;
+                    }
+
                     if (encryptServerData1 == null) encryptServerData1 = false;
-                    finStoreConfigs.add(new FinStoreConfig(sdkKey, sdkSecret, apiUrl, apmUrl, "", fingerprint, encryptType, encryptServerData1));
+                    finStoreConfigs.add(new FinStoreConfig(sdkKey, sdkSecret, apiUrl, apmUrl, "", fingerprint, encryptType, encryptServerData1, enablePreloadFramework));
                 }
             }
         }
@@ -155,6 +162,7 @@ public class BaseModule extends BaseApi {
 
             }
         };
+        FinAppClient.INSTANCE.preloadFramework(config, application);
         FinAppClient.INSTANCE.init(application, config, cb);
     }
 }
