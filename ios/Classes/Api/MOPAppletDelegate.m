@@ -95,6 +95,12 @@
         } else {
             model.menuIconImage = [UIImage imageNamed:imageUrl];
         }
+        NSString *darkImageUrl = data[@"darkImage"];
+        if ([darkImageUrl hasPrefix:@"http"]) {
+            model.menuDarkIconUrl = darkImageUrl;
+        } else {
+            model.menuIconDarkImage = [UIImage imageNamed:darkImageUrl];
+        }
         NSString *typeString = data[@"type"];
         if (typeString) {
             FATAppletMenuStyle style = [typeString isEqualToString:@"onMiniProgram"] ? FATAppletMenuStyleOnMiniProgram : FATAppletMenuStyleCommon;

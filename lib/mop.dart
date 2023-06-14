@@ -1154,6 +1154,9 @@ class Mop {
         map["image"] = element.image;
         map["title"] = element.title;
         map["type"] = element.type;
+        if (element.darkImage != null) {
+          map["darkImage"] = element.darkImage;
+        }
         list.add(map);
       });
       debugPrint("registerAppletHandler getCustomMenus list $list");
