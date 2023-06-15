@@ -180,8 +180,9 @@ static NSString *scheme = @"fatae55433be2f62915";//App对应的scheme
     NSDictionary *params = @{@"name":@"getPhoneNumber"};
 
     FlutterMethodChannel *channel = [[MopPlugin instance] methodChannel];
+    self.bindGetPhoneNumbers = bindGetPhoneNumber;
+    NSLog(@"getPhoneNumberWithAppletInfo");
     [channel invokeMethod:@"extensionApi:getPhoneNumber" arguments:params result:^(id _Nullable result) {
-        self.bindGetPhoneNumbers = bindGetPhoneNumber;
 //        !self.bindGetPhoneNumbers?: bindGetPhoneNumber(result);
     }];
 
