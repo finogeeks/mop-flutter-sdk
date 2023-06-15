@@ -9,15 +9,16 @@
 
 @implementation MopCustomMenuModel
 
-@synthesize menuId, menuIconImage, menuTitle, menuType;
-
 - (id)copyWithZone:(NSZone *)zone
 {
     MopCustomMenuModel *model = [[MopCustomMenuModel allocWithZone:zone] init];
     model.menuId = self.menuId;
     model.menuIconImage = self.menuIconImage;
+    model.menuIconDarkImage = self.menuIconDarkImage;
     model.menuTitle = self.menuTitle;
     model.menuType = self.menuType;
+    model.menuIconUrl = self.menuIconUrl;
+    model.menuDarkIconUrl = self.menuDarkIconUrl;
     return model;
 }
 

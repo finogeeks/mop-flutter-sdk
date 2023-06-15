@@ -91,9 +91,15 @@
         NSString *imageUrl = data[@"image"];
         if ([imageUrl hasPrefix:@"http"]) {
             // 需要异步加载，待优化！
-            model.menuIconImage = [UIImage fat_getImageWithUrl:imageUrl];
+            model.menuIconUrl = imageUrl;
         } else {
             model.menuIconImage = [UIImage imageNamed:imageUrl];
+        }
+        NSString *darkImageUrl = data[@"darkImage"];
+        if ([darkImageUrl hasPrefix:@"http"]) {
+            model.menuDarkIconUrl = darkImageUrl;
+        } else {
+            model.menuIconDarkImage = [UIImage imageNamed:darkImageUrl];
         }
         NSString *typeString = data[@"type"];
         if (typeString) {
