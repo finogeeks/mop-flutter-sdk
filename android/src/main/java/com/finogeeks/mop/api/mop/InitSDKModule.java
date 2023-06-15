@@ -224,7 +224,6 @@ public class InitSDKModule extends BaseApi {
 
             }
         };
-        FinAppClient.INSTANCE.preloadFramework(finAppConfig, application);
         FinAppClient.INSTANCE.init(application, finAppConfig, cb);
     }
 

@@ -162,7 +162,6 @@ public class BaseModule extends BaseApi {
 
             }
         };
-        FinAppClient.INSTANCE.preloadFramework(config, application);
         FinAppClient.INSTANCE.init(application, config, cb);
     }
 }
