@@ -45,6 +45,7 @@ class _MyAppState extends State<MyApp> {
     Config config = Config(storeConfigs);
     config.language = LanguageType.English;
     config.baseLoadingViewClass = "LoadingView";
+    config.appletDebugMode = BOOLState.BOOLStateTrue;
     
     UIConfig uiconfig = UIConfig();
     uiconfig.isAlwaysShowBackInDefaultNavigationBar = false;
@@ -59,6 +60,7 @@ class _MyAppState extends State<MyApp> {
     uiconfig.capsuleConfig = capsuleConfig;
     uiconfig.appletText = "applet";
     uiconfig.loadingLayoutCls = "com.finogeeks.mop_example.CustomLoadingPage";
+    uiconfig.autoAdaptDarkMode = true;
 
     // if (Platform.isIOS) {
     //   final res = await Mop.instance.initialize(
@@ -129,14 +131,15 @@ class _MyAppState extends State<MyApp> {
               // physics: NeverScrollableScrollPhysics(),
               children: [
                 _buildAppletItem(appletId, "打开小程序", () {
-                  // Mop.instance.openApplet(appletId,
-                  //     path: 'pages/index/index', query: '');
                   TranstionStyle style = TranstionStyle.TranstionStyleUp;
                   if (appletId == "5f72e3559a6a7900019b5baa") {
                     style = TranstionStyle.TranstionStylePush;
                   }
                   RemoteAppletRequest request = RemoteAppletRequest(apiServer: 'https://api.finclip.com', appletId: appletId, transitionStyle: style);
                   Mop.instance.startApplet(request);
+
+                  // Mop.instance.qrcodeOpenApplet('https://api.finclip.com/api/v1/mop/runtime/applet/-f-MGYzN2Q1YTYzMmI2MWIyZg--');
+
                 }),
                 _buildAppletItem(appletId, "finishRunningApplet", () {
                   Mop.instance.finishRunningApplet(appletId, true);
@@ -167,7 +170,7 @@ class _MyAppState extends State<MyApp> {
           children: <Widget>[
             _buildAppletWidget("5facb3a52dcbff00017469bd", "画图小程序"),
             _buildAppletWidget("5f72e3559a6a7900019b5baa", "官方小程序"),
-            _buildAppletWidget("5fa215459a6a7900019b5cc3", "我的对账单"),
+            _buildAppletWidget("5f17f457297b540001e06ebb", "测试小程序"),
           ],
         ),
       ),
@@ -184,8 +187,8 @@ class MyAppletHandler extends AppletHandler {
   @override
   bool customCapsuleMoreButtonClick(String appId) {
     print("customCapsuleMoreButtonClick---");
-    toAppMessageChannel.invokeMethod("showCustomMoreView", {"appId": appId});
-    return true;
+    // toAppMessageChannel.invokeMethod("showCustomMoreView", {"appId": appId});
+    return false;
   }
 
   @override
@@ -195,14 +198,32 @@ class MyAppletHandler extends AppletHandler {
 
   @override
   Future<List<CustomMenu>> getCustomMenus(String appId) {
-    List<CustomMenu> customMenus = [];
+    CustomMenu menu1 = CustomMenu('WXTest', 'https://img1.baidu.com/it/u=2878938773,1765835171&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500', '百度图标', 'common');
+    menu1.darkImage = 'https://img95.699pic.com/xsj/14/46/mh.jpg%21/fw/700/watermark/url/L3hzai93YXRlcl9kZXRhaWwyLnBuZw/align/southeast';
+    
+    CustomMenu menu2 = CustomMenu('CustomMenu2', 'minipro_list_collect', '工程图标', 'common');
+    menu2.darkImage = 'minipro_list_service';
+
+    List<CustomMenu> customMenus = [
+      menu1,
+      menu2,
+      CustomMenu('MyFriends', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpvugSNLs9R7iopz_noeotAelvgzYj-74iCg&usqp=CAU', '谷歌图标', 'common'),
+      // CustomMenu('WXShareAPPFriends', 'https://img1.baidu.com/it/u=2878938773,1765835171&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500', '微信好朋友', 'common'),
+      // CustomMenu('WXShareAPPMoments', 'https://img2.baidu.com/it/u=3113705544,436318069&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500', '微信朋友圈', 'common'),
+
+      // CustomMenu('WXShareAPPFriends', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpvugSNLs9R7iopz_noeotAelvgzYj-74iCg&usqp=CAU', '微信好朋友', 'common'),
+      // CustomMenu('WXShareAPPMoments', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7cO4KB4e5-Ugdcq4pIyWunliH7LZRZzguKQ&usqp=CAU', '微信朋友圈', 'common'),
+    ];
     return Future.value(customMenus);
   }
 
   @override
-  Future<void> getMobileNumber(Function(dynamic params) param0) {
+  Future<void> getMobileNumber(Function(dynamic params) callback) {
     // TODO: implement getMobileNumber
-    throw UnimplementedError();
+    Map<String, dynamic> result = {"phone": '18607180143',"other":'abc123'};
+    print('getMobileNumber:' + result.toString());
+    callback(result);
+    return Future.value(null);
   }
 
   @override

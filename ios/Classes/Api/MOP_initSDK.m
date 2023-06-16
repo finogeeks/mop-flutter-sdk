@@ -33,6 +33,7 @@
                 storeConfig.cryptType = FATApiCryptTypeMD5;
             }
             storeConfig.encryptServerData = [dict[@"encryptServerData"] boolValue];
+            storeConfig.enablePreloadFramework = [storeConfig.apiServer isEqualToString:@"https://api.finclip.com"];
             [storeArrayM addObject:storeConfig];
         }
         config = [FATConfig configWithStoreConfigs:storeArrayM];

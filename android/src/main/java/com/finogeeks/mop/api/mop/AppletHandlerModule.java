@@ -186,12 +186,17 @@ public class AppletHandlerModule extends BaseApi {
                                     if (image == null) {
                                         image = "";
                                     }
+                                    String darkImage = (String) map.get("darkImage");
+                                    if (darkImage == null) {
+                                        darkImage = "";
+                                    }
                                     moreMenuItems.add(
                                             new MoreMenuItem(
                                                     menuId,
                                                     title,
                                                     image,
                                                     -1,
+                                                    darkImage,
                                                     moreMenuType,
                                                     true
                                             )

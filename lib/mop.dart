@@ -34,11 +34,15 @@ class FinStoreConfig {
   /// 是否需要接口加密验证（初始化多服务器时使用）默认为不开启，当设置为YES时开启，接口返回加密数据并处理
   bool encryptServerData;
 
+  /// 是否开启预加载基础库
+  bool enablePreloadFramework;
+
   FinStoreConfig(this.sdkKey, this.sdkSecret, this.apiServer,
       {this.apmServer,
       this.cryptType = "MD5",
       this.fingerprint,
-      this.encryptServerData = false});
+      this.encryptServerData = false,
+      this.enablePreloadFramework = false});
 
   Map<String, dynamic> toMap() {
     return {
@@ -48,7 +52,8 @@ class FinStoreConfig {
       "apmServer": apmServer,
       "cryptType": cryptType,
       "fingerprint": fingerprint,
-      "encryptServerData": encryptServerData
+      "encryptServerData": encryptServerData,
+      "enablePreloadFramework": enablePreloadFramework
     };
   }
 }
@@ -1165,6 +1170,9 @@ class Mop {
         map["image"] = element.image;
         map["title"] = element.title;
         map["type"] = element.type;
+        if (element.darkImage != null) {
+          map["darkImage"] = element.darkImage;
+        }
         list.add(map);
       });
       debugPrint("registerAppletHandler getCustomMenus list $list");

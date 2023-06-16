@@ -91,9 +91,15 @@
         NSString *imageUrl = data[@"image"];
         if ([imageUrl hasPrefix:@"http"]) {
             // 需要异步加载，待优化！
-            model.menuIconImage = [UIImage fat_getImageWithUrl:imageUrl];
+            model.menuIconUrl = imageUrl;
         } else {
             model.menuIconImage = [UIImage imageNamed:imageUrl];
+        }
+        NSString *darkImageUrl = data[@"darkImage"];
+        if ([darkImageUrl hasPrefix:@"http"]) {
+            model.menuDarkIconUrl = darkImageUrl;
+        } else {
+            model.menuIconDarkImage = [UIImage imageNamed:darkImageUrl];
         }
         NSString *typeString = data[@"type"];
         if (typeString) {
@@ -180,8 +186,9 @@ static NSString *scheme = @"fatae55433be2f62915";//App对应的scheme
     NSDictionary *params = @{@"name":@"getPhoneNumber"};
 
     FlutterMethodChannel *channel = [[MopPlugin instance] methodChannel];
+    self.bindGetPhoneNumbers = bindGetPhoneNumber;
+    NSLog(@"getPhoneNumberWithAppletInfo");
     [channel invokeMethod:@"extensionApi:getPhoneNumber" arguments:params result:^(id _Nullable result) {
-        self.bindGetPhoneNumbers = bindGetPhoneNumber;
 //        !self.bindGetPhoneNumbers?: bindGetPhoneNumber(result);
     }];
 

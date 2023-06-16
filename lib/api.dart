@@ -1,13 +1,14 @@
 class CustomMenu {
   String menuId;
   String image;
+  String? darkImage;
   String title;
   String type;
 
   CustomMenu(this.menuId, this.image, this.title, this.type);
 
   Map<String, dynamic> toJson() =>
-      {'menuId': menuId, 'image': image, 'title': title, 'type': type};
+      {'menuId': menuId, 'image': image, 'darkImage': darkImage, 'title': title, 'type': type};
 }
 
 abstract class AppletHandler {
