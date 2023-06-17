@@ -170,7 +170,9 @@ class _MyAppState extends State<MyApp> {
           children: <Widget>[
             _buildAppletWidget("5facb3a52dcbff00017469bd", "画图小程序"),
             _buildAppletWidget("5f72e3559a6a7900019b5baa", "官方小程序"),
-            _buildAppletWidget("5f17f457297b540001e06ebb", "测试小程序"),
+            _buildAppletWidget("5f17f457297b540001e06ebb", "api测试小程序"),
+            _buildAppletWidget("61386f6484dd160001d3e1ab", "测试小程序"),
+            
           ],
         ),
       ),
