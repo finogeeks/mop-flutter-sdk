@@ -33,6 +33,9 @@ doc/api/
 .DS_Store
 /build
 /captures
+example/ios/Podfile.lock
+example/pubspec.lock
+pubspec.lock
 
 
 android/bin/

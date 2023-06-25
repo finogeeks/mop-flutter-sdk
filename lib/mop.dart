@@ -822,7 +822,6 @@ class RemoteAppletRequest {
     this.isSingleProcess = false,
   });
 
-  @override
   Map<String, dynamic> toMap() {
     Map<String, dynamic> result = {
       "apiServer": apiServer,
