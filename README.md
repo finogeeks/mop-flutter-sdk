@@ -308,7 +308,7 @@ module.exports = {
 ```
 
 ## 目录树
-.
+```
 ├── CHANGELOG.md
 ├── LICENSE
 ├── README.md
@@ -508,7 +508,7 @@ module.exports = {
 ├── pubspec.yaml
 ├── tag.sh        // 打tag脚本
 └── trigger.sh    // 脚本
-
+```
 ## 🔗 常用链接
 以下内容是您在 FinClip 进行开发与体验时，常见的问题与指引信息
 
