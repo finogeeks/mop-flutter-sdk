@@ -307,6 +307,208 @@ module.exports = {
 }
 ```
 
+## 目录树
+.
+├── CHANGELOG.md
+├── LICENSE
+├── README.md
+├── android
+│   ├── build.gradle
+│   ├── build.gradle.tpl
+│   ├── gradle
+│   │   └── wrapper
+│   │       └── gradle-wrapper.properties
+│   ├── gradle.properties
+│   ├── proguard-android.txt
+│   ├── proguard-rules.pro
+│   ├── settings.gradle
+│   └── src     // Android源文件目录
+│       └── main
+│           ├── AndroidManifest.xml
+│           └── java
+│               └── com
+│                   └── finogeeks
+│                       └── mop
+│                           ├── MopEventStream.java
+│                           ├── MopPlugin.java
+│                           ├── MopPluginDelegate.java
+│                           ├── api
+│                           │   ├── AbsApi.java
+│                           │   ├── ApisManager.java
+│                           │   ├── BaseApi.java
+│                           │   ├── EmptyApi.java
+│                           │   └── mop
+│                           │       ├── AppletHandlerModule.java
+│                           │       ├── AppletManageModule.java
+│                           │       ├── AppletModule.java
+│                           │       ├── BaseModule.java
+│                           │       ├── ExtensionApiModule.java
+│                           │       ├── InitSDKModule.java
+│                           │       ├── SmSignModule.java
+│                           │       ├── VersionModule.java
+│                           │       ├── WXQrCodeModule.java
+│                           │       └── util
+│                           │           └── InitUtils.java
+│                           ├── constants
+│                           │   └── Constants.java
+│                           ├── interfaces
+│                           │   ├── Event.java
+│                           │   ├── FlutterInterface.java
+│                           │   ├── IApi.java
+│                           │   ├── ICallback.java
+│                           │   └── ILifecycle.java
+│                           ├── service
+│                           │   └── MopPluginService.java
+│                           └── utils
+│                               ├── AppletUtils.java
+│                               └── GsonUtil.java
+├── example     // 示例工程目录
+│   ├── README.md
+│   ├── analysis_options.yaml
+│   ├── android
+│   │   ├── app
+│   │   │   ├── build.gradle
+│   │   │   └── src
+│   │   │       ├── debug
+│   │   │       │   └── AndroidManifest.xml
+│   │   │       ├── main
+│   │   │       │   ├── AndroidManifest.xml
+│   │   │       │   ├── java
+│   │   │       │   │   └── com
+│   │   │       │   │       └── finogeeks
+│   │   │       │   │           └── mop_example
+│   │   │       │   │               ├── CustomLoadingPage.java
+│   │   │       │   │               ├── MainActivity.java
+│   │   │       │   │               └── MainApplication.java
+│   │   │       │   └── res
+│   │   │       │       ├── drawable
+│   │   │       │       │   └── launch_background.xml
+│   │   │       │       ├── drawable-v21
+│   │   │       │       │   └── launch_background.xml
+│   │   │       │       ├── layout
+│   │   │       │       │   ├── layout_custom_loading_page.xml
+│   │   │       │       │   └── layout_custom_loading_page_failure.xml
+│   │   │       │       ├── mipmap-hdpi
+│   │   │       │       │   └── ic_launcher.png
+│   │   │       │       ├── mipmap-mdpi
+│   │   │       │       │   └── ic_launcher.png
+│   │   │       │       ├── mipmap-xhdpi
+│   │   │       │       │   └── ic_launcher.png
+│   │   │       │       ├── mipmap-xxhdpi
+│   │   │       │       │   └── ic_launcher.png
+│   │   │       │       ├── mipmap-xxxhdpi
+│   │   │       │       │   └── ic_launcher.png
+│   │   │       │       ├── values
+│   │   │       │       │   └── styles.xml
+│   │   │       │       └── values-night
+│   │   │       │           └── styles.xml
+│   │   │       └── profile
+│   │   │           └── AndroidManifest.xml
+│   │   ├── build.gradle
+│   │   ├── gradle
+│   │   │   └── wrapper
+│   │   │       └── gradle-wrapper.properties
+│   │   ├── gradle.properties
+│   │   └── settings.gradle
+│   ├── ios     // iOS示例工程
+│   │   ├── Podfile
+│   │   ├── Runner
+│   │   │   ├── AppDelegate.swift   // 示例工程原生端初始化，以及插件注册
+│   │   │   ├── Assets.xcassets
+│   │   │   ├── FlutterMethodChannelHandler.h   // Flutter调用原生channel
+│   │   │   ├── FlutterMethodChannelHandler.m
+│   │   │   ├── LoadingView.h   // 小程序启动页自定义UI
+│   │   │   ├── LoadingView.m
+│   │   │   └── Runner-Bridging-Header.h
+│   │   ├── Runner.xcodeproj
+│   ├── lib
+│   │   └── main.dart   // 示例工程入口
+│   ├── pubspec.yaml
+├── ios     // iOS源文件目录
+│   ├── Assets
+│   ├── Classes
+│   │   ├── Api     // 自定义API，用户可以此目录下新增自定义API
+│   │   │   ├── MOPAppletDelegate.h     // 小程序回调处理
+│   │   │   ├── MOPAppletDelegate.m
+│   │   │   ├── MOP_addWebExtentionApi.h    // 添加扩展API
+│   │   │   ├── MOP_addWebExtentionApi.m
+│   │   │   ├── MOP_callJS.h    // 调用JS方法
+│   │   │   ├── MOP_callJS.m
+│   │   │   ├── MOP_changeUserId.h  // 设置userId
+│   │   │   ├── MOP_changeUserId.m
+│   │   │   ├── MOP_clearApplets.h  // 清除本地所有小程序缓存
+│   │   │   ├── MOP_clearApplets.m
+│   │   │   ├── MOP_closeAllApplets.h   // 关闭所有小程序
+│   │   │   ├── MOP_closeAllApplets.m
+│   │   │   ├── MOP_closeApplet.h   // 关闭指定小程序
+│   │   │   ├── MOP_closeApplet.m
+│   │   │   ├── MOP_currentApplet.h // 获取当前小程序的信息
+│   │   │   ├── MOP_currentApplet.m
+│   │   │   ├── MOP_finishRunningApplet.h   // 关闭小程序，并移除缓存
+│   │   │   ├── MOP_finishRunningApplet.m
+│   │   │   ├── MOP_initSDK.h       // 小程序SDK初始化
+│   │   │   ├── MOP_initSDK.m       
+│   │   │   ├── MOP_initialize.h    // 小程序SDK初始化(跟 MOP_initSDK 参数不同)
+│   │   │   ├── MOP_initialize.m
+│   │   │   ├── MOP_openApplet.h    // 打开小程序
+│   │   │   ├── MOP_openApplet.m
+│   │   │   ├── MOP_parseAppletInfoFromWXQrCode.h   // 解析微信小程序二维码，得到凡泰小程序信息
+│   │   │   ├── MOP_parseAppletInfoFromWXQrCode.m
+│   │   │   ├── MOP_qrcodeOpenApplet.h  // 二维码链接打开小程序
+│   │   │   ├── MOP_qrcodeOpenApplet.m
+│   │   │   ├── MOP_registerAppletHandler.h // 注册小程序回调
+│   │   │   ├── MOP_registerAppletHandler.m
+│   │   │   ├── MOP_registerExtensionApi.h  // 注册扩展Api
+│   │   │   ├── MOP_registerExtensionApi.m
+│   │   │   ├── MOP_removeAllUsedApplets.h  // 移除所有本地小程序缓存
+│   │   │   ├── MOP_removeAllUsedApplets.m
+│   │   │   ├── MOP_removeApplet.h      // 删除小程序本地缓存，如果小程序正在打开则先关闭小程序
+│   │   │   ├── MOP_removeApplet.m
+│   │   │   ├── MOP_removeUsedApplet.h  // 从本地缓存中删除小程序
+│   │   │   ├── MOP_removeUsedApplet.m
+│   │   │   ├── MOP_scanOpenApplet.h    // 扫描二维码打开小程序
+│   │   │   ├── MOP_scanOpenApplet.m
+│   │   │   ├── MOP_sdkVersion.h    // 获取SDK版本信息
+│   │   │   ├── MOP_sdkVersion.m
+│   │   │   ├── MOP_sendCustomEvent.h   // 给SDK发动自定义事件
+│   │   │   ├── MOP_sendCustomEvent.m
+│   │   │   ├── MOP_showBotomSheetModel.h   // 显示底部分享View
+│   │   │   ├── MOP_showBotomSheetModel.m
+│   │   │   ├── MOP_smsign.h    // 获取签名
+│   │   │   ├── MOP_smsign.m
+│   │   │   ├── MOP_startApplet.h   // 启动小程序
+│   │   │   ├── MOP_startApplet.m
+│   │   │   ├── MOP_webViewBounces.h    // 设置 webView  Bounces
+│   │   │   └── MOP_webViewBounces.m    
+│   │   ├── Model
+│   │   │   ├── MopCustomMenuModel.h  // 自定义菜单Model
+│   │   │   └── MopCustomMenuModel.m
+│   │   ├── MopPlugin.h     // 插件初始化以及事件处理
+│   │   ├── MopPlugin.m
+│   │   └── Utils   // 存放一些工具类
+│   │       ├── MOPApiConverter.h // 将Request通过反射转换成自定义API
+│   │       ├── MOPApiConverter.m
+│   │       ├── MOPApiRequest.h   // 将参数封装成一个Request
+│   │       ├── MOPApiRequest.m
+│   │       ├── MOPBaseApi.h      // 自定义API基类
+│   │       ├── MOPBaseApi.m
+│   │       ├── MOPTools.h        // 工具类
+│   │       ├── MOPTools.m
+│   │       ├── MopShareView.h    // 分享界面UI
+│   │       ├── MopShareView.m
+│   │       ├── UIView+MOPFATToast.h  // Toast提示分类
+│   │       └── UIView+MOPFATToast.m
+│   ├── mop.podspec
+│   └── mop.podspec.tpl   //mop.podspec 模板文件
+├── lib
+│   ├── api.dart    // 小程序回调接口（抽象类）
+│   └── mop.dart    // mop SDK 初始化接口
+├── publish.sh      // 发布脚本
+├── pubspec.tpl.yaml  // pubspec.yaml模板文件
+├── pubspec.yaml
+├── tag.sh        // 打tag脚本
+└── trigger.sh    // 脚本
+
 ## 🔗 常用链接
 以下内容是您在 FinClip 进行开发与体验时，常见的问题与指引信息
 
