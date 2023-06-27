@@ -308,6 +308,7 @@ module.exports = {
 ```
 
 ## Flutter-SDK 工程源码说明
+```
 .
 ├── CHANGELOG.md
 ├── LICENSE
@@ -487,6 +488,7 @@ module.exports = {
 ├── pubspec.yaml        // 配置文件
 ├── tag.sh              // 打tag的脚本
 └── trigger.sh          // 脚本
+```
 
 ## 🔗 常用链接
 以下内容是您在 FinClip 进行开发与体验时，常见的问题与指引信息
