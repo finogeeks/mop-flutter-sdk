@@ -8,6 +8,7 @@
 #import "MOP_registerAppletHandler.h"
 #import "MopPlugin.h"
 #import "MOPAppletDelegate.h"
+#import "MOPButtonOpenTypeDelegate.h"
 #import <FinApplet/FinApplet.h>
 
 @implementation MOP_registerAppletHandler
@@ -16,6 +17,7 @@
 {
     NSLog(@"MOP_registerAppletHandler");
     [FATClient sharedClient].delegate = [MOPAppletDelegate instance];
+    [FATClient sharedClient].buttonOpenTypeDelegate = [MOPButtonOpenTypeDelegate instance];
 }
 
 @end
