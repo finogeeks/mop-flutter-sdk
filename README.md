@@ -252,7 +252,7 @@ final res = await Mop.instance.initialize(
   void registerAppletHandler(AppletHandler handler) 
 ```
 
-处理器的结构
+处理类的结构
 ```
 abstract class AppletHandler {
   ///
@@ -305,6 +305,189 @@ module.exports = {
     }
   ]
 }
+```
+
+## Flutter-SDK 工程源码说明
+```
+.
+├── CHANGELOG.md
+├── LICENSE
+├── README.md
+├── android
+│   ├── build.gradle
+│   ├── build.gradle.tpl
+│   ├── gradle
+│   │   └── wrapper
+│   │       └── gradle-wrapper.properties
+│   ├── gradle.properties
+│   ├── proguard-android.txt
+│   ├── proguard-rules.pro
+│   ├── settings.gradle
+│   └── src     // Flutter-SDK Android源文件目录
+│       └── main
+│           ├── AndroidManifest.xml
+│           └── java
+│               └── com
+│                   └── finogeeks
+│                       └── mop
+│                           ├── MopEventStream.java         // 
+│                           ├── MopPlugin.java              // flutter 消息的处理类
+│                           ├── MopPluginDelegate.java      //
+│                           ├── api
+│                           │   ├── AbsApi.java             // flutter-API的抽象类
+│                           │   ├── ApisManager.java        // flutter-API的管理类
+│                           │   ├── BaseApi.java            // flutter-API的基类
+│                           │   ├── EmptyApi.java           // flutter-API的空实现
+│                           │   └── mop
+│                           │       ├── AppletHandlerModule.java  // 安卓代理的处理类，会转发消息至AppletHandler
+│                           │       ├── AppletManageModule.java  // 小程序相关API的实现Module(包含获取小程序信息、关闭小程序、删除小程序等)
+│                           │       ├── AppletModule.java       // 打开小程序的API实现Module（包含打开小程序的几种api）
+│                           │       ├── BaseModule.java         // 旧版本初始化SDK的API实现Module
+│                           │       ├── ExtensionApiModule.java  // 扩展API的实现Module（注册小程序自定义API、H5自定义API）
+│                           │       ├── InitSDKModule.java  // 新版初始化SDK的Module
+│                           │       ├── SmSignModule.java   // (废弃)
+│                           │       ├── VersionModule.java  // 获取SDK版本信息的Module
+│                           │       ├── WXQrCodeModule.java  //通过微信小程序二维码获取关联的FinClip 小程序信息的Module
+│                           │       └── util   // 工具类
+│                           │           └── InitUtils.java  //初始化参数处理工具类
+│                           ├── constants
+│                           │   └── Constants.java      // 常量
+│                           ├── interfaces    // 一些接口类
+│                           │   ├── Event.java
+│                           │   ├── FlutterInterface.java
+│                           │   ├── IApi.java
+│                           │   ├── ICallback.java
+│                           │   └── ILifecycle.java
+│                           ├── service
+│                           │   └── MopPluginService.java    // Flutter 插件服务
+│                           └── utils
+│                               ├── AppletUtils.java        // 小程序操作工具类
+│                               └── GsonUtil.java           //json 处理工具类
+├── example     // 示例工程目录
+│   ├── README.md
+│   ├── analysis_options.yaml
+│   ├── android // 示例工程--安卓工程
+│   │   ├── app
+│   │   │   ├── build.gradle
+│   │   │   └── src
+│   │   │       ├── debug
+│   │   │       │   └── AndroidManifest.xml
+│   │   │       ├── main
+│   │   │       │   ├── AndroidManifest.xml
+│   │   │       │   ├── java
+│   │   │       │   │   └── com
+│   │   │       │   │       └── finogeeks
+│   │   │       │   │           └── mop_example
+│   │   │       │   │               ├── CustomLoadingPage.java  //安卓自定义loading实现类
+│   │   │       │   │               ├── MainActivity.java       //安卓主页
+│   │   │       │   │               └── MainApplication.java   
+│   │   │       │   └── res   图片、布局等资源文件夹
+│   │   │       └── profile
+│   │   │           └── AndroidManifest.xml
+│   │   ├── build.gradle
+│   │   ├── gradle
+│   │   │   └── wrapper
+│   │   │       └── gradle-wrapper.properties
+│   │   ├── gradle.properties
+│   │   └── settings.gradle
+│   ├── ios     // 示例工程--iOS工程
+│   │   ├── Podfile
+│   │   ├── Runner
+│   │   │   ├── AppDelegate.swift   // 示例工程原生端初始化，以及插件注册
+│   │   │   ├── Assets.xcassets
+│   │   │   ├── FlutterMethodChannelHandler.h   // Flutter调用原生channel
+│   │   │   ├── FlutterMethodChannelHandler.m
+│   │   │   ├── LoadingView.h   // 小程序启动页自定义UI
+│   │   │   ├── LoadingView.m
+│   │   │   └── Runner-Bridging-Header.h
+│   │   ├── Runner.xcodeproj
+│   ├── lib
+│   │   └── main.dart   // 示例工程入口
+│   ├── pubspec.yaml
+├── ios                 // iOS源文件目录
+│   ├── Assets
+│   ├── Classes
+│   │   ├── Api     // flutter-sdk API的iOS实现类
+│   │   │   ├── MOPAppletDelegate.h     // iOS SDK代理的实现类，会转发消息至AppletHandler
+│   │   │   ├── MOPAppletDelegate.m     // iOS SDK代理的实现类，会转发消息至AppletHandler
+│   │   │   ├── MOP_addWebExtentionApi.h    // 注册小程序H5 自定义api的实现类
+│   │   │   ├── MOP_addWebExtentionApi.m    
+│   │   │   ├── MOP_callJS.h            // 原生给小程序组件发消息的实现类
+│   │   │   ├── MOP_callJS.m
+│   │   │   ├── MOP_changeUserId.h      // 修复userId的实现类
+│   │   │   ├── MOP_changeUserId.m
+│   │   │   ├── MOP_clearApplets.h      // 清除本地所有小程序的实现类
+│   │   │   ├── MOP_clearApplets.m
+│   │   │   ├── MOP_closeAllApplets.h   // 关闭所有小程序的实现类
+│   │   │   ├── MOP_closeAllApplets.m
+│   │   │   ├── MOP_closeApplet.h       // 关闭指定小程序的实现类
+│   │   │   ├── MOP_closeApplet.m
+│   │   │   ├── MOP_currentApplet.h     // 获取当前小程序的信息的实现类
+│   │   │   ├── MOP_currentApplet.m
+│   │   │   ├── MOP_finishRunningApplet.h   // 彻底关闭小程序的实现类
+│   │   │   ├── MOP_finishRunningApplet.m
+│   │   │   ├── MOP_initSDK.h           // 新的初始化SDK实现类(推荐)
+│   │   │   ├── MOP_initSDK.m       
+│   │   │   ├── MOP_initialize.h        // 旧的初始化SDK实现类(不推荐)
+│   │   │   ├── MOP_initialize.m
+│   │   │   ├── MOP_openApplet.h        // 旧的打开小程序实现类（不推荐）
+│   │   │   ├── MOP_openApplet.m
+│   │   │   ├── MOP_parseAppletInfoFromWXQrCode.h   // 解析微信小程序二维码，得到凡泰小程序信息
+│   │   │   ├── MOP_parseAppletInfoFromWXQrCode.m
+│   │   │   ├── MOP_qrcodeOpenApplet.h      // 通过二维码链接打开小程序实现类
+│   │   │   ├── MOP_qrcodeOpenApplet.m
+│   │   │   ├── MOP_registerAppletHandler.h // 注册代理实现类
+│   │   │   ├── MOP_registerAppletHandler.m
+│   │   │   ├── MOP_registerExtensionApi.h  // 注册小程序自定义api的实现类
+│   │   │   ├── MOP_registerExtensionApi.m
+│   │   │   ├── MOP_removeAllUsedApplets.h  // 删除本地所有小程序的实现类（小程序包、运行过程中的数据等）
+│   │   │   ├── MOP_removeAllUsedApplets.m
+│   │   │   ├── MOP_removeApplet.h          // 删除指定小程序（小程序包、运行过程中的数据等）
+│   │   │   ├── MOP_removeApplet.m
+│   │   │   ├── MOP_removeUsedApplet.h      // 删除指定小程序（小程序包、运行过程中的数据等）
+│   │   │   ├── MOP_removeUsedApplet.m
+│   │   │   ├── MOP_scanOpenApplet.h        // 旧版二维码打开小程序。（需要解密二维码内容，废弃）
+│   │   │   ├── MOP_scanOpenApplet.m
+│   │   │   ├── MOP_sdkVersion.h            // 获取SDK版本信息
+│   │   │   ├── MOP_sdkVersion.m
+│   │   │   ├── MOP_sendCustomEvent.h       // 给SDK发动全局自定义事件
+│   │   │   ├── MOP_sendCustomEvent.m
+│   │   │   ├── MOP_showBotomSheetModel.h   // 显示底部分享View
+│   │   │   ├── MOP_showBotomSheetModel.m
+│   │   │   ├── MOP_smsign.h                // (废弃)
+│   │   │   ├── MOP_smsign.m
+│   │   │   ├── MOP_startApplet.h           // 新的启动小程序实现类(推荐)
+│   │   │   ├── MOP_startApplet.m
+│   │   │   ├── MOP_webViewBounces.h        // 设置顶层 webView的弹性效果
+│   │   │   └── MOP_webViewBounces.m    
+│   │   ├── Model
+│   │   │   ├── MopCustomMenuModel.h        // 自定义菜单Model
+│   │   │   └── MopCustomMenuModel.m
+│   │   ├── MopPlugin.h                     // flutter 与 iOS原生通信桥接类
+│   │   ├── MopPlugin.m
+│   │   └── Utils           // 存放一些工具类
+│   │       ├── MOPApiConverter.h   // Api动态转换类（使用runtime将request动态转换为api实现类）
+│   │       ├── MOPApiConverter.m
+│   │       ├── MOPApiRequest.h   // flutter-sdk传递给原生的事件和参数会封装成一个Request
+│   │       ├── MOPApiRequest.m
+│   │       ├── MOPBaseApi.h      // flutter API实现类的基类
+│   │       ├── MOPBaseApi.m
+│   │       ├── MOPTools.h        // 工具类（包含颜色、截图、获取顶层控制器等）
+│   │       ├── MOPTools.m
+│   │       ├── MopShareView.h    // 分享界面UI
+│   │       ├── MopShareView.m
+│   │       ├── UIView+MOPFATToast.h  // Toast提示分类
+│   │       └── UIView+MOPFATToast.m
+│   ├── mop.podspec
+│   └── mop.podspec.tpl   //mop.podspec 模板文件
+├── lib
+│   ├── api.dart        // flutter-sdk代理的（抽象类）
+│   └── mop.dart        // mop 核心类（包含初始化配置型、flutter-sdk的所有api）
+├── publish.sh          // 发布脚本
+├── pubspec.tpl.yaml    // pubspec.yaml模板文件
+├── pubspec.yaml        // 配置文件
+├── tag.sh              // 打tag的脚本
+└── trigger.sh          // 脚本
 ```
 
 ## 🔗 常用链接
