@@ -91,7 +91,7 @@ kapt {
 }
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    def sdk_version = '2.41.0-alpha20230617v01'
+    def sdk_version = '2.41.0-dev20230628v01'
     implementation "com.finogeeks.lib:finapplet:$sdk_version"
     implementation "com.finogeeks.mop:plugins:$sdk_version"
 }
