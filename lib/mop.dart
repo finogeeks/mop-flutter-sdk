@@ -210,6 +210,14 @@ class Config {
   /// SDK的语言类型，默认为中文
   LanguageType language = LanguageType.Chinese;
 
+  /// Android属性
+  /// 是否使用本地加载tbs内核
+  bool useLocalTbsCore = false;
+
+  /// Android属性
+  /// tbs内核的下载地址，不包含文件名
+  String? tbsCoreUrl;
+
   Config(this.finStoreConfigs);
 
   Map<String, dynamic> toMap() {
@@ -252,6 +260,8 @@ class Config {
       "logDir": logDir,
       "enablePreNewProcess": enablePreNewProcess,
       "language":language.index,
+      "useLocalTbsCore": useLocalTbsCore,
+      "tbsCoreUrl": tbsCoreUrl,
     };
   }
 }
@@ -356,7 +366,7 @@ class UIConfig {
   /// 该手势禁用，不影响小程序里页面的侧滑返回上一页的功能
   bool disableSlideCloseAppletGesture = false;
 
-  // 注入小程序统称appletText字符串，默认为“小程序”。
+  /// 注入小程序统称appletText字符串，默认为“小程序”。
   String? appletText;
 
   /// Android属性
@@ -401,6 +411,7 @@ class UIConfig {
       "disableSlideCloseAppletGesture": disableSlideCloseAppletGesture,
       "appletText": appletText,
       "loadingLayoutCls": loadingLayoutCls,
+      "useNativeLiveComponent": useNativeLiveComponent,
     };
   }
 }
@@ -990,7 +1001,7 @@ class Mop {
     UIConfig? uiConfig,
     String? customWebViewUserAgent,
     int? appletIntervalUpdateLimit,
-    int? maxRunningApplet,
+    int? maxRunningApplet
   }) async {
     List<Map<String, dynamic>>? storeConfigs =
         finStoreConfigs?.map((e) => e.toMap()).toList();
@@ -1011,7 +1022,7 @@ class Mop {
       "uiConfig": uiConfig?.toMap(),
       "customWebViewUserAgent": customWebViewUserAgent,
       "appletIntervalUpdateLimit": appletIntervalUpdateLimit,
-      "maxRunningApplet": maxRunningApplet
+      "maxRunningApplet": maxRunningApplet,
     });
     return ret;
   }

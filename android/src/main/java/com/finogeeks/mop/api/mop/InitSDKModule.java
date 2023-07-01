@@ -178,7 +178,11 @@ public class InitSDKModule extends BaseApi {
             configBuilder.setXLogDir(logDir);
         }
         configBuilder.setEnablePreNewProcess((Boolean) configMap.get("enablePreNewProcess"));
-
+        configBuilder.setUseLocalTbsCore((Boolean) configMap.get("useLocalTbsCore"));
+        String tbsCoreUrl = (String) configMap.get("tbsCoreUrl");
+        if (tbsCoreUrl != null) {
+            configBuilder.setTbsCoreUrl(tbsCoreUrl);
+        }
         Map<Object, Object> uiConfigMap = (Map<Object, Object>) param.get("uiConfig");
         String appendingCustomUserAgent = (String) uiConfigMap.get("appendingCustomUserAgent");
         if (appendingCustomUserAgent != null) {
