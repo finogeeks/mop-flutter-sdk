@@ -24,6 +24,7 @@ import com.finogeeks.mop.interfaces.ICallback;
 import com.finogeeks.mop.service.MopPluginService;
 import com.finogeeks.mop.utils.AppletUtils;
 import com.finogeeks.mop.utils.GsonUtil;
+import com.finogeeks.mop.impls.MyUserProfileHandler;
 import com.google.gson.reflect.TypeToken;
 
 import org.jetbrains.annotations.NotNull;
@@ -65,6 +66,9 @@ public class AppletHandlerModule extends BaseApi {
         Log.d("AppletHandlerModule", "registerAppletHandler");
 
         MethodChannel channel = MopPluginService.getInstance().getMethodChannel();
+        // getUserProfile的内置实现
+        FinAppClient.INSTANCE.getFinAppConfig().setGetUserProfileHandlerClass(MyUserProfileHandler.class.getName());
+
         FinAppClient.INSTANCE.getAppletApiManager().setAppletHandler(mIAppletHandler = new IAppletHandler() {
 
             @Nullable

@@ -81,8 +81,25 @@ class _MyAppState extends State<MyApp> {
     print(res);
     Mop.instance.registerAppletHandler(MyAppletHandler());
 
+    Mop.instance.registerExtensionApi('getUserProfile', getUserProfile);
+
     if (!mounted) return;
   }
+
+  Future<Map<String, dynamic>> getUserProfile(dynamic params) async {
+  Map<String, dynamic> result = {
+    "userInfo":{
+      "nickName" : "haley",
+      "avatarUrl" : "https://www.finclip.com",
+      "gender" : 1,
+      "country" : "China",
+      "province" : "Guangdong",
+      "city" : "shenzhen",
+    }
+  };
+
+  return result;
+}
 
   Widget _buildAppletItem(
       String appletId, String itemName, VoidCallback tapAction) {
