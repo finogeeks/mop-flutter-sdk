@@ -98,7 +98,7 @@ class _MyAppState extends State<MyApp> {
     }
   };
 
-  return result;
+  return Future.value(result);
 }
 
   Widget _buildAppletItem(
@@ -248,7 +248,18 @@ class MyAppletHandler extends AppletHandler {
   @override
   Future<Map<String, dynamic>> getUserInfo() {
     // TODO: implement getUserInfo
-    throw UnimplementedError();
+    Map<String, dynamic> result = {
+    "userInfo":{
+      "nickName" : "haley",
+      "avatarUrl" : "https://www.finclip.com",
+      "gender" : 1,
+      "country" : "China",
+      "province" : "Guangdong",
+      "city" : "shenzhen",
+    }
+  };
+
+  return Future.value(result);
   }
 
   @override
