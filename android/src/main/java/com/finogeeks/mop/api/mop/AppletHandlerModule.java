@@ -377,7 +377,7 @@ public class AppletHandlerModule extends BaseApi {
         callback.onSuccess(null);
         if (phoneNumberCallback != null) {
             try {
-                JSONObject jsonObject = new JSONObject(param.get("phone").toString());
+                JSONObject jsonObject = new JSONObject(param);
                 phoneNumberCallback.onSuccess(jsonObject);
             } catch (Exception e) {
                 e.printStackTrace();
