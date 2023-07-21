@@ -10,6 +10,7 @@ typedef MopEventErrorCallback = void Function(dynamic event);
 
 typedef ExtensionApiHandler = Future<Map<String, dynamic>> Function(
     dynamic params);
+typedef SyncExtensionApiHandler = Map<String, dynamic> Function(dynamic params);
 typedef MopAppletHandler = Future Function(dynamic params);
 
 class FinStoreConfig {
@@ -914,6 +915,8 @@ class Mop {
 
   final Map<String, ExtensionApiHandler> _extensionApis = {};
 
+  final Map<String, SyncExtensionApiHandler> _syncExtensionApis = {};
+
   Map<String, ExtensionApiHandler> _webExtensionApis = {};
 
   factory Mop() {
@@ -959,6 +962,14 @@ class Mop {
       final apiHandler = _appletHandlerApis[name];
       if (apiHandler != null) {
         return await apiHandler(call.arguments);
+      }
+    } else if (call.method.toLowerCase().startsWith("syncextensionapi:")) {
+      final name =
+      call.method.toLowerCase().substring("syncextensionapi:".length);
+      final handler = _syncExtensionApis[name];
+      debugPrint("syncExtensionApisName:$name,handler:$handler");
+      if (handler != null) {
+        return handler(call.arguments);
       }
     } else if (call.method.startsWith("webExtentionApi:")) {
       final name = call.method.substring("webExtentionApi:".length);
@@ -1200,6 +1211,13 @@ class Mop {
   void registerExtensionApi(String name, ExtensionApiHandler handler) {
     _extensionApis[name] = handler;
     _channel.invokeMethod("registerExtensionApi", {"name": name});
+  }
+
+  /// register sync extension api
+  /// 注册拓展api(同步)
+  void registerSyncExtensionApi(String name, SyncExtensionApiHandler handler) {
+    _syncExtensionApis[name] = handler;
+    _channel.invokeMethod("registerSyncExtensionApi", {"name": name});
   }
 
   /// register webview extension api
