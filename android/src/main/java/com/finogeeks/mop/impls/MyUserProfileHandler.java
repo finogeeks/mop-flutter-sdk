@@ -25,34 +25,35 @@ public class MyUserProfileHandler implements IUserProfileHandler {
     public void getUserProfileWithAppletInfo(@NotNull Context context, @NotNull FinAppInfo finAppInfo, @NotNull UserProfileCallback callback) {
         MethodChannel channel = MopPluginService.getInstance().getMethodChannel();
         Log.d(TAG, "getUserProfileWithAppletInfo:");
-        Log.d(TAG, "channel:" + channel !=null ? "存在": "不存在" );
-        channel.invokeMethod("extensionApi:getUserProfile", null, new MethodChannel.Result() {
-            @Override
-            public void success(Object mapResult) {
-                JSONObject result = null;
-                try {
-                    result = new JSONObject((Map)mapResult); 
-                } catch (Exception e) {
-                    
+        Log.d(TAG, "channel:" + (channel != null ? "存在" : "不存在"));
+        new Handler(Looper.getMainLooper()).post(() -> {
+            channel.invokeMethod("extensionApi:getUserProfile", null, new MethodChannel.Result() {
+                @Override
+                public void success(Object mapResult) {
+                    JSONObject result = null;
+                    try {
+                        result = new JSONObject((Map) mapResult);
+                    } catch (Exception e) {
+
+                    }
+
+                    if (result == null) {
+                        callback.onError(null);
+                    } else {
+                        callback.onSuccess(result);
+                    }
                 }
-                
-                if (result == null) {
+
+                @Override
+                public void error(String errorCode, String errorMessage, Object errorDetails) {
                     callback.onError(null);
-                } else {
-                    callback.onSuccess(result);
                 }
-            }
 
-            @Override
-            public void error(String errorCode, String errorMessage, Object errorDetails) {
-                callback.onError(null);
-            }
-
-            @Override
-            public void notImplemented() {
-                callback.onError(null);
-            }
+                @Override
+                public void notImplemented() {
+                    callback.onError(null);
+                }
+            });
         });
-
     }
 }
