@@ -14,6 +14,7 @@ import com.finogeeks.mop.api.BaseApi;
 import com.finogeeks.mop.api.mop.util.InitUtils;
 import com.finogeeks.mop.interfaces.ICallback;
 import com.finogeeks.mop.service.MopPluginService;
+import com.finogeeks.mop.impls.MyUserProfileHandler;
 import com.finogeeks.xlog.XLogLevel;
 import com.google.gson.Gson;
 

@@ -411,7 +411,6 @@ class UIConfig {
       "disableSlideCloseAppletGesture": disableSlideCloseAppletGesture,
       "appletText": appletText,
       "loadingLayoutCls": loadingLayoutCls,
-      "useNativeLiveComponent": useNativeLiveComponent,
     };
   }
 }
