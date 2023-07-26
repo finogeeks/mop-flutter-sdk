@@ -25,7 +25,6 @@ public class MyUserProfileHandler implements IUserProfileHandler {
     public void getUserProfileWithAppletInfo(@NotNull Context context, @NotNull FinAppInfo finAppInfo, @NotNull UserProfileCallback callback) {
         MethodChannel channel = MopPluginService.getInstance().getMethodChannel();
         Log.d(TAG, "getUserProfileWithAppletInfo:");
-        Log.d(TAG, "channel:" + (channel != null ? "存在" : "不存在"));
         new Handler(Looper.getMainLooper()).post(() -> {
             channel.invokeMethod("extensionApi:getUserProfile", null, new MethodChannel.Result() {
                 @Override

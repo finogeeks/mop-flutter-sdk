@@ -200,9 +200,6 @@ public class InitSDKModule extends BaseApi {
             configBuilder.setLocale(Locale.SIMPLIFIED_CHINESE);
         }
 
-         // getUserProfile的内置实现
-        configBuilder.setGetUserProfileHandlerClass(MyUserProfileHandler.class.getName());
-
         // uiConfig
         FinAppConfig.UIConfig uiConfig = InitUtils.createUIConfigFromMap(uiConfigMap);
         if (uiConfig != null) {
