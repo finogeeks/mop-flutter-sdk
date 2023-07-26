@@ -184,6 +184,7 @@ public class InitSDKModule extends BaseApi {
         if (tbsCoreUrl != null) {
             configBuilder.setTbsCoreUrl(tbsCoreUrl);
         }
+        configBuilder.setEnableJ2V8((Boolean) configMap.get("enableJ2V8"));
         Map<Object, Object> uiConfigMap = (Map<Object, Object>) param.get("uiConfig");
         String appendingCustomUserAgent = (String) uiConfigMap.get("appendingCustomUserAgent");
         if (appendingCustomUserAgent != null) {

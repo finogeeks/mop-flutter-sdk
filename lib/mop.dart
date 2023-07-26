@@ -218,6 +218,10 @@ class Config {
   /// tbs内核的下载地址，不包含文件名
   String? tbsCoreUrl;
 
+  /// Android属性
+  /// 是否开启j2v8
+  bool enableJ2V8 = false;
+
   Config(this.finStoreConfigs);
 
   Map<String, dynamic> toMap() {
@@ -262,6 +266,7 @@ class Config {
       "language":language.index,
       "useLocalTbsCore": useLocalTbsCore,
       "tbsCoreUrl": tbsCoreUrl,
+      "enableJ2V8": enableJ2V8,
     };
   }
 }
