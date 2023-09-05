@@ -26,6 +26,8 @@ import com.finogeeks.mop.utils.AppletUtils;
 import com.finogeeks.mop.utils.GsonUtil;
 import com.finogeeks.mop.impls.MyUserProfileHandler;
 import com.google.gson.reflect.TypeToken;
+import com.finogeeks.lib.applet.sdk.api.IAppletLifecycleCallback;
+
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -68,6 +70,66 @@ public class AppletHandlerModule extends BaseApi {
         MethodChannel channel = MopPluginService.getInstance().getMethodChannel();
         // getUserProfile的内置实现
         FinAppClient.INSTANCE.getFinAppConfig().setGetUserProfileHandlerClass(MyUserProfileHandler.class.getName());
+
+        FinAppClient.INSTANCE.getAppletApiManager().setAppletLifecycleCallback(new IAppletLifecycleCallback() {
+
+            @Override
+            public void onCreate(@NotNull String appId) {
+                Log.d(TAG, "IAppletLifecycleCallback onCreate : " + appId);
+            }
+
+            @Override
+            public void onInitComplete(@NotNull String appId) {
+                Log.d(TAG, "IAppletLifecycleCallback onInitComplete : " + appId);
+                Map<String, Object> params = new HashMap<>();
+                params.put("appId", appId);
+                handler.post(() -> {
+                    channel.invokeMethod("extensionApi:appletDidOpen", params, new MethodChannel.Result() {
+                        @Override
+                        public void success(Object result) {
+                        }
+
+                        @Override
+                        public void error(String errorCode, String errorMessage, Object errorDetails) {
+                        }
+
+                        @Override
+                        public void notImplemented() {
+                        }
+                    });
+                });
+            }
+
+            @Override
+            public void onStart(@NotNull String appId) {
+                Log.d(TAG, "IAppletLifecycleCallback onStart : " + appId);
+            }
+
+            @Override
+            public void onResume(@NotNull String appId) {
+                Log.d(TAG, "IAppletLifecycleCallback onResume : " + appId);
+            }
+
+            @Override
+            public void onPause(@NotNull String appId) {
+                Log.d(TAG, "IAppletLifecycleCallback onPause : " + appId);
+            }
+
+            @Override
+            public void onStop(@NotNull String appId) {
+                Log.d(TAG, "IAppletLifecycleCallback onStop : " + appId);
+            }
+
+            @Override
+            public void onDestroy(@NotNull String appId) {
+                Log.d(TAG, "IAppletLifecycleCallback onDestroy : " + appId);
+            }
+
+            @Override
+            public void onFailure(@NotNull String appId, String errMsg) {
+                Log.d(TAG, "IAppletLifecycleCallback onFailure : " + appId);
+            }
+        });
 
         FinAppClient.INSTANCE.getAppletApiManager().setAppletHandler(mIAppletHandler = new IAppletHandler() {
 
