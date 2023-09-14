@@ -1,0 +1,27 @@
+stages:
+  - buildVerify
+variables:
+  LC_ALL: "en_US.UTF-8"
+  LANG: "en_US.UTF-8"
+  GITLAB_FLUTTER_VERSION: $GITLAB_FLUTTER_VERSION
+  GITLAB_IOS_VERSION: $GITLAB_IOS_VERSION
+  GITLAB_ANDROID_VERSION: $GITLAB_ANDROID_VERSION
+
+
+buildVerify:
+  stage: buildVerify
+  script:
+    # 编译
+    - echo $gitlab_uploadToGit
+    - sh bundle.sh $GITLAB_FLUTTER_VERSION $GITLAB_IOS_VERSION $GITLAB_ANDROID_VERSION
+  tags:
+    - mac-studio
+  only:
+    - web
+    - api
+    - pipelines
+  after_script:
+    - curl -d "{\"msg\":\"flutter sdk 打包完成\r版本:$GITLAB_VERSION\r分支:$CI_COMMIT_REF_NAME\r触发人:$GITLAB_USER_NAME\"}" -H "Content-Type:application/json" -X POST https://api.finogeeks.club/api/v1/finstore/webhooks/63ef38403604130001cecf10/postreceive?nonce=-ruiKzr9T_o
+
+
+
