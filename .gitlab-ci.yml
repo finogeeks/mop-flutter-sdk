@@ -20,8 +20,7 @@ buildVerify:
     - web
     - api
     - pipelines
-  after_script:
-    - curl -d "{\"msg\":\"flutter sdk 打包完成\r版本:$GITLAB_VERSION\r分支:$CI_COMMIT_REF_NAME\r触发人:$GITLAB_USER_NAME\"}" -H "Content-Type:application/json" -X POST https://api.finogeeks.club/api/v1/finstore/webhooks/63ef38403604130001cecf10/postreceive?nonce=-ruiKzr9T_o
+  
 
 
 
