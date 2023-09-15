@@ -49,16 +49,16 @@ git tag -a ${version} -m 'FinClip-Flutter-SDK发版'
 git push ssh-origin HEAD:refs/heads/master --tags -f
 
 
-export http_proxy=http://127.0.0.1:1087
-export https_proxy=http://127.0.0.1:1087
+#export http_proxy=http://127.0.0.1:1087
+#export https_proxy=http://127.0.0.1:1087
 
 
 flutter packages pub publish --dry-run --server=https://pub.dartlang.org
 
 flutter packages pub publish --server=https://pub.dartlang.org --force
 
-unset http_proxy
-unset https_proxy
+#unset http_proxy
+#unset https_proxy
 
 
 git remote add github ssh://git@github.com/finogeeks/mop-flutter-sdk.git
