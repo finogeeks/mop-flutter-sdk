@@ -2,8 +2,9 @@ package com.finogeeks.mop.api.mop;
 
 import android.content.Context;
 
-
-import com.finogeeks.finclip.sdkcore.manager.FinClipSDKCoreManager;
+import com.finogeeks.finochat.sdkcore.client.FinoChatSDKCoreClient;
+import com.finogeeks.lib.applet.client.FinAppClient;
+import com.finogeeks.lib.applet.db.entity.FinApplet;
 import com.finogeeks.mop.api.BaseApi;
 import com.finogeeks.mop.interfaces.ICallback;
 
@@ -24,7 +25,7 @@ public class SmSignModule extends BaseApi {
     @Override
     public void invoke(String event, Map param, ICallback callback) {
         String text = (String) param.get("plainText");
-        String result = new FinClipSDKCoreManager.Builder().build().messageDigestBySM(text);
+        String result = FinoChatSDKCoreClient.getInstance().finoLicenseService().messageDigest(text);
         Map<String, Object> res = new HashMap<>();
         res.put("data", result);
         callback.onSuccess(res);
