@@ -69,8 +69,8 @@
     } else {
         config.language = FATPreferredLanguageSimplifiedChinese;
     }
-    
-    
+    config.customLanguagePath = self.config[@"customLanguagePath"];
+        
     NSError* error = nil;
     FATUIConfig *uiconfig = [[FATUIConfig alloc]init];
     if (_uiConfig) {
