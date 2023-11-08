@@ -210,6 +210,13 @@ class Config {
   /// SDK的语言类型，默认为中文
   LanguageType language = LanguageType.Chinese;
 
+  /// iOS属性
+  /// 自定义SDK的语言，优先级高于内置的 language 属性。
+  /// 示例：
+  /// 如果是放在 mainBundle 下，则设置相对路径：@"abc.lproj"
+  /// 如果是放在自定于 Bundle 下，则设置相对路径：@"bundleName.bundle/abc.lproj"
+  String? customLanguagePath;
+  
   /// Android属性
   /// 是否使用本地加载tbs内核
   bool useLocalTbsCore = false;
@@ -267,6 +274,7 @@ class Config {
       "useLocalTbsCore": useLocalTbsCore,
       "tbsCoreUrl": tbsCoreUrl,
       "enableJ2V8": enableJ2V8,
+      "customLanguagePath": customLanguagePath,
     };
   }
 }
