@@ -194,11 +194,23 @@ public class InitSDKModule extends BaseApi {
         if (appletText != null) {
             configBuilder.setAppletText(appletText);
         }
-        Integer languageInteger = (Integer) configMap.get("language");
-        if (languageInteger == 1) {
-            configBuilder.setLocale(Locale.ENGLISH);
+
+        Object localeLanguage = configMap.get("localeLanguage");
+        if (localeLanguage != null) {
+            String language = (String) localeLanguage;
+            if (language.contains("_")) {
+                String[] locales = language.split("_");
+                configBuilder.setLocale(new Locale(locales[0], locales[1]));
+            } else {
+                configBuilder.setLocale(new Locale(language));
+            }
         } else {
-            configBuilder.setLocale(Locale.SIMPLIFIED_CHINESE);
+            Integer languageInteger = (Integer) configMap.get("language");
+            if (languageInteger == 1) {
+                configBuilder.setLocale(Locale.ENGLISH);
+            } else {
+                configBuilder.setLocale(Locale.SIMPLIFIED_CHINESE);
+            }
         }
 
         // uiConfig

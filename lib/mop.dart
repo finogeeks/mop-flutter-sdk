@@ -216,7 +216,13 @@ class Config {
   /// 如果是放在 mainBundle 下，则设置相对路径：@"abc.lproj"
   /// 如果是放在自定于 Bundle 下，则设置相对路径：@"bundleName.bundle/abc.lproj"
   String? customLanguagePath;
-  
+
+  /// Android属性
+  /// 自定义SDK的语言，优先级高于内置的 language 属性。
+  /// 语言列表可以参考：https://uutool.cn/info-i18n/ 或者Java类 【java.util.Locale】
+  /// 示例：简体中文：zh_CN，繁体中文：zh_TW，英文：en
+  String? localeLanguage;
+
   /// Android属性
   /// 是否使用本地加载tbs内核
   bool useLocalTbsCore = false;
@@ -275,6 +281,7 @@ class Config {
       "tbsCoreUrl": tbsCoreUrl,
       "enableJ2V8": enableJ2V8,
       "customLanguagePath": customLanguagePath,
+      "localeLanguage": localeLanguage,
     };
   }
 }
