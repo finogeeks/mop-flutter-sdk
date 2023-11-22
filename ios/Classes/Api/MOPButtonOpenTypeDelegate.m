@@ -23,6 +23,22 @@
     return _instance;
 }
 
+- (BOOL)getUserInfoWithAppletInfo:(FATAppletInfo *)appletInfo bindGetUserInfo:(void (^)(NSDictionary *result))bindGetUserInfo
+{
+    FlutterMethodChannel *channel = [[MopPlugin instance] methodChannel];
+    NSLog(@"getUserInfoWithAppletInfo:%@", channel);
+    [channel invokeMethod:@"extensionApi:getUserInfo" arguments:nil result:^(id _Nullable result) {
+        NSDictionary *userInfo;
+        if (![result isKindOfClass:[NSDictionary class]]) {
+            userInfo = @{@"errMsg":@"getUserInfo:fail return value format invalid"};
+        } else {
+            userInfo = result;
+        }
+        bindGetUserInfo(userInfo);
+    }];
+    return YES;
+}
+
 - (BOOL)getUserProfileWithAppletInfo:(FATAppletInfo *)appletInfo
                   bindGetUserProfile:(void (^)(NSDictionary *result))bindGetUserProfile
 {

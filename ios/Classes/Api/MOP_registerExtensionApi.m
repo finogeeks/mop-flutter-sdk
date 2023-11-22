@@ -15,15 +15,13 @@
 {
     NSLog(@"MOP_registerExtensionApi");
     FlutterMethodChannel *channel = [[MopPlugin instance] methodChannel];
-    [[FATClient sharedClient] registerExtensionApi:self.name handle:^(id param, FATExtensionApiCallback callback) {
-        NSLog(@"invoke ExtensionApi:");
-        NSLog(@"%@",self.name);
-        NSLog(@"%@",param);
-        NSString* api = [@"extensionApi:" stringByAppendingString:self.name];
+    NSString *name = self.name;
+    [[FATClient sharedClient] registerExtensionApi:name handler:^(FATAppletInfo *appletInfo, id param, FATExtensionApiCallback callback) {
+        NSLog(@"channel:%@---invoke ExtensionApi:%@, param:%@", channel, name, param);
+        NSString *api = [@"extensionApi:" stringByAppendingString:name];
         [channel invokeMethod:api arguments:param result:^(id  _Nullable result) {
-            NSLog(@"extensionApi reslut:%@",result);
+            NSLog(@"extensionApi [%@] reslut:%@", name, result);
             // 先判断是否flutter发生错误
-//            BOOL isFlutterError = [result isKindOfClass:[FlutterError class]] || result == FlutterMethodNotImplemented;
             BOOL isValid = [result isKindOfClass:[NSDictionary class]];
             if (!isValid) {
                 NSLog(@"extensionApi reslut is not NSDictionary");
@@ -34,7 +32,7 @@
             BOOL hasError = [[result allKeys] containsObject:@"errMsg"];
             if (hasError) {
                 NSString *errMsg = result[@"errMsg"];
-                NSString *errPrefix = [NSString stringWithFormat:@"%@:fail", self.name];
+                NSString *errPrefix = [NSString stringWithFormat:@"%@:fail", name];
                 BOOL isFail = [errMsg hasPrefix:errPrefix];
                 if (isFail) {
                     NSLog(@"extensionApi reslut:fail");

@@ -37,43 +37,32 @@
         if([result isKindOfClass:[FlutterError class]]|| [result isKindOfClass:[FlutterMethodNotImplemented class] ])
         {
             completion(FATExtensionCodeFailure,nil);
-        }else
-        {
+        } else {
             completion(FATExtensionCodeSuccess,result);
         }
     }];
 }
 
-- (NSDictionary *)getUserInfoWithAppletInfo:(FATAppletInfo *)appletInfo {
-    NSLog(@"getUserInfoWithAppletInfo");
-    __block NSDictionary *userInfo;
-    FlutterMethodChannel *channel = [[MopPlugin instance] methodChannel];
-    [channel invokeMethod:@"extensionApi:getUserInfo" arguments:nil result:^(id _Nullable result) {
-        CFRunLoopStop(CFRunLoopGetMain());
-        userInfo = result;
-    }];
-    CFRunLoopRun();
-    return userInfo;
-}
-
 - (BOOL)appletInfo:(FATAppletInfo *)appletInfo didClickMoreBtnAtPath:(NSString *)path {
     NSLog(@"appletInfo:didClickMoreBtnAtPath");
-    __block BOOL flag;
+    __block BOOL flag = NO;
     FlutterMethodChannel *channel = [[MopPlugin instance] methodChannel];
     [channel invokeMethod:@"extensionApi:customCapsuleMoreButtonClick" arguments:@{@"appId": appletInfo.appId} result:^(id _Nullable result) {
-        CFRunLoopStop(CFRunLoopGetMain());
         if ([result isKindOfClass:[NSNumber class]]) {
             flag = [result boolValue];
         }
+        CFRunLoopStop(CFRunLoopGetMain());
     }];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        CFRunLoopStop(CFRunLoopGetMain());
+    });
     CFRunLoopRun();
-
     return flag;
 }
 
 - (NSArray<id<FATAppletMenuProtocol>> *)customMenusInApplet:(FATAppletInfo *)appletInfo atPath:(NSString *)path {
     NSLog(@"customMenusInApplet");
-    __block NSArray *list;
+    __block NSArray *list = @[];
     FlutterMethodChannel *channel = [[MopPlugin instance] methodChannel];
     [channel invokeMethod:@"extensionApi:getCustomMenus" arguments:@{@"appId": appletInfo.appId} result:^(id _Nullable result) {
         CFRunLoopStop(CFRunLoopGetMain());
@@ -81,6 +70,9 @@
             list = result;
         }
     }];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        CFRunLoopStop(CFRunLoopGetMain());
+    });
     CFRunLoopRun();
     
     NSMutableArray *models = [NSMutableArray array];
