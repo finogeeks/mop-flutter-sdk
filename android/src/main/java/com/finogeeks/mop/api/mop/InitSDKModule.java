@@ -133,6 +133,7 @@ public class InitSDKModule extends BaseApi {
             configBuilder.setSchemes(schemes);
         }
         configBuilder.setDebugMode((Boolean) configMap.get("debug"));
+        configBuilder.setEnableLog((Boolean) configMap.get("debug"));
         Integer maxRunningApplet = (Integer) configMap.get("maxRunningApplet");
         if (maxRunningApplet != null) {
             configBuilder.setMaxRunningApplet(maxRunningApplet);
