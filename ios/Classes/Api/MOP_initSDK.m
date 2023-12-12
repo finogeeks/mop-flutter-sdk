@@ -63,6 +63,7 @@
     config.h5AjaxHookRequestKey = self.config[@"h5AjaxHookRequestKey"];
     config.pageCountLimit = [self.config[@"pageCountLimit"] integerValue];
     config.schemes = self.config[@"schemes"];
+    config.webViewInspectable = [self.config[@"debug"] boolValue];
     NSInteger languageInteger = [self.config[@"language"] integerValue];
     if (languageInteger == 1) {
         config.language = FATPreferredLanguageEnglish;
@@ -256,16 +257,20 @@
         return;
     }
     
+    int logMaxAliveSec = [self.config[@"logMaxAliveSec"] intValue];
+    if (logMaxAliveSec) {
+        [[FATClient sharedClient].logManager setLogFileAliveDuration:logMaxAliveSec];
+    }
+
+    BOOL debug = [self.config[@"debug"] boolValue];
     NSInteger logLevelIntValue = [self.config[@"logLevel"] integerValue];
-    if (logLevelIntValue >= 5) {
-        [[FATClient sharedClient].logManager closeLog];
-    } else {
+    if (debug && logLevelIntValue < 5) {
         FATLogLevel logLevel = logLevelIntValue;
         NSString *logDir = self.config[@"logDir"];
         [[FATClient sharedClient].logManager initLogWithLogDir:logDir logLevel:logLevel consoleLog:YES];
+    } else {
+        [FATClient sharedClient].enableLog = NO;
     }
-    
-    [[FATClient sharedClient] setEnableLog:YES];
     
     success(@{});
     
