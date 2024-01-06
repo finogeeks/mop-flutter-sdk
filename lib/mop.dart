@@ -233,6 +233,9 @@ class Config {
   /// 是否开启j2v8
   bool enableJ2V8 = false;
 
+  /// 周期性更新的时间间隔(小时), 设置为0不会发起周期性更新请求，接收设置范围为3-12小时
+  int backgroundFetchPeriod = 12;
+
   Config(this.finStoreConfigs);
 
   Map<String, dynamic> toMap() {
@@ -279,6 +282,7 @@ class Config {
       "tbsCoreUrl": tbsCoreUrl,
       "enableJ2V8": enableJ2V8,
       "customLanguagePath": customLanguagePath,
+      "backgroundFetchPeriod": backgroundFetchPeriod,
       "localeLanguage": localeLanguage,
     };
   }
@@ -334,11 +338,14 @@ class UIConfig {
   /// 隐藏...弹出菜单中的 【收藏】 菜单
   bool isHideFavoriteMenu = true;
 
-  // 隐藏...弹出菜单中的 【重新进入小程序】 菜单，默认为false
+  /// 隐藏...弹出菜单中的 【重新进入小程序】 菜单，默认为false
   bool isHideRefreshMenu = false;
 
-  // 隐藏...弹出菜单中的 【设置】 菜单，默认为false
+  /// 隐藏...弹出菜单中的 【设置】 菜单，默认为false
   bool isHideSettingMenu = false;
+
+  /// 隐藏...弹出菜单中的 【清理缓存】 菜单，默认为false
+  bool isHideClearCacheMenu = false;
 
   /// 胶囊按钮配置
   CapsuleConfig? capsuleConfig;
@@ -413,6 +420,7 @@ class UIConfig {
       "isHideSettingMenu": isHideSettingMenu,
       "isHideAddToDesktopMenu": isHideAddToDesktopMenu,
       "isHideFavoriteMenu": isHideFavoriteMenu,
+      "isHideClearCacheMenu": isHideClearCacheMenu,
       "hideTransitionCloseButton": hideTransitionCloseButton,
       "capsuleConfig": capsuleConfig?.toMap(),
       "navHomeConfig": navHomeConfig?.toMap(),

@@ -138,6 +138,12 @@ public class InitSDKModule extends BaseApi {
         if (maxRunningApplet != null) {
             configBuilder.setMaxRunningApplet(maxRunningApplet);
         }
+
+        Integer backgroundFetchPeriod = (Integer) configMap.get("backgroundFetchPeriod");
+        if (backgroundFetchPeriod != null) {
+            configBuilder.setBackgroundFetchPeriod(backgroundFetchPeriod);
+        }
+
         Integer webViewMixedContentMode = (Integer) configMap.get("webViewMixedContentMode");
         if (webViewMixedContentMode != null) {
             configBuilder.setWebViewMixedContentMode(webViewMixedContentMode);

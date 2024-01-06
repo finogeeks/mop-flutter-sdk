@@ -39,6 +39,7 @@ public class InitUtils {
             uiConfig.setHideShareAppletMenu((Boolean) map.get("isHideShareAppletMenu"));
             uiConfig.setHideAddToDesktopMenu((Boolean) map.get("isHideAddToDesktopMenu"));
             uiConfig.setHideFavoriteMenu((Boolean) map.get("isHideFavoriteMenu"));
+            uiConfig.setHideClearCacheMenu((Boolean) map.get("isHideClearCacheMenu"));
             uiConfig.setHideSettingMenu((Boolean) map.get("isHideSettingMenu"));
             uiConfig.setHideTransitionCloseButton((Boolean) map.get("hideTransitionCloseButton"));
             uiConfig.setUseNativeLiveComponent((Boolean) map.get("useNativeLiveComponent"));
