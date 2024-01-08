@@ -65,6 +65,9 @@
     config.schemes = self.config[@"schemes"];
     config.webViewInspectable = [self.config[@"debug"] boolValue];
     NSInteger languageInteger = [self.config[@"language"] integerValue];
+    if (self.config[@"backgroundFetchPeriod"]) {
+        config.backgroundFetchPeriod = [self.config[@"backgroundFetchPeriod"] integerValue];
+    }
     if (languageInteger == 1) {
         config.language = FATPreferredLanguageEnglish;
     } else {
@@ -105,6 +108,7 @@
         uiconfig.hideRefreshMenu = [_uiConfig[@"isHideRefreshMenu"] boolValue];
         uiconfig.hideFavoriteMenu = [_uiConfig[@"isHideFavoriteMenu"] boolValue];
         uiconfig.hideAddToDesktopMenu = [_uiConfig[@"isHideAddToDesktopMenu"] boolValue];
+        uiconfig.hideClearCacheMenu = [_uiConfig[@"isHideClearCacheMenu"] boolValue];
 
         // 胶囊配置
         if (_uiConfig[@"capsuleConfig"]) {
