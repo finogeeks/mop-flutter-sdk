@@ -21,4 +21,3 @@ A finclip miniprogram flutter sdk.
   s.dependency 'FinAppletExt' , '2.43.5'
 end
 
-
