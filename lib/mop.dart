@@ -35,14 +35,14 @@ class FinStoreConfig {
   bool encryptServerData;
 
   /// 是否开启预加载基础库
-  bool enablePreloadFramework;
+  bool enablePreloadFramework = true;
 
   FinStoreConfig(this.sdkKey, this.sdkSecret, this.apiServer,
       {this.apmServer,
       this.cryptType = "MD5",
       this.fingerprint,
       this.encryptServerData = false,
-      this.enablePreloadFramework = false});
+      this.enablePreloadFramework = true});
 
   Map<String, dynamic> toMap() {
     return {
@@ -1067,9 +1067,9 @@ class Mop {
   /// [query] is miniprogram query parameters. example key1=value1&key2=value2
   /// [sequence] is miniprogram sequence. example 0,1.2.3,4,5...
   /// [apiServer] is optional. the mop server address. default is https://mp.finogeek.com
-  /// [apiPrefix] is optional. the mop server prefix. default is /api/v1/mop
-  /// [fingerprint] is optional. the mop sdk fingerprint. is nullable
-  /// [cryptType] is optional. cryptType, should be MD5/SM
+  /// [scene]
+  /// [shareDepth]
+  /// [isSingleProcess]
   Future<Map> openApplet(
     final String appId, {
     final String? path,
