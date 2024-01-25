@@ -277,7 +277,7 @@ class Config {
       "logMaxAliveSec": logMaxAliveSec,
       "logDir": logDir,
       "enablePreNewProcess": enablePreNewProcess,
-      "language":language.index,
+      "language": language.index,
       "useLocalTbsCore": useLocalTbsCore,
       "tbsCoreUrl": tbsCoreUrl,
       "enableJ2V8": enableJ2V8,
@@ -787,12 +787,16 @@ class BaseAppletRequest {
   // 是否以单进程模式运行，仅限android，默认为false
   bool isSingleProcess;
 
+  // 是否以单任务模式运行，仅限android，默认为false
+  bool isSingTask;
+
   BaseAppletRequest({
     required this.apiServer,
     required this.appletId,
     this.startParams,
     this.animated = true,
     this.isSingleProcess = false,
+    this.isSingTask = false,
   });
 
   Map<String, dynamic> toMap() {
@@ -802,6 +806,7 @@ class BaseAppletRequest {
       "startParams": startParams,
       "animated": animated,
       "isSingleProcess": isSingleProcess,
+      "isSingTask": isSingTask,
     };
   }
 }
@@ -835,6 +840,9 @@ class RemoteAppletRequest {
   // 是否以单进程模式运行，仅限android，默认为false
   bool isSingleProcess;
 
+  // 是否以单任务模式运行，仅限android，默认为false
+  bool isSingTask;
+
   RemoteAppletRequest({
     required this.apiServer,
     required this.appletId,
@@ -845,6 +853,7 @@ class RemoteAppletRequest {
     this.animated = true,
     this.transitionStyle = TranstionStyle.TranstionStyleUp,
     this.isSingleProcess = false,
+    this.isSingTask = false,
   });
 
   Map<String, dynamic> toMap() {
@@ -853,7 +862,8 @@ class RemoteAppletRequest {
       "appletId": appletId,
       "animated": animated,
       "isSingleProcess": isSingleProcess,
-      "transitionStyle":transitionStyle.index,
+      "isSingTask": isSingTask,
+      "transitionStyle": transitionStyle.index,
     };
     if (startParams != null) result["startParams"] = startParams;
     if (offlineMiniprogramZipPath != null)
@@ -876,13 +886,18 @@ class QRCodeAppletRequest {
   // 是否以单进程模式运行，仅限android，默认为false
   bool isSingleProcess;
 
-  QRCodeAppletRequest(this.qrCode, {this.isSingleProcess = false});
+  // 是否以单任务模式运行，仅限android，默认为false
+  bool isSingTask;
+
+  QRCodeAppletRequest(this.qrCode,
+      {this.isSingleProcess = false, this.isSingTask = false});
 
   Map<String, dynamic> toMap() {
     return {
       "apiServer": qrCode,
       "animated": animated,
       "isSingleProcess": isSingleProcess,
+      "isSingTask": isSingTask,
     };
   }
 }
@@ -915,8 +930,8 @@ enum BOOLState {
 }
 
 enum LanguageType {
-  Chinese,    // 中文
-  English,    // 英文
+  Chinese, // 中文
+  English, // 英文
 }
 
 enum LogLevel {
@@ -1010,24 +1025,21 @@ class Mop {
   /// [customWebViewUserAgent] 设置自定义webview ua
   /// [appletIntervalUpdateLimit] 设置小程序批量更新周期
   /// [maxRunningApplet] 设置最大同时运行小程序个数
-  Future<Map> initialize(
-    String sdkkey,
-    String secret, {
-    String? apiServer,
-    String? apiPrefix,
-    String? cryptType,
-    bool encryptServerData = false,
-    bool disablePermission = false,
-    String? userId,
-    bool debug = false,
-    bool bindAppletWithMainProcess = false,
-    int? pageCountLimit = 0,
-    List<FinStoreConfig>? finStoreConfigs,
-    UIConfig? uiConfig,
-    String? customWebViewUserAgent,
-    int? appletIntervalUpdateLimit,
-    int? maxRunningApplet
-  }) async {
+  Future<Map> initialize(String sdkkey, String secret,
+      {String? apiServer,
+      String? apiPrefix,
+      String? cryptType,
+      bool encryptServerData = false,
+      bool disablePermission = false,
+      String? userId,
+      bool debug = false,
+      bool bindAppletWithMainProcess = false,
+      int? pageCountLimit = 0,
+      List<FinStoreConfig>? finStoreConfigs,
+      UIConfig? uiConfig,
+      String? customWebViewUserAgent,
+      int? appletIntervalUpdateLimit,
+      int? maxRunningApplet}) async {
     List<Map<String, dynamic>>? storeConfigs =
         finStoreConfigs?.map((e) => e.toMap()).toList();
 
@@ -1079,6 +1091,7 @@ class Mop {
     final String? scene,
     final String? shareDepth,
     final bool isSingleProcess = false,
+    final bool isSingTask = false,
   }) async {
     Map<String, Object> params = {'appId': appId};
     Map param = {};
@@ -1090,6 +1103,7 @@ class Mop {
     if (scene != null) param["scene"] = scene;
     if (shareDepth != null) param["shareDepth"] = shareDepth;
     params["isSingleProcess"] = isSingleProcess;
+    params["isSingTask"] = isSingTask;
     final Map ret = await _channel.invokeMethod('openApplet', params);
     return ret;
   }
@@ -1102,19 +1116,23 @@ class Mop {
 
   /// 通过二维码打开小程序
   /// [qrcode] 二维码内容
-  Future qrcodeOpenApplet(String qrcode, {bool isSingleProcess = false}) async {
+  Future qrcodeOpenApplet(String qrcode,
+      {bool isSingleProcess = false, bool isSingTask = false}) async {
     Map<String, Object> params = {
       'qrcode': qrcode,
       'isSingleProcess': isSingleProcess,
+      'isSingTask': isSingTask,
     };
     return await _channel.invokeMapMethod("qrcodeOpenApplet", params);
   }
 
   /// （扫码后）解密-鉴权-打开小程序
-  Future scanOpenApplet(String info, {bool isSingleProcess = false}) async {
+  Future scanOpenApplet(String info,
+      {bool isSingleProcess = false, bool isSingTask = false}) async {
     Map<String, Object> params = {
       'info': info,
       'isSingleProcess': isSingleProcess,
+      'isSingTask': isSingTask,
     };
     return await _channel.invokeMapMethod("scanOpenApplet", params);
   }
@@ -1272,7 +1290,7 @@ class Mop {
         .invokeMapMethod("sdkVersion")
         .then((value) => value?["data"]);
   }
-  
+
   /// 获取国密加密
   Future<String> getSMSign(String plainText) async {
     var result =

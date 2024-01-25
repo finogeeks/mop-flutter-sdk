@@ -64,11 +64,18 @@ public class AppletModule extends BaseApi {
         Map<String, String> params = (Map) param.get("params");
         String apiServer = (String) param.get("apiServer");
         Boolean isSingleProcess = (Boolean) param.get("isSingleProcess");
+        Boolean isSingTask = (Boolean) param.get("isSingTask");
         IFinAppletRequest.ProcessMode processMode;
         if (Boolean.TRUE.equals(isSingleProcess)) {
             processMode = IFinAppletRequest.ProcessMode.SINGLE;
         } else {
             processMode = IFinAppletRequest.ProcessMode.MULTI;
+        }
+        IFinAppletRequest.TaskMode taskMode;
+        if (Boolean.TRUE.equals(isSingTask)) {
+            taskMode = IFinAppletRequest.TaskMode.SINGLE;
+        } else {
+            taskMode = IFinAppletRequest.TaskMode.MULTI;
         }
         // mContext是FlutterActivity，
         // 在Android 6.0、7.0系统的部分设备中热启动小程序时，如果context参数用mContext，会出现无法启动小程序的问题
@@ -82,7 +89,9 @@ public class AppletModule extends BaseApi {
                     IFinAppletRequest.Companion.fromAppId(apiServer, appId)
                             .setStartParams(startParams)
                             .setSequence(sequence)
-                            .setProcessMode(processMode),
+                            .setProcessMode(processMode)
+                            .setTaskMode(taskMode)
+                    ,
                     null
             );
 //            FinAppClient.INSTANCE.getAppletApiManager().startApplet(context, apiServer, appId, sequence, startParams,null);
@@ -154,11 +163,18 @@ public class AppletModule extends BaseApi {
         String offlineMiniprogramZipPath = (String) param.get("offlineMiniprogramZipPath");
         String offlineFrameworkZipPath = (String) param.get("offlineFrameworkZipPath");
         Boolean isSingleProcess = (Boolean) param.get("isSingleProcess");
+        Boolean isSingTask = (Boolean) param.get("isSingTask");
         IFinAppletRequest.ProcessMode processMode;
         if (Boolean.TRUE.equals(isSingleProcess)) {
             processMode = IFinAppletRequest.ProcessMode.SINGLE;
         } else {
             processMode = IFinAppletRequest.ProcessMode.MULTI;
+        }
+        IFinAppletRequest.TaskMode taskMode;
+        if (Boolean.TRUE.equals(isSingTask)) {
+            taskMode = IFinAppletRequest.TaskMode.SINGLE;
+        } else {
+            taskMode = IFinAppletRequest.TaskMode.MULTI;
         }
 
         Log.d("MopPlugin", "startApplet (appId=" + appId + ", sequence=" + sequence + ", apiServer=" + apiServer + ", isSingleProcess:" + isSingleProcess);
@@ -175,7 +191,8 @@ public class AppletModule extends BaseApi {
                         .setSequence(sequence)
                         .setStartParams(params)
                         .setOfflineParams(offlineFrameworkZipPath, offlineMiniprogramZipPath)
-                        .setProcessMode(processMode),
+                        .setProcessMode(processMode)
+                        .setTaskMode(taskMode),
                 null);
         // 改成通过request来启动小程序
         // FinAppClient.INSTANCE.getAppletApiManager().startApplet(context, IFinAppletRequest.Companion.fromAppId("apiServer", "appId")
@@ -186,14 +203,21 @@ public class AppletModule extends BaseApi {
     private void scanOpenApplet(Map param, ICallback callback) {
         String info = String.valueOf(param.get("info"));
         Boolean isSingleProcess = (Boolean) param.get("isSingleProcess");
+        Boolean isSingTask = (Boolean) param.get("isSingTask");
         IFinAppletRequest.ProcessMode processMode;
         if (Boolean.TRUE.equals(isSingleProcess)) {
             processMode = IFinAppletRequest.ProcessMode.SINGLE;
         } else {
             processMode = IFinAppletRequest.ProcessMode.MULTI;
         }
+        IFinAppletRequest.TaskMode taskMode;
+        if (Boolean.TRUE.equals(isSingTask)) {
+            taskMode = IFinAppletRequest.TaskMode.SINGLE;
+        } else {
+            taskMode = IFinAppletRequest.TaskMode.MULTI;
+        }
         FinAppClient.INSTANCE.getAppletApiManager().startApplet(mContext, IFinAppletRequest.Companion.fromDecrypt(info)
-                .setProcessMode(processMode), null);
+                .setProcessMode(processMode).setTaskMode(taskMode), null);
 //        FinAppClient.INSTANCE.getAppletApiManager().startApplet(mContext, new StartAppletDecryptRequest(info),null);
         callback.onSuccess(new HashMap());
     }
@@ -201,14 +225,21 @@ public class AppletModule extends BaseApi {
     private void qrcodeOpenApplet(Map param, ICallback callback) {
         String qrcode = String.valueOf(param.get("qrcode"));
         Boolean isSingleProcess = (Boolean) param.get("isSingleProcess");
+        Boolean isSingTask = (Boolean) param.get("isSingTask");
         IFinAppletRequest.ProcessMode processMode;
         if (Boolean.TRUE.equals(isSingleProcess)) {
             processMode = IFinAppletRequest.ProcessMode.SINGLE;
         } else {
             processMode = IFinAppletRequest.ProcessMode.MULTI;
         }
+        IFinAppletRequest.TaskMode taskMode;
+        if (Boolean.TRUE.equals(isSingTask)) {
+            taskMode = IFinAppletRequest.TaskMode.SINGLE;
+        } else {
+            taskMode = IFinAppletRequest.TaskMode.MULTI;
+        }
         FinAppClient.INSTANCE.getAppletApiManager().startApplet(mContext, IFinAppletRequest.Companion.fromQrCode(qrcode)
-                .setProcessMode(processMode), new FinCallback<String>() {
+                .setProcessMode(processMode).setTaskMode(taskMode), new FinCallback<String>() {
             @Override
             public void onSuccess(String s) {
                 callback.onSuccess(new HashMap());
