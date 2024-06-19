@@ -143,7 +143,7 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  Widget _buildAppletWidget(String appletId, String appletName) {
+  Widget _buildAppletWidget(String appletId, String appletName, int index, Map<String, String>? startParams) {
     return Container(
       margin: EdgeInsets.only(left: 20, top: 30, right: 20),
       child: Column(
@@ -157,33 +157,45 @@ class _MyAppState extends State<MyApp> {
             height: 10,
           ),
           Container(
-            height: 100,
+            height: 60,
             child: GridView.count(
-              crossAxisCount: 3,
+              crossAxisCount: 4,
               childAspectRatio: 2,
-              crossAxisSpacing: 30,
+              crossAxisSpacing: 10,
               // physics: NeverScrollableScrollPhysics(),
               children: [
-                _buildAppletItem(appletId, "打开小程序", () {
+                _buildAppletItem(appletId, "open", () {
                   TranstionStyle style = TranstionStyle.TranstionStyleUp;
-                  if (appletId == "5f72e3559a6a7900019b5baa") {
+                  FCReLaunchMode mode = FCReLaunchMode.PARAMS_EXIST;
+                  if (index == 1) {
+                    mode = FCReLaunchMode.ONLY_PARAMS_DIFF;
                     style = TranstionStyle.TranstionStylePush;
+                  } else if (index == 2) {
+                    mode = FCReLaunchMode.ALWAYS;
+                  } else if (index == 3) {
+                    mode = FCReLaunchMode.NEVER;
                   }
-                  RemoteAppletRequest request = RemoteAppletRequest(apiServer: 'https://api.finclip.com', appletId: appletId, transitionStyle: style);
+                  
+                  RemoteAppletRequest request = RemoteAppletRequest(
+                    apiServer: 'https://api.finclip.com', 
+                    appletId: appletId, 
+                    transitionStyle: style,
+                    reLaunchMode: mode,
+                    startParams: startParams);
                   Mop.instance.startApplet(request);
 
                   // Mop.instance.qrcodeOpenApplet('https://api.finclip.com/api/v1/mop/runtime/applet/-f-MGYzN2Q1YTYzMmI2MWIyZg--');
 
                 }),
-                _buildAppletItem(appletId, "finishRunningApplet", () {
+                _buildAppletItem(appletId, "finish", () {
                   Mop.instance.finishRunningApplet(appletId, true);
                 }),
-                _buildAppletItem(appletId, "removeUsedApplet", () {
+                _buildAppletItem(appletId, "remove", () {
                   Mop.instance.removeUsedApplet(appletId);
                 }),
-                // _buildAppletItem(appletId, "removeUsedApplet", () {
-                //   Mop.instance.removeUsedApplet(appletId);
-                // }),
+                _buildAppletItem(appletId, "finishAll", () {
+                  Mop.instance.clearApplets();
+                }),
               ],
             ),
           )
@@ -202,10 +214,10 @@ class _MyAppState extends State<MyApp> {
         ),
         body: Column(
           children: <Widget>[
-            _buildAppletWidget("5facb3a52dcbff00017469bd", "画图小程序"),
-            _buildAppletWidget("5f72e3559a6a7900019b5baa", "官方小程序"),
-            _buildAppletWidget("5f17f457297b540001e06ebb", "api测试小程序"),
-            _buildAppletWidget("61386f6484dd160001d3e1ab", "测试小程序"),
+            _buildAppletWidget("5facb3a52dcbff00017469bd", "画图小程序", 0, {'query':'ramdom='+context.hashCode.toString()}),
+            _buildAppletWidget("5f72e3559a6a7900019b5baa", "官方小程序", 1, {'query':'key=value'}),
+            _buildAppletWidget("5f17f457297b540001e06ebb", "api测试小程序", 2, null),
+            _buildAppletWidget("61386f6484dd160001d3e1ab", "测试小程序", 3, {'query':'ramdom='+context.hashCode.toString()}),
             
           ],
         ),

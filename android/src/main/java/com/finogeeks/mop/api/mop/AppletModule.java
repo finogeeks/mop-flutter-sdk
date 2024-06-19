@@ -176,6 +176,15 @@ public class AppletModule extends BaseApi {
         } else {
             taskMode = IFinAppletRequest.TaskMode.MULTI;
         }
+        Integer reLaunchMode = (Integer) param.get("reLaunchMode");
+        IFinAppletRequest.ReLaunchMode mode = IFinAppletRequest.ReLaunchMode.PARAMS_EXIST;
+        if (reLaunchMode == 1) {
+            mode = IFinAppletRequest.ReLaunchMode.ONLY_PARAMS_DIFF;
+        } else if (reLaunchMode == 2) {
+            mode = IFinAppletRequest.ReLaunchMode.ALWAYS;
+        } else if (reLaunchMode == 3) {
+            mode = IFinAppletRequest.ReLaunchMode.NEVER;
+        }
 
         Log.d("MopPlugin", "startApplet (appId=" + appId + ", sequence=" + sequence + ", apiServer=" + apiServer + ", isSingleProcess:" + isSingleProcess);
         // mContext是FlutterActivity，
@@ -193,6 +202,7 @@ public class AppletModule extends BaseApi {
                         .setOfflineParams(offlineFrameworkZipPath, offlineMiniprogramZipPath)
                         .setProcessMode(processMode)
                         .setTaskMode(taskMode),
+                        .setReLaunchMode(mode),
                 null);
         // 改成通过request来启动小程序
         // FinAppClient.INSTANCE.getAppletApiManager().startApplet(context, IFinAppletRequest.Companion.fromAppId("apiServer", "appId")

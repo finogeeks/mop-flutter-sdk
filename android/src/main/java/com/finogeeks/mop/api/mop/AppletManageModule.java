@@ -95,7 +95,7 @@ public class AppletManageModule extends BaseApi {
                 callback.onFail(null);
             }
         } else if (event.equals("clearApplets")) {
-            FinAppClient.INSTANCE.getAppletApiManager().clearApplets();
+            FinAppClient.INSTANCE.getAppletApiManager().finishAllRunningApplets();
             callback.onSuccess(null);
         } else if (event.equals("removeUsedApplet")) {
             Log.d("MopPlugin", "removeUsedApplet:params:" + param);

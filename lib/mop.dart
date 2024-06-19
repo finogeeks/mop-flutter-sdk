@@ -843,6 +843,9 @@ class RemoteAppletRequest {
   // 是否以单任务模式运行，仅限android，默认为false
   bool isSingTask;
 
+  // 触发reLaunch的条件模式
+  FCReLaunchMode reLaunchMode;
+
   RemoteAppletRequest({
     required this.apiServer,
     required this.appletId,
@@ -854,6 +857,7 @@ class RemoteAppletRequest {
     this.transitionStyle = TranstionStyle.TranstionStyleUp,
     this.isSingleProcess = false,
     this.isSingTask = false,
+    this.reLaunchMode = FCReLaunchMode.PARAMS_EXIST,
   });
 
   Map<String, dynamic> toMap() {
@@ -864,6 +868,7 @@ class RemoteAppletRequest {
       "isSingleProcess": isSingleProcess,
       "isSingTask": isSingTask,
       "transitionStyle": transitionStyle.index,
+      "reLaunchMode": reLaunchMode.index,
     };
     if (startParams != null) result["startParams"] = startParams;
     if (offlineMiniprogramZipPath != null)
@@ -889,8 +894,11 @@ class QRCodeAppletRequest {
   // 是否以单任务模式运行，仅限android，默认为false
   bool isSingTask;
 
+  // 触发reLaunch的条件模式
+  FCReLaunchMode reLaunchMode;
+
   QRCodeAppletRequest(this.qrCode,
-      {this.isSingleProcess = false, this.isSingTask = false});
+      {this.isSingleProcess = false, this.isSingTask = false, this.reLaunchMode = FCReLaunchMode.PARAMS_EXIST});
 
   Map<String, dynamic> toMap() {
     return {
@@ -898,6 +906,7 @@ class QRCodeAppletRequest {
       "animated": animated,
       "isSingleProcess": isSingleProcess,
       "isSingTask": isSingTask,
+      "reLaunchMode": reLaunchMode.index,
     };
   }
 }
@@ -941,6 +950,13 @@ enum LogLevel {
   LEVEL_DEBUG, // 设置为该等级，将会记录ERROR、WARING、INFO和DEBUG级别的日志
   LEVEL_VERBOSE, // 设置为该等级，将会记录ERROR、WARING、INFO、DEBUG和VERBOSE级别的日志
   LEVEL_NONE
+}
+
+enum FCReLaunchMode {
+  PARAMS_EXIST,   // 只要有启动参数（path、query），热启动就会执行reLaunch
+  ONLY_PARAMS_DIFF, // 只有启动参数与上一次不同，热启动时才会执行reLaunch
+  ALWAYS,  // 每次热启动均执行reLaunch
+  NEVER     // 永远不执行reLaunch，每次热启动均复用页面栈
 }
 
 class Mop {
