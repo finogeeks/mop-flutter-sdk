@@ -157,7 +157,7 @@ class _MyAppState extends State<MyApp> {
             height: 10,
           ),
           Container(
-            height: 60,
+            height: 100,
             child: GridView.count(
               crossAxisCount: 4,
               childAspectRatio: 2,
@@ -195,6 +195,21 @@ class _MyAppState extends State<MyApp> {
                 }),
                 _buildAppletItem(appletId, "finishAll", () {
                   Mop.instance.clearApplets();
+                }),
+                _buildAppletItem(appletId, "qrcodeOpen", () {
+                  FCReLaunchMode mode = FCReLaunchMode.PARAMS_EXIST;
+                  if (index == 1) {
+                    mode = FCReLaunchMode.ONLY_PARAMS_DIFF;
+                  } else if (index == 2) {
+                    mode = FCReLaunchMode.ALWAYS;
+                  } else if (index == 3) {
+                    mode = FCReLaunchMode.NEVER;
+                  }
+                  String qrCode = 'https://api.finclip.com/api/v1/mop/runtime/applet/-f-78d53c04618315e7--';
+                  QRCodeAppletRequest qrcodeRequest =  QRCodeAppletRequest(qrCode, reLaunchMode: mode);
+                  Mop.instance.qrcodeStartApplet(qrcodeRequest);
+
+                  //  Mop.instance.qrcodeOpenApplet('https://api.finclip.com/api/v1/mop/runtime/applet/-f-78d53c04618315e7--');
                 }),
               ],
             ),

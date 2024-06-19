@@ -902,7 +902,7 @@ class QRCodeAppletRequest {
 
   Map<String, dynamic> toMap() {
     return {
-      "apiServer": qrCode,
+      "qrcode": qrCode,
       "animated": animated,
       "isSingleProcess": isSingleProcess,
       "isSingTask": isSingTask,
@@ -1140,6 +1140,12 @@ class Mop {
       'isSingTask': isSingTask,
     };
     return await _channel.invokeMapMethod("qrcodeOpenApplet", params);
+  }
+
+  Future<Map> qrcodeStartApplet(QRCodeAppletRequest qrcodeRequest) async {
+    Map<String, dynamic> params = qrcodeRequest.toMap();
+    final Map ret = await _channel.invokeMethod("qrcodeOpenApplet", params);
+    return ret;
   }
 
   /// （扫码后）解密-鉴权-打开小程序

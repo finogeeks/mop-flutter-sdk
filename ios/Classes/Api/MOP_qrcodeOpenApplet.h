@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MOP_qrcodeOpenApplet : MOPBaseApi
 
 @property (nonatomic,copy) NSString *qrcode;
+@property (nonatomic,copy) NSString *reLaunchMode;
 
 @end
 

@@ -248,8 +248,17 @@ public class AppletModule extends BaseApi {
         } else {
             taskMode = IFinAppletRequest.TaskMode.MULTI;
         }
+        Integer reLaunchMode = (Integer) param.get("reLaunchMode");
+        IFinAppletRequest.ReLaunchMode mode = IFinAppletRequest.ReLaunchMode.PARAMS_EXIST;
+        if (reLaunchMode == 1) {
+            mode = IFinAppletRequest.ReLaunchMode.ONLY_PARAMS_DIFF;
+        } else if (reLaunchMode == 2) {
+            mode = IFinAppletRequest.ReLaunchMode.ALWAYS;
+        } else if (reLaunchMode == 3) {
+            mode = IFinAppletRequest.ReLaunchMode.NEVER;
+        }
         FinAppClient.INSTANCE.getAppletApiManager().startApplet(mContext, IFinAppletRequest.Companion.fromQrCode(qrcode)
-                .setProcessMode(processMode).setTaskMode(taskMode), new FinCallback<String>() {
+                .setProcessMode(processMode).setTaskMode(taskMode).setReLaunchMode(mode), new FinCallback<String>() {
             @Override
             public void onSuccess(String s) {
                 callback.onSuccess(new HashMap());
