@@ -201,7 +201,7 @@ public class AppletModule extends BaseApi {
                         .setStartParams(params)
                         .setOfflineParams(offlineFrameworkZipPath, offlineMiniprogramZipPath)
                         .setProcessMode(processMode)
-                        .setTaskMode(taskMode),
+                        .setTaskMode(taskMode)
                         .setReLaunchMode(mode),
                 null);
         // 改成通过request来启动小程序
