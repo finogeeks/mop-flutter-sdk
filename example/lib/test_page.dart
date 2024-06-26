@@ -63,8 +63,7 @@ class _TestPageState extends State<TestPage> {
     } else if (index == 3) {
       mode = FCReLaunchMode.NEVER;
     }
-    String qrCode = 'https://api.finclip.com/api/v1/mop/runtime/applet/-f-78d53c04618315e7--';
-    QRCodeAppletRequest qrcodeRequest =  QRCodeAppletRequest(qrCode, reLaunchMode: mode);
+    QRCodeAppletRequest qrcodeRequest =  QRCodeAppletRequest(qrcode, reLaunchMode: mode);
     Mop.instance.qrcodeStartApplet(qrcodeRequest);
   }
 
