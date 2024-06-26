@@ -141,6 +141,7 @@ static MopPlugin *_instance;
       request.command = call.method;
       request.param = (NSDictionary*)call.arguments;
       MOPBaseApi* api = [MOPApiConverter apiWithRequest: request];
+      NSLog(@"method:%@, param:%@", request.command, request.param);
       if (api) {
           [api setupApiWithSuccess:^(NSDictionary<NSString *,id> * _Nonnull data) {
               result(@{@"retMsg":@"ok",@"success":@(YES),@"data": data ? : @{}});

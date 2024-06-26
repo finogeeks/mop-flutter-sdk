@@ -1,13 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mop/api.dart';
 import 'dart:async';
-import 'dart:io';
 import 'package:mop/mop.dart';
+import 'package:mop_example/test_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -45,6 +43,7 @@ class _MyAppState extends State<MyApp> {
     Config config = Config(storeConfigs);
     config.language = LanguageType.English;
     config.baseLoadingViewClass = "LoadingView";
+    config.userId = "18607180143";
     config.appletDebugMode = BOOLState.BOOLStateTrue;
     
     UIConfig uiconfig = UIConfig();
@@ -196,21 +195,6 @@ class _MyAppState extends State<MyApp> {
                 _buildAppletItem(appletId, "finishAll", () {
                   Mop.instance.clearApplets();
                 }),
-                _buildAppletItem(appletId, "qrcodeOpen", () {
-                  FCReLaunchMode mode = FCReLaunchMode.PARAMS_EXIST;
-                  if (index == 1) {
-                    mode = FCReLaunchMode.ONLY_PARAMS_DIFF;
-                  } else if (index == 2) {
-                    mode = FCReLaunchMode.ALWAYS;
-                  } else if (index == 3) {
-                    mode = FCReLaunchMode.NEVER;
-                  }
-                  String qrCode = 'https://api.finclip.com/api/v1/mop/runtime/applet/-f-78d53c04618315e7--';
-                  QRCodeAppletRequest qrcodeRequest =  QRCodeAppletRequest(qrCode, reLaunchMode: mode);
-                  Mop.instance.qrcodeStartApplet(qrcodeRequest);
-
-                  //  Mop.instance.qrcodeOpenApplet('https://api.finclip.com/api/v1/mop/runtime/applet/-f-78d53c04618315e7--');
-                }),
               ],
             ),
           )
@@ -226,6 +210,22 @@ class _MyAppState extends State<MyApp> {
       home: Scaffold(
         appBar: AppBar(
           title: const Text('凡泰极客小程序 Flutter 插件'),
+          actions: <Widget>[
+            Builder(
+              builder: (context) {
+                return IconButton(
+                  icon: Icon(Icons.more_horiz),
+                  tooltip: 'More',
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => TestPage()),
+                    );
+                  },
+                );
+              },
+            ),
+          ],
         ),
         body: Column(
           children: <Widget>[
