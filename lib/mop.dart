@@ -1192,7 +1192,7 @@ class Mop {
   }
 
   /// clear applets cache
-  /// 清除缓存的小程序
+  /// 结束所有小程序
   Future clearApplets() async {
     return await _channel.invokeMethod("clearApplets");
   }
