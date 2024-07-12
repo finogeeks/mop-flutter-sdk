@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import com.finogeeks.lib.applet.client.FinAppClient;
 import com.finogeeks.lib.applet.client.FinAppInfo;
 import com.finogeeks.lib.applet.interfaces.FinCallback;
@@ -176,16 +177,7 @@ public class AppletModule extends BaseApi {
         } else {
             taskMode = IFinAppletRequest.TaskMode.MULTI;
         }
-        Integer reLaunchMode = (Integer) param.get("reLaunchMode");
-        IFinAppletRequest.ReLaunchMode mode = IFinAppletRequest.ReLaunchMode.PARAMS_EXIST;
-        if (reLaunchMode == 1) {
-            mode = IFinAppletRequest.ReLaunchMode.ONLY_PARAMS_DIFF;
-        } else if (reLaunchMode == 2) {
-            mode = IFinAppletRequest.ReLaunchMode.ALWAYS;
-        } else if (reLaunchMode == 3) {
-            mode = IFinAppletRequest.ReLaunchMode.NEVER;
-        }
-
+        IFinAppletRequest.ReLaunchMode mode = getReLaunchMode(param);
         Log.d("MopPlugin", "startApplet (appId=" + appId + ", sequence=" + sequence + ", apiServer=" + apiServer + ", isSingleProcess:" + isSingleProcess);
         // mContext是FlutterActivity，
         // 在Android 6.0、7.0系统的部分设备中热启动小程序时，如果context参数用mContext，会出现无法启动小程序的问题
@@ -248,15 +240,7 @@ public class AppletModule extends BaseApi {
         } else {
             taskMode = IFinAppletRequest.TaskMode.MULTI;
         }
-        Integer reLaunchMode = (Integer) param.get("reLaunchMode");
-        IFinAppletRequest.ReLaunchMode mode = IFinAppletRequest.ReLaunchMode.PARAMS_EXIST;
-        if (reLaunchMode == 1) {
-            mode = IFinAppletRequest.ReLaunchMode.ONLY_PARAMS_DIFF;
-        } else if (reLaunchMode == 2) {
-            mode = IFinAppletRequest.ReLaunchMode.ALWAYS;
-        } else if (reLaunchMode == 3) {
-            mode = IFinAppletRequest.ReLaunchMode.NEVER;
-        }
+        IFinAppletRequest.ReLaunchMode mode = getReLaunchMode(param);
         FinAppClient.INSTANCE.getAppletApiManager().startApplet(mContext, IFinAppletRequest.Companion.fromQrCode(qrcode)
                 .setProcessMode(processMode).setTaskMode(taskMode).setReLaunchMode(mode), new FinCallback<String>() {
             @Override
@@ -294,6 +278,25 @@ public class AppletModule extends BaseApi {
 
             }
         });*/
+    }
+
+    @NonNull
+    private static IFinAppletRequest.ReLaunchMode getReLaunchMode(Map param) {
+        IFinAppletRequest.ReLaunchMode mode = IFinAppletRequest.ReLaunchMode.PARAMS_EXIST;
+        Object modeValue = param.get("reLaunchMode");
+        if (modeValue != null) {
+            if (modeValue instanceof Integer) {
+                int reLaunchMode = (Integer) modeValue;
+                if (reLaunchMode == 1) {
+                    mode = IFinAppletRequest.ReLaunchMode.ONLY_PARAMS_DIFF;
+                } else if (reLaunchMode == 2) {
+                    mode = IFinAppletRequest.ReLaunchMode.ALWAYS;
+                } else if (reLaunchMode == 3) {
+                    mode = IFinAppletRequest.ReLaunchMode.NEVER;
+                }
+            }
+        }
+        return mode;
     }
 
     private void changeUserId(Map param, ICallback callback) {
