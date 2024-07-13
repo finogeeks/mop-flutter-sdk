@@ -91,6 +91,6 @@ kapt {
 }
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.finogeeks.lib:finapplet:2.43.11-fix20240701v01'
-    implementation 'com.finogeeks.mop:plugins:2.43.11-fix20240701v01'
+    implementation 'com.finogeeks.lib:finapplet:2.45.1'
+    implementation 'com.finogeeks.mop:plugins:2.45.1'
 }
