@@ -115,7 +115,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "2.43.11-dev20240625v02"
+    version: "2.45.1"
   path:
     dependency: transitive
     description:

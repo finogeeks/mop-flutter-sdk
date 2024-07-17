@@ -80,6 +80,15 @@ public class InitSDKModule extends BaseApi {
         if (userId != null) {
             configBuilder.setUserId(userId);
         }
+        String channel = (String) configMap.get("channel");
+        if (channel != null) {
+            configBuilder.setChannel(channel);
+        }
+        String phone = (String) configMap.get("phone");
+        if (phone != null) {
+            configBuilder.setPhone(phone);
+        }
+
         String productIdentification = (String) configMap.get("productIdentification");
         if (productIdentification != null) {
             configBuilder.setProductIdentification(productIdentification);

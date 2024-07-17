@@ -20,7 +20,10 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    init();
+
+    Future.delayed(const Duration(seconds: 3), () {
+         init();
+    });
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -44,6 +47,8 @@ class _MyAppState extends State<MyApp> {
     config.language = LanguageType.English;
     config.baseLoadingViewClass = "LoadingView";
     config.userId = "18607180143";
+    config.channel = "finclip";
+    config.phone = "1234567890";
     config.appletDebugMode = BOOLState.BOOLStateTrue;
     
     UIConfig uiconfig = UIConfig();

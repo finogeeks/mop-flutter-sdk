@@ -43,6 +43,8 @@
     }
     
     config.currentUserId = self.config[@"userId"];
+    config.channel = self.config[@"channel"];
+    config.phone = self.config[@"phone"];
     config.productIdentification = self.config[@"productIdentification"];
     config.disableAuthorize = [self.config[@"disableRequestPermissions"] boolValue];
     config.appletAutoAuthorize = [self.config[@"appletAutoAuthorize"] boolValue];

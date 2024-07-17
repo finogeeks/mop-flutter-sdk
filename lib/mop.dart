@@ -68,6 +68,11 @@ class Config {
   /// 小程序缓存信息会存储在以userId命名的不同目录下。
   String? userId;
 
+  // 渠道标识，如果未设置则取应用bundleId
+  String? channel;
+  // 手机号，也可以是一个token。
+  String? phone;
+
   /// 产品的标识，非必传，默认为存储目录里的finclip，finogeeks和userAgent里的finogeeks
   String? productIdentification;
 
@@ -244,6 +249,8 @@ class Config {
     return {
       "finStoreConfigs": storeConfigs,
       "userId": userId,
+      "channel": channel,
+      "phone": phone,
       "productIdentification": productIdentification,
       "disableRequestPermissions": disableRequestPermissions,
       "appletAutoAuthorize": appletAutoAuthorize,
