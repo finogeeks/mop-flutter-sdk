@@ -82,19 +82,24 @@ class _MyAppState extends State<MyApp> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> init() async {
-    if (Platform.isiOS) {
-      //com.finogeeks.mopExample
-      final res = await Mop.instance.initialize(
-          '22LyZEib0gLTQdU3MUauARlLry7JL/2fRpscC9kpGZQA', '1c11d7252c53e0b6',
-          apiServer: 'https://api.finclip.com', apiPrefix: '/api/v1/mop');
-      print(res);
-    } else if (Platform.isAndroid) {
-      //com.finogeeks.mopexample
-      final res = await Mop.instance.initialize(
-          '22LyZEib0gLTQdU3MUauARjmmp6QmYgjGb3uHueys1oA', '98c49f97a031b555',
-          apiServer: 'https://api.finclip.com', apiPrefix: '/api/v1/mop');
-      print(res);
-    }
+    //多服务器配置
+    FinStoreConfig storeConfigA = FinStoreConfig(
+      "22LyZEib0gLTQdU3MUauAfJ/xujwNfM6OvvEqQyH4igA",
+      "703b9026be3d6bc5",
+      "https://api.finclip.com",
+      cryptType: "SM",
+    );
+    List<FinStoreConfig> storeConfigs = [storeConfigA];
+    Config config = Config(storeConfigs);
+    config.language = LanguageType.English;
+    config.userId = "abc12345";
+    config.channel = "finclip";
+    config.phone = "12345678901";
+    config.appletDebugMode = BOOLState.BOOLStateTrue;
+    
+    UIConfig uiconfig = UIConfig();
+    uiconfig.isHideBackHome = true;
+    final res = await Mop.instance.initSDK(config, uiConfig: uiconfig);
     if (!mounted) return;
   }
 
@@ -170,24 +175,29 @@ class _MyAppState extends State<MyApp> {
    在使用 SDK 提供的 API 之前必须要初始化 SDK ，初始化 SDK 的接口如下
 
 ```
-  ///
-  /// initialize mop miniprogram engine.
-  /// 初始化小程序
-  /// [appkey] is required. it can be getted from api.finclip.com
-  /// [secret] is required. it can be getted from api.finclip.com
-  /// [apiServer] is optional. the mop server address. default is https://mp.finogeek.com
-  /// [apiPrefix] is optional. the mop server prefix. default is /api/v1/mop
-  ///
-  ///
-  Future<Map> initialize(String appkey, String secret,
-      {String apiServer, String apiPrefix})
+///
+/// initialize FinClip SDK.
+/// 初始化SDK(推荐使用)
+/// [config] is required. sdk配置
+/// [uiConfig] is optional. UI配置
+Future<Map> initSDK(Config config, {UIConfig? uiConfig})
 ```
 
 使用示例：
 ```
-final res = await Mop.instance.initialize(
-          '22LyZEib0gLTQdU3MUauARlLry7JL/2fRpscC9kpGZQA', '1c11d7252c53e0b6',
-          apiServer: 'https://api.finclip.com', apiPrefix: '/api/v1/mop');
+// 1.创建Config
+// 1.1 配置服务器1的参数
+FinStoreConfig finclip_store = FinStoreConfig('22LyZEib0gLTQdU3MUauATBwgfnTCJjdr7FCnywmAEM=', 'bdfd76cae24d4313', 'https://api.finclip.com');
+// 1.2 配置服务器2的参数
+FinStoreConfig test_store = FinStoreConfig('sdkKey2', 'sdkSecret2', '测试服务器');
+Config config = Config([finclip_store, test_store]);
+config.userId = '您app的用户唯一标识';
+
+// 2.创建UIConfig
+UIConfig uiConfig = UIConfig();
+uiConfig.isHideAddToDesktopMenu = true;
+uiConfig.isHideFeedbackAndComplaints = true;
+final res = await Mop.instance.initSDK(config, uiConfig: uiConfig);
 ```
 
 ### 2. 打开小程序
