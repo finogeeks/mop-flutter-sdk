@@ -239,6 +239,7 @@ class _MyAppState extends State<MyApp> {
             _buildAppletWidget("5f72e3559a6a7900019b5baa", "官方小程序", 1, {'query':'key=value'}),
             _buildAppletWidget("5f17f457297b540001e06ebb", "api测试小程序", 2, null),
             _buildAppletWidget("61386f6484dd160001d3e1ab", "测试小程序", 3, {'query':'ramdom='+context.hashCode.toString()}),
+            _buildAppletWidget("fc2298538724255493", "自定义菜单测试", 4, {'query':'ramdom='+context.hashCode.toString()}),
             
           ],
         ),
@@ -267,16 +268,16 @@ class MyAppletHandler extends AppletHandler {
 
   @override
   Future<List<CustomMenu>> getCustomMenus(String appId) {
-    CustomMenu menu1 = CustomMenu('WXTest', 'https://img1.baidu.com/it/u=2878938773,1765835171&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500', '百度图标', 'common');
+    CustomMenu menu1 = CustomMenu('menu100', 'https://img1.baidu.com/it/u=2878938773,1765835171&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500', '百度图标', 'common');
     menu1.darkImage = 'https://img95.699pic.com/xsj/14/46/mh.jpg%21/fw/700/watermark/url/L3hzai93YXRlcl9kZXRhaWwyLnBuZw/align/southeast';
     
-    CustomMenu menu2 = CustomMenu('CustomMenu2', 'minipro_list_collect', '工程图标', 'common');
+    CustomMenu menu2 = CustomMenu('menu101', 'minipro_list_collect', '工程图标', 'common');
     menu2.darkImage = 'minipro_list_service';
 
     List<CustomMenu> customMenus = [
       menu1,
       menu2,
-      CustomMenu('MyFriends', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpvugSNLs9R7iopz_noeotAelvgzYj-74iCg&usqp=CAU', '谷歌图标', 'common'),
+      CustomMenu('ShareDingDing', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpvugSNLs9R7iopz_noeotAelvgzYj-74iCg&usqp=CAU', '谷歌图标', 'common'),
       // CustomMenu('WXShareAPPFriends', 'https://img1.baidu.com/it/u=2878938773,1765835171&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500', '微信好朋友', 'common'),
       // CustomMenu('WXShareAPPMoments', 'https://img2.baidu.com/it/u=3113705544,436318069&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500', '微信朋友圈', 'common'),
 
