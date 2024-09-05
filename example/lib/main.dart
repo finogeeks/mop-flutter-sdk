@@ -166,6 +166,7 @@ class _MyAppState extends State<MyApp> {
               crossAxisCount: 4,
               childAspectRatio: 2,
               crossAxisSpacing: 10,
+              physics: ClampingScrollPhysics(), // 关闭弹性效果
               // physics: NeverScrollableScrollPhysics(),
               children: [
                 _buildAppletItem(appletId, "open", () {
@@ -232,7 +233,7 @@ class _MyAppState extends State<MyApp> {
             ),
           ],
         ),
-        body: Column(
+        body: ListView(
           children: <Widget>[
             _buildAppletWidget("5facb3a52dcbff00017469bd", "画图小程序", 0, {'query':'ramdom='+context.hashCode.toString()}),
             _buildAppletWidget("5f72e3559a6a7900019b5baa", "官方小程序", 1, {'query':'key=value'}),
