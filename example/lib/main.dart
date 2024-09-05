@@ -239,7 +239,6 @@ class _MyAppState extends State<MyApp> {
             _buildAppletWidget("5f72e3559a6a7900019b5baa", "官方小程序", 1, {'query':'key=value'}),
             _buildAppletWidget("5f17f457297b540001e06ebb", "api测试小程序", 2, null),
             _buildAppletWidget("61386f6484dd160001d3e1ab", "测试小程序", 3, {'query':'ramdom='+context.hashCode.toString()}),
-            _buildAppletWidget("fc2298538724255493", "自定义菜单测试", 4, {'query':'ramdom='+context.hashCode.toString()}),
             
           ],
         ),
@@ -321,6 +320,7 @@ class MyAppletHandler extends AppletHandler {
 
   @override
   Future<void> onCustomMenuClick(String appId, String path, String menuId, String appInfo) {
+    print('自定义菜单的点击 appId:$appId path: $path menuId:$menuId');
     // TODO: implement onCustomMenuClick
     throw UnimplementedError();
   }
