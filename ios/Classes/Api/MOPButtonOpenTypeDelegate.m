@@ -46,7 +46,15 @@
     [channel invokeMethod:@"extensionApi:getUserProfile"
                 arguments:nil
                    result:^(id result) {
-        bindGetUserProfile ? bindGetUserProfile(result) : nil;
+        if (!bindGetUserProfile) {
+            return;
+        }
+        if ([result isKindOfClass:NSDictionary.class]) {
+            bindGetUserProfile(result);
+        } else {
+            bindGetUserProfile(@{@"fatErrCode": @"fail"});
+        }
+        
     }];
     return YES;
 }
