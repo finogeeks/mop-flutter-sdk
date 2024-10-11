@@ -456,14 +456,14 @@ class CapsuleConfig {
   /// 上角胶囊视图的高度，默认值为32
   double capsuleHeight = 32;
 
-  /// 右上角胶囊视图的右边距
-  double capsuleRightMargin = 8;
+  /// 右上角胶囊视图的右边距，默认值为7
+  double capsuleRightMargin = 7;
 
-  /// 右上角胶囊视图的圆角半径，默认值为5
-  double capsuleCornerRadius = 5;
+  /// 右上角胶囊视图的圆角半径，默认值为16
+  double capsuleCornerRadius = 16;
 
-  /// 右上角胶囊视图的边框宽度，默认值为1
-  double capsuleBorderWidth = 1;
+  /// 右上角胶囊视图的边框宽度，默认值为0.5
+  double capsuleBorderWidth = 0.5;
 
   // /// 胶囊背景颜色浅色
   // int capsuleBgLightColor = 0x80ffffff;
@@ -471,22 +471,26 @@ class CapsuleConfig {
   // /// 胶囊背景颜色深色
   // int capsuleBgDarkColor = 0x33000000;
 
-  /// 胶囊背景颜色浅色
+  /// 胶囊背景颜色浅色(安卓和iOS在SDK内部语义上是取反的，所以不一致)
   int capsuleBgLightColor = Platform.isAndroid ? 0x33000000 : 0x80ffffff;
 
-  /// 胶囊背景颜色深色
+  /// 胶囊背景颜色深色(安卓和iOS在SDK内部语义上是取反的，所以不一致)
   int capsuleBgDarkColor = Platform.isAndroid ? 0x80ffffff : 0x33000000;
 
   /// 右上角胶囊视图的边框浅色颜色
+  /// 暗黑模式
   int capsuleBorderLightColor = 0x80ffffff;
 
-  ///右上角胶囊视图的边框深色颜色
+  /// 右上角胶囊视图的边框深色颜色
+  /// 明亮模式
   int capsuleBorderDarkColor = 0x26000000;
 
   /// 胶囊分割线浅色颜色
+  /// 暗黑模式
   int capsuleDividerLightColor = 0x80ffffff;
 
   /// 胶囊分割线深色颜色
+  /// 明亮模式
   int capsuleDividerDarkColor = 0x26000000;
 
   /// 胶囊里的浅色更多按钮的图片对象，如果不传，会使用默认图标
@@ -571,8 +575,8 @@ class NavHomeConfig {
   /// 返回首页按钮的圆角半径，默认值为5
   double cornerRadius = 5;
 
-  /// 返回首页按钮的边框宽度，Android默认值为0.75，iOS默认值为0.8
-  double borderWidth = Platform.isAndroid ? 0.75 : 0.8;
+  /// 返回首页按钮的边框宽度，默认值为0.5
+  double borderWidth = 0.5;
 
   /// 返回首页按钮的边框浅色颜色
   /// （暗黑模式）
