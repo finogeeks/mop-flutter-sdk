@@ -18,7 +18,7 @@ workflow:
 update:
   stage: update
   script: 
-      - |
+    - |
       echo "update version"
       sh update_version.sh $GITLAB_VERSION $GITLAB_IOS_VERSION $GITLAB_ANDROID_VERSION
 
