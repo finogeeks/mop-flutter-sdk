@@ -1,19 +1,38 @@
 stages:
-  - buildVerify
+  - update
+  - check
+  - build
 variables:
   LC_ALL: "en_US.UTF-8"
   LANG: "en_US.UTF-8"
-  GITLAB_FLUTTER_VERSION: $GITLAB_FLUTTER_VERSION
+  GITLAB_VERSION: $GITLAB_VERSION
   GITLAB_IOS_VERSION: $GITLAB_IOS_VERSION
   GITLAB_ANDROID_VERSION: $GITLAB_ANDROID_VERSION
+  GITLAB_BUILD_DEPLOY: $GITLAB_BUILD_DEPLOY
 
+workflow:
+  rules:
+    - if: '$GITLAB_BUILD_DEPLOY == "true" && $GITLAB_VERSION != null && $GITLAB_VERSION != ""'
+    - when: never
 
-buildVerify:
-  stage: buildVerify
+update:
+  stage: update
+  script: 
+      - |
+      echo "update version"
+      sh update_version.sh $GITLAB_VERSION $GITLAB_IOS_VERSION $GITLAB_ANDROID_VERSION
+
+check:
+  stage: check
+  script: 
+    - echo "check build flutter sdk"
+
+build:
+  stage: build
   script:
     # 编译
-    - echo $gitlab_uploadToGit
-    - sh bundle.sh $GITLAB_FLUTTER_VERSION $GITLAB_IOS_VERSION $GITLAB_ANDROID_VERSION
+    - echo "start build flutter sdk"
+    # - sh bundle.sh $GITLAB_VERSION $GITLAB_IOS_VERSION $GITLAB_ANDROID_VERSION $GITLAB_BUILD_DEPLOY
   tags:
     - mac-studio
   only:
