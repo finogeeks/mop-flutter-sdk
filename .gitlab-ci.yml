@@ -19,14 +19,14 @@ update:
   stage: update
   script: 
     - |
+      # 先设置默认值
+      export IOS_VERSION="${GITLAB_IOS_VERSION:-}"
+      export ANDROID_VERSION="${GITLAB_ANDROID_VERSION:-}"
+
       # 先检查变量
-      echo "Version: ${GITLAB_VERSION:-未设置}"
-      echo "iOS Version: ${GITLAB_IOS_VERSION:-未设置}"
-      echo "Android Version: ${GITLAB_ANDROID_VERSION:-未设置}"
-      
-      # 设置默认值，确保传递空字符串而不是未定义的变量
-      IOS_VERSION=${GITLAB_IOS_VERSION:-""}
-      ANDROID_VERSION=${GITLAB_ANDROID_VERSION:-""}
+      echo "Version: ${GITLAB_VERSION}"
+      echo "iOS Version: ${GITLAB_IOS_VERSION}"
+      echo "Android Version: ${GITLAB_ANDROID_VERSION}"
 
       sh update_version.sh "$GITLAB_VERSION" "$IOS_VERSION" "$ANDROID_VERSION"
 
