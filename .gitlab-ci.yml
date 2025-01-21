@@ -31,11 +31,15 @@ update:
       
       # 使用 eval 确保变量被正确传递
       sh -c "sh update_version.sh '$GITLAB_VERSION' '$IOS_VERSION' '$ANDROID_VERSION'"
+  tags:
+    - mac-studio
 
 check:
   stage: check
   script: 
     - echo "check build flutter sdk"
+  tags:
+    - mac-studio
 
 build:
   stage: build
