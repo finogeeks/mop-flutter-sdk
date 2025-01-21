@@ -46,14 +46,18 @@ fi
 
 check_ios_version() {
     if [ -f "ios/mop.podspec" ]; then
-        # 使用通用的版本号匹配，可以匹配任何后缀
-        local current_version=$(grep -E "s.dependency 'FinApplet'\s*,\s*'([0-9]+\.[0-9]+\.[0-9]+[a-zA-Z0-9.-]*)'" ios/mop.podspec | sed -E "s/.*'FinApplet'\s*,\s*'(.*)'.*/\1/")
+        # 使用更精确的grep和sed模式来只提取版本号
+        local current_version=$(grep -E "s.dependency 'FinApplet'" ios/mop.podspec | sed -E "s/.*'FinApplet'.*'([0-9]+\.[0-9]+\.[0-9]+[a-zA-Z0-9.-]*)'.*/\1/")
         
-        echo "找到 iOS FinApplet 版本号: $current_version"
-        
-        if [[ "$current_version" == "$version" ]]; then
-            echo "iOS podspec 已包含 FinApplet 版本 $version"
-            return 0
+        if [ -n "$current_version" ]; then
+            echo "找到 iOS FinApplet 版本号: $current_version"
+            
+            if [[ "$current_version" == "$iosVersion" ]]; then
+                echo "iOS podspec 已包含 FinApplet 版本 $iosVersion"
+                return 0
+            fi
+        else
+            echo "无法从 podspec 中提取版本号"
         fi
     fi
     return 1
