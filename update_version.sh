@@ -2,9 +2,10 @@ export LANG=en_US.UTF-8
 export FASTLANE_DISABLE_COLORS=1
 
 
-export version="$1"
-export iosVersion="$2"
-export androidVersion="$3"
+# 接收参数并去除可能的引号
+version=$(echo "$1" | tr -d '"')
+iosVersion=$(echo "$2" | tr -d '"')
+androidVersion=$(echo "$3" | tr -d '"')
 
 #version=`git describe --abbrev=0 --tags | tr -d '\\n' | tr -d '\\t'`
 
