@@ -1,6 +1,4 @@
 stages:
-  - update
-  - check
   - build
 variables:
   LC_ALL: "en_US.UTF-8"
@@ -15,35 +13,17 @@ workflow:
     - if: '$GITLAB_BUILD_DEPLOY == "true" && $GITLAB_VERSION != null && $GITLAB_VERSION != ""'
     - when: never
 
-update:
-  stage: update
-  script: 
+build:
+  stage: build
+  script:
     - |
-      # 打印检查
       echo "检查变量值："
       echo "Version: $GITLAB_VERSION"
       echo "iOS Version: $GITLAB_IOS_VERSION"
       echo "Android Version: $GITLAB_ANDROID_VERSION"
       echo "GITLAB_BUILD_DEPLOY: $GITLAB_BUILD_DEPLOY"
-      
-      # 使用 eval 确保变量被正确传递
-      sh -c "sh update_version.sh $GITLAB_VERSION $GITLAB_IOS_VERSION $GITLAB_ANDROID_VERSION"
-  tags:
-    - mac-studio
 
-check:
-  stage: check
-  script: 
-    - echo "check build flutter sdk"
-  tags:
-    - mac-studio
-
-build:
-  stage: build
-  script:
-    # 编译
-    - echo "start build flutter sdk"
-    # - sh bundle.sh $GITLAB_VERSION $GITLAB_IOS_VERSION $GITLAB_ANDROID_VERSION $GITLAB_BUILD_DEPLOY
+      sh bundle.sh $GITLAB_VERSION $GITLAB_IOS_VERSION $GITLAB_ANDROID_VERSION $GITLAB_BUILD_DEPLOY
   tags:
     - mac-studio
   only:

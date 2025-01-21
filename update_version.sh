@@ -38,8 +38,8 @@ else
     echo "跳过 Android gradle 更新（未设置版本号）"
 fi
 
-# git remote add ssh-origin ssh://git@gitlab.finogeeks.club:2233/finclipsdk/finclip-flutter-sdk.git
+git remote add ssh-origin ssh://git@gitlab.finogeeks.club:2233/finclipsdk/finclip-flutter-sdk.git
 
-# git add .
-# git commit -m "update version:$version"
-# git push ssh-origin 
+git add .
+git commit -m "update version:$version"
+git push ssh-origin 
