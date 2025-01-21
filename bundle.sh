@@ -95,7 +95,7 @@ if [[ ("$iosVersionExist" == "true" && "$androidVersionExist" == "true") || (ios
 	git tag -d ${version}
 	git push ssh-origin --delete tag ${version}
 	git tag -a ${version} -m 'FinClip-Flutter-SDK发版'
-	git push ssh-origin HEAD:refs/heads/master --tags -f
+	git push ssh-origin --tags -f
 
 
 	#export http_proxy=http://127.0.0.1:1087
@@ -116,7 +116,7 @@ if [[ ("$iosVersionExist" == "true" && "$androidVersionExist" == "true") || (ios
 
 	git push github HEAD:refs/heads/master
 else
-	echo "android or ios version not set, exit"
+	echo " ❌❌❌ android or ios version not set, exit"
 fi
 
 
