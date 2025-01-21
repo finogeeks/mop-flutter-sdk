@@ -98,16 +98,16 @@ if [[ ("$iosVersionExist" == "true" && "$androidVersionExist" == "true") || (ios
 	git push ssh-origin --tags -f
 
 
-	#export http_proxy=http://127.0.0.1:1087
-	#export https_proxy=http://127.0.0.1:1087
+	export http_proxy=http://127.0.0.1:1087
+	export https_proxy=http://127.0.0.1:1087
 
 
 	flutter packages pub publish --dry-run --server=https://pub.dartlang.org
 
 	flutter packages pub publish --server=https://pub.dartlang.org --force
 
-	#unset http_proxy
-	#unset https_proxy
+	unset http_proxy
+	unset https_proxy
 
 	# 在执行 GitHub 相关操作之前添加分支检查
 	current_branch=$(git rev-parse --abbrev-ref HEAD)
