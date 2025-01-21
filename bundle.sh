@@ -47,10 +47,7 @@ git remote add ssh-origin ssh://git@gitlab.finogeeks.club:2233/finclipsdk/fincli
 
 git add .
 git commit -m "release: version:$version"
-git tag -d ${version}
-git push ssh-origin --delete tag ${version}
-git tag -a ${version} -m 'FinClip-Flutter-SDK发版'
-git push ssh-origin --tags -f
+git push ssh-origin
 
 
 check_ios_version() {
@@ -96,6 +93,14 @@ android_check=$?
 if [[ ("$iosVersionExist" == "true" && "$androidVersionExist" == "true") || (ios_check == 0 && android_check == 0) ]]; then
     echo "校验通过，继续执行。。。"
     cat pubspec.yaml
+
+    git add .
+	git commit -m "release: version:$version"
+	git tag -d ${version}
+	git push ssh-origin --delete tag ${version}
+	git tag -a ${version} -m 'FinClip-Flutter-SDK发版'
+	git push ssh-origin --tags -f
+
 
 	export http_proxy=http://127.0.0.1:1087
 	export https_proxy=http://127.0.0.1:1087
