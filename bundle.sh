@@ -74,7 +74,13 @@ check_android_version() {
     return 1
 }
 
-if [[ ("$iosVersionExist" == "true" && "$androidVersionExist" == "true") || (check_android_version() == 0 && check_ios_version() == 0) ]]; then
+check_ios_version
+ios_check=$?
+
+check_android_version
+android_check=$?
+
+if [[ ("$iosVersionExist" == "true" && "$androidVersionExist" == "true") || (ios_check == 0 && android_check == 0) ]]; then
     echo "校验通过，继续执行。。。"
 else
 	echo "android or ios version not set, exit"
@@ -105,11 +111,9 @@ flutter packages pub publish --server=https://pub.dartlang.org --force
 #unset https_proxy
 
 
-if [[ "$buildDeploy" == "true" ]]; then
-	git remote add github ssh://git@github.com/finogeeks/mop-flutter-sdk.git
+git remote add github ssh://git@github.com/finogeeks/mop-flutter-sdk.git
 
-	#git push github HEAD:refs/heads/master --tags
+#git push github HEAD:refs/heads/master --tags
 
-	git push github HEAD:refs/heads/master
-fi
+git push github HEAD:refs/heads/master
 
