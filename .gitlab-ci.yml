@@ -19,18 +19,15 @@ update:
   stage: update
   script: 
     - |
-      # 使用 eval 确保变量被正确展开
-      IOS_VERSION=$(eval echo ${GITLAB_IOS_VERSION:-""})
-      ANDROID_VERSION=$(eval echo ${GITLAB_ANDROID_VERSION:-""})
-      
       # 打印检查
       echo "检查变量值："
       echo "Version: $GITLAB_VERSION"
-      echo "iOS Version: '$IOS_VERSION'"
-      echo "Android Version: '$ANDROID_VERSION'"
+      echo "iOS Version: $GITLAB_IOS_VERSION"
+      echo "Android Version: $GITLAB_ANDROID_VERSION"
+      echo "GITLAB_BUILD_DEPLOY: $GITLAB_BUILD_DEPLOY"
       
       # 使用 eval 确保变量被正确传递
-      sh -c "sh update_version.sh '$GITLAB_VERSION' '$IOS_VERSION' '$ANDROID_VERSION'"
+      sh -c "sh update_version.sh $GITLAB_VERSION $GITLAB_IOS_VERSION $GITLAB_ANDROID_VERSION"
   tags:
     - mac-studio
 
