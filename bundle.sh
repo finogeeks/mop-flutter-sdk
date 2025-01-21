@@ -49,7 +49,7 @@ check_ios_version() {
         # 使用通用的版本号匹配，可以匹配任何后缀
         local current_version=$(grep -E "s.dependency 'FinApplet'\s*,\s*'([0-9]+\.[0-9]+\.[0-9]+[a-zA-Z0-9.-]*)'" ios/mop.podspec | sed -E "s/.*'FinApplet'\s*,\s*'(.*)'.*/\1/")
         
-        echo "找到 FinApplet 版本号: $current_version"
+        echo "找到 iOS FinApplet 版本号: $current_version"
         
         if [[ "$current_version" == "$version" ]]; then
             echo "iOS podspec 已包含 FinApplet 版本 $version"
@@ -64,7 +64,7 @@ check_android_version() {
         # 匹配 finapplet 的版本号
         local current_version=$(grep -E "implementation 'com.finogeeks.lib:finapplet:([0-9]+\.[0-9]+\.[0-9]+[a-zA-Z0-9.-]*)'" android/build.gradle | sed -E "s/.*finapplet:(.*)'.*/\1/")
         
-        echo "找到 finapplet 版本号: $current_version"
+        echo "找到 Android finapplet 版本号: $current_version"
         
         if [[ "$current_version" == "$version" ]]; then
             echo "Android build.gradle 已包含 finapplet 版本 $version"
@@ -82,38 +82,37 @@ android_check=$?
 
 if [[ ("$iosVersionExist" == "true" && "$androidVersionExist" == "true") || (ios_check == 0 && android_check == 0) ]]; then
     echo "校验通过，继续执行。。。"
+    cat pubspec.yaml
+
+	git remote add ssh-origin ssh://git@gitlab.finogeeks.club:2233/finclipsdk/finclip-flutter-sdk.git
+
+	git add .
+	git commit -m "release: version:$version"
+	git tag -d ${version}
+	git push ssh-origin --delete tag ${version}
+	git tag -a ${version} -m 'FinClip-Flutter-SDK发版'
+	git push ssh-origin HEAD:refs/heads/master --tags -f
+
+
+	#export http_proxy=http://127.0.0.1:1087
+	#export https_proxy=http://127.0.0.1:1087
+
+
+	flutter packages pub publish --dry-run --server=https://pub.dartlang.org
+
+	flutter packages pub publish --server=https://pub.dartlang.org --force
+
+	#unset http_proxy
+	#unset https_proxy
+
+
+	git remote add github ssh://git@github.com/finogeeks/mop-flutter-sdk.git
+
+	#git push github HEAD:refs/heads/master --tags
+
+	git push github HEAD:refs/heads/master
 else
 	echo "android or ios version not set, exit"
-    exit 1
 fi
 
-cat pubspec.yaml
-
-git remote add ssh-origin ssh://git@gitlab.finogeeks.club:2233/finclipsdk/finclip-flutter-sdk.git
-
-git add .
-git commit -m "release: version:$version"
-git tag -d ${version}
-git push ssh-origin --delete tag ${version}
-git tag -a ${version} -m 'FinClip-Flutter-SDK发版'
-git push ssh-origin HEAD:refs/heads/master --tags -f
-
-
-#export http_proxy=http://127.0.0.1:1087
-#export https_proxy=http://127.0.0.1:1087
-
-
-flutter packages pub publish --dry-run --server=https://pub.dartlang.org
-
-flutter packages pub publish --server=https://pub.dartlang.org --force
-
-#unset http_proxy
-#unset https_proxy
-
-
-git remote add github ssh://git@github.com/finogeeks/mop-flutter-sdk.git
-
-#git push github HEAD:refs/heads/master --tags
-
-git push github HEAD:refs/heads/master
 
