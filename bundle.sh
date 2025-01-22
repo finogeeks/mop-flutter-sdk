@@ -45,9 +45,12 @@ fi
 
 git remote add ssh-origin ssh://git@gitlab.finogeeks.club:2233/finclipsdk/finclip-flutter-sdk.git
 
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+echo "current_branch: $current_branch"
+
 git add .
 git commit -m "release: version:$version"
-git push ssh-origin
+git push ssh-origin HEAD:refs/heads/${current_branch}
 
 
 check_ios_version() {
@@ -114,7 +117,6 @@ if [[ ("$iosVersionExist" == "true" && "$androidVersionExist" == "true") || (ios
 	unset https_proxy
 
 	# 在执行 GitHub 相关操作之前添加分支检查
-	current_branch=$(git rev-parse --abbrev-ref HEAD)
 	if [ "$current_branch" = "master" ]; then
 	    echo "当前在 master 分支，继续执行 GitHub 推送..."
 	    git remote add github ssh://git@github.com/finogeeks/mop-flutter-sdk.git
