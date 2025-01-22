@@ -6,12 +6,14 @@ export version="$1"
 export iosVersion="$2"
 export androidVersion="$3"
 export buildDeploy="$4"
+export branch=$5
 
 #version=`git describe --abbrev=0 --tags | tr -d '\\n' | tr -d '\\t'`
 
 echo "当前版本号：${version}"
 echo "依赖的iOS：${iosVersion}"
 echo "依赖的Android:${androidVersion}"
+echo "branch: $branch"
 
 git reset --hard
 #git checkout ${version}
@@ -45,12 +47,9 @@ fi
 
 git remote add ssh-origin ssh://git@gitlab.finogeeks.club:2233/finclipsdk/finclip-flutter-sdk.git
 
-current_branch=$(git rev-parse --abbrev-ref HEAD)
-echo "current_branch: $current_branch"
-
 git add .
 git commit -m "release: version:$version"
-git push ssh-origin HEAD:refs/heads/${current_branch}
+git push ssh-origin HEAD:refs/heads/${branch}
 
 
 check_ios_version() {
@@ -117,7 +116,7 @@ if [[ ("$iosVersionExist" == "true" && "$androidVersionExist" == "true") || (ios
 	unset https_proxy
 
 	# 在执行 GitHub 相关操作之前添加分支检查
-	if [ "$current_branch" = "master" ]; then
+	if [ "$echo "branch: $branch"" = "master" ]; then
 	    echo "当前在 master 分支，继续执行 GitHub 推送..."
 	    git remote add github ssh://git@github.com/finogeeks/mop-flutter-sdk.git
 
