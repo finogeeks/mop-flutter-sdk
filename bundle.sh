@@ -60,8 +60,8 @@ check_ios_version() {
         if [ -n "$current_version" ]; then
             echo "找到 iOS FinApplet 版本号: $current_version"
             
-            if [[ "$current_version" == "$iosVersion" ]]; then
-                echo "iOS podspec 已包含 FinApplet 版本 $iosVersion"
+            if [[ "$current_version" == "$version" ]]; then
+                echo "iOS podspec 已包含 FinApplet 版本 $version"
                 return 0
             fi
         else
@@ -116,7 +116,7 @@ if [[ ("$iosVersionExist" == "true" && "$androidVersionExist" == "true") || (ios
 	unset https_proxy
 
 	# 在执行 GitHub 相关操作之前添加分支检查
-	if [ "$echo "branch: $branch"" = "master" ]; then
+	if [ "$branch" = "master" ]; then
 	    echo "当前在 master 分支，继续执行 GitHub 推送..."
 	    git remote add github ssh://git@github.com/finogeeks/mop-flutter-sdk.git
 
@@ -124,7 +124,7 @@ if [[ ("$iosVersionExist" == "true" && "$androidVersionExist" == "true") || (ios
 
 	    git push github HEAD:refs/heads/master
 	else
-	    echo "当前分支是 ${current_branch}，不是 master 分支，跳过 GitHub 推送操作"
+	    echo "当前分支是 ${branch}，不是 master 分支，跳过 GitHub 推送操作"
 	fi
 else
 	echo " ❌❌❌ android or ios version not set, exit"
