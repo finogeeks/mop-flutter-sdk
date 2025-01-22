@@ -9,7 +9,7 @@ variables:
 
 workflow:
   rules:
-    - if: '$GITLAB_BUILD_DEPLOY == "true" && $GITLAB_VERSION != null && $GITLAB_VERSION != ""'
+    - if: '$GITLAB_VERSION != null && $GITLAB_VERSION != ""'
     - when: never
 
 build:
