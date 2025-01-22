@@ -92,6 +92,11 @@ ios_check=$?
 check_android_version
 android_check=$?
 
+echo "iosVersionExist: $iosVersionExist"
+echo "androidVersionExist: $androidVersionExist"
+echo "ios_check: $ios_check"
+echo "android_check: $android_check"
+
 if [[ ("$iosVersionExist" == "true" && "$androidVersionExist" == "true") || (ios_check == 0 && android_check == 0) ]]; then
     echo "校验通过，继续执行。。。"
     cat pubspec.yaml
