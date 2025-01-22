@@ -92,13 +92,8 @@ ios_check=$?
 check_android_version
 android_check=$?
 
-echo "iosVersionExist: $iosVersionExist"
-echo "androidVersionExist: $androidVersionExist"
-echo "ios_check: $ios_check"
-echo "android_check: $android_check"
-
-if [[ ("$iosVersionExist" == "true" && "$androidVersionExist" == "true") || (ios_check == 0 && android_check == 0) ]]; then
-    echo "校验通过，继续执行。。。"
+# 主要发布流程
+do_publish() {
     cat pubspec.yaml
 
     git add .
@@ -131,6 +126,20 @@ if [[ ("$iosVersionExist" == "true" && "$androidVersionExist" == "true") || (ios
 	else
 	    echo "当前分支是 ${branch}，不是 master 分支，跳过 GitHub 推送操作"
 	fi
+}
+
+echo "iosVersionExist: $iosVersionExist"
+echo "androidVersionExist: $androidVersionExist"
+echo "ios_check: $ios_check"
+echo "android_check: $android_check"
+
+# 使用更明确的条件判断
+if [ "$iosVersionExist" = "true" ] && [ "$androidVersionExist" = "true" ]; then
+    echo "新版本号均有设置--通过"
+    do_publish
+elif [ $ios_check -eq 0 ] && [ $android_check -eq 0 ]; then
+    echo "本地版本号检查通过"
+    do_publish
 else
 	echo " ❌❌❌ android or ios version not set, exit"
 fi
