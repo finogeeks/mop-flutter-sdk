@@ -5,8 +5,7 @@ export FASTLANE_DISABLE_COLORS=1
 export version="$1"
 export iosVersion="$2"
 export androidVersion="$3"
-export buildDeploy="$4"
-export branch=$5
+export branch=$4
 
 #version=`git describe --abbrev=0 --tags | tr -d '\\n' | tr -d '\\t'`
 
@@ -51,47 +50,6 @@ git add .
 git commit -m "release: version:$version"
 git push ssh-origin HEAD:refs/heads/${branch}
 
-
-check_ios_version() {
-    if [ -f "ios/mop.podspec" ]; then
-        # 使用更精确的grep和sed模式来只提取版本号
-        local current_version=$(grep -E "s.dependency 'FinApplet'" ios/mop.podspec | sed -E "s/.*'FinApplet'.*'([0-9]+\.[0-9]+\.[0-9]+[a-zA-Z0-9.-]*)'.*/\1/")
-        
-        if [ -n "$current_version" ]; then
-            echo "找到 iOS FinApplet 版本号: $current_version"
-            
-            if [[ "$current_version" == "$version" ]]; then
-                echo "iOS podspec 已包含 FinApplet 版本 $version"
-                return 0
-            fi
-        else
-            echo "无法从 podspec 中提取版本号"
-        fi
-    fi
-    return 1
-}
-
-check_android_version() {
-    if [ -f "android/build.gradle" ]; then
-        # 匹配 finapplet 的版本号
-        local current_version=$(grep -E "implementation 'com.finogeeks.lib:finapplet:([0-9]+\.[0-9]+\.[0-9]+[a-zA-Z0-9.-]*)'" android/build.gradle | sed -E "s/.*finapplet:(.*)'.*/\1/")
-        
-        echo "找到 Android finapplet 版本号: $current_version"
-        
-        if [[ "$current_version" == "$version" ]]; then
-            echo "Android build.gradle 已包含 finapplet 版本 $version"
-            return 0
-        fi
-    fi
-    return 1
-}
-
-check_ios_version
-ios_check=$?
-
-check_android_version
-android_check=$?
-
 # 主要发布流程
 do_publish() {
     cat pubspec.yaml
@@ -130,15 +88,10 @@ do_publish() {
 
 echo "iosVersionExist: $iosVersionExist"
 echo "androidVersionExist: $androidVersionExist"
-echo "ios_check: $ios_check"
-echo "android_check: $android_check"
 
 # 使用更明确的条件判断
 if [ "$iosVersionExist" = "true" ] && [ "$androidVersionExist" = "true" ]; then
     echo "新版本号均有设置--通过"
-    do_publish
-elif [ $ios_check -eq 0 ] && [ $android_check -eq 0 ]; then
-    echo "本地版本号检查通过"
     do_publish
 else
 	echo " ❌❌❌ android or ios version not set, exit"
