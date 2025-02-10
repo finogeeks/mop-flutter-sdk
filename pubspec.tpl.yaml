@@ -4,7 +4,7 @@ version: '__mop_flutter_sdk_version__'
 homepage: https://github.com/finogeeks/mop-flutter-sdk
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: '>=2.12.0 <4.0.0'
   flutter: '>=2.2.3'
 
 dependencies:

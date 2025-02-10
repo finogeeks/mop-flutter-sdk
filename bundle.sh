@@ -5,13 +5,14 @@ export FASTLANE_DISABLE_COLORS=1
 export version="$1"
 export iosVersion="$2"
 export androidVersion="$3"
-export buildDeploy="$4"
+export branch=$4
 
 #version=`git describe --abbrev=0 --tags | tr -d '\\n' | tr -d '\\t'`
 
 echo "当前版本号：${version}"
 echo "依赖的iOS：${iosVersion}"
 echo "依赖的Android:${androidVersion}"
+echo "branch: $branch"
 
 git reset --hard
 #git checkout ${version}
@@ -43,77 +44,57 @@ else
     echo "跳过 Android gradle 更新（未设置版本号）"
 fi
 
-
-check_ios_version() {
-    if [ -f "ios/mop.podspec" ]; then
-        # 使用通用的版本号匹配，可以匹配任何后缀
-        local current_version=$(grep -E "s.dependency 'FinApplet'\s*,\s*'([0-9]+\.[0-9]+\.[0-9]+[a-zA-Z0-9.-]*)'" ios/mop.podspec | sed -E "s/.*'FinApplet'\s*,\s*'(.*)'.*/\1/")
-        
-        echo "找到 FinApplet 版本号: $current_version"
-        
-        if [[ "$current_version" == "$version" ]]; then
-            echo "iOS podspec 已包含 FinApplet 版本 $version"
-            return 0
-        fi
-    fi
-    return 1
-}
-
-check_android_version() {
-    if [ -f "android/build.gradle" ]; then
-        # 匹配 finapplet 的版本号
-        local current_version=$(grep -E "implementation 'com.finogeeks.lib:finapplet:([0-9]+\.[0-9]+\.[0-9]+[a-zA-Z0-9.-]*)'" android/build.gradle | sed -E "s/.*finapplet:(.*)'.*/\1/")
-        
-        echo "找到 finapplet 版本号: $current_version"
-        
-        if [[ "$current_version" == "$version" ]]; then
-            echo "Android build.gradle 已包含 finapplet 版本 $version"
-            return 0
-        fi
-    fi
-    return 1
-}
-
-check_ios_version
-ios_check=$?
-
-check_android_version
-android_check=$?
-
-if [[ ("$iosVersionExist" == "true" && "$androidVersionExist" == "true") || (ios_check == 0 && android_check == 0) ]]; then
-    echo "校验通过，继续执行。。。"
-else
-	echo "android or ios version not set, exit"
-    exit 1
-fi
-
-cat pubspec.yaml
-
 git remote add ssh-origin ssh://git@gitlab.finogeeks.club:2233/finclipsdk/finclip-flutter-sdk.git
 
 git add .
 git commit -m "release: version:$version"
-git tag -d ${version}
-git push ssh-origin --delete tag ${version}
-git tag -a ${version} -m 'FinClip-Flutter-SDK发版'
-git push ssh-origin HEAD:refs/heads/master --tags -f
+git push ssh-origin HEAD:refs/heads/${branch}
+
+# 主要发布流程
+do_publish() {
+    cat pubspec.yaml
+
+    git add .
+	git commit -m "release: version:$version"
+	git tag -d ${version}
+	git push ssh-origin --delete tag ${version}
+	git tag -a ${version} -m 'FinClip-Flutter-SDK发版'
+	git push ssh-origin --tags -f
 
 
-#export http_proxy=http://127.0.0.1:1087
-#export https_proxy=http://127.0.0.1:1087
+	export http_proxy=http://127.0.0.1:1087
+	export https_proxy=http://127.0.0.1:1087
 
 
-flutter packages pub publish --dry-run --server=https://pub.dartlang.org
+	flutter packages pub publish --dry-run --server=https://pub.dartlang.org
 
-flutter packages pub publish --server=https://pub.dartlang.org --force
+	flutter packages pub publish --server=https://pub.dartlang.org --force
 
-#unset http_proxy
-#unset https_proxy
+	unset http_proxy
+	unset https_proxy
 
+	# 在执行 GitHub 相关操作之前添加分支检查
+	if [ "$branch" = "master" ]; then
+	    echo "当前在 master 分支，继续执行 GitHub 推送..."
+	    git remote add github ssh://git@github.com/finogeeks/mop-flutter-sdk.git
 
-git remote add github ssh://git@github.com/finogeeks/mop-flutter-sdk.git
+	    #git push github HEAD:refs/heads/master --tags
 
-#git push github HEAD:refs/heads/master --tags
+	    git push github HEAD:refs/heads/master
+	else
+	    echo "当前分支是 ${branch}，不是 master 分支，跳过 GitHub 推送操作"
+	fi
+}
 
-git push github HEAD:refs/heads/master
+echo "iosVersionExist: $iosVersionExist"
+echo "androidVersionExist: $androidVersionExist"
+
+# 使用更明确的条件判断
+if [ "$iosVersionExist" = "true" ] && [ "$androidVersionExist" = "true" ]; then
+    echo "新版本号均有设置--通过"
+    do_publish
+else
+	echo " ❌❌❌ android or ios version not set, exit"
+fi
+
 
