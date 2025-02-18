@@ -66,6 +66,7 @@ static MopPlugin *_instance;
               binaryMessenger:[registrar messenger]];
     [registrar addMethodCallDelegate:_instance channel:appletShareChannel];
     _instance.shareAppletMethodChannel = appletShareChannel;
+    
 
 }
 
@@ -174,7 +175,7 @@ static MopPlugin *_instance;
     if ([string containsString:@"finclipWebview/url="]) {
         if (![FATClient sharedClient].inited) {
             [self checkSDKInitStatusWithComplete:^(BOOL result) {
-                if (YES) {
+                if (result) {
                     FlutterMethodChannel *channel = [[MopPlugin instance] shareMethodChannel];
                     [channel invokeMethod:@"shareApi:openURL" arguments:@{@"url":string} result:^(id  _Nullable result) {
 
@@ -217,6 +218,7 @@ static MopPlugin *_instance;
 
 - (void)checkSDKInitStatusWithComplete:(void(^)(BOOL result))complete {
     if (self.checkSDKInitTimes >=20) {
+        complete(NO);
         return;
     }
     if ([FATClient sharedClient].inited) {
