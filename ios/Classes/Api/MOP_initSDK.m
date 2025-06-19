@@ -51,7 +51,6 @@
     config.disableGetSuperviseInfo = [self.config[@"disableGetSuperviseInfo"] boolValue];
     config.ignoreWebviewCertAuth = [self.config[@"ignoreWebviewCertAuth"] boolValue];
     config.appletIntervalUpdateLimit = [self.config[@"appletIntervalUpdateLimit"] integerValue];
-    config.startCrashProtection = [self.config[@"startCrashProtection"] boolValue];
     config.enableApmDataCompression = [self.config[@"enableApmDataCompression"] boolValue];
     config.encryptServerData = [self.config[@"encryptServerData"] boolValue];
     config.enableAppletDebug = [self.config[@"appletDebugMode"] integerValue];
