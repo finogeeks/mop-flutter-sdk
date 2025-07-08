@@ -50,18 +50,18 @@ git add .
 git commit -m "release: version:$version"
 git push ssh-origin HEAD:refs/heads/${branch}
 
+cat pubspec.yaml
+
+git add .
+git commit -m "release: version:$version"
+git tag -d ${version}
+git push ssh-origin --delete tag ${version}
+git tag -a ${version} -m 'FinClip-Flutter-SDK发版'
+git push ssh-origin --tags -f
+
 # 主要发布流程
 do_publish() {
-    cat pubspec.yaml
-
-    git add .
-	git commit -m "release: version:$version"
-	git tag -d ${version}
-	git push ssh-origin --delete tag ${version}
-	git tag -a ${version} -m 'FinClip-Flutter-SDK发版'
-	git push ssh-origin --tags -f
-
-
+    
 	export http_proxy=http://127.0.0.1:1087
 	export https_proxy=http://127.0.0.1:1087
 
