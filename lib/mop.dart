@@ -1269,6 +1269,9 @@ class Mop {
       return handler.getMobileNumber((params0) =>
           {_channel.invokeMethod("getPhoneNumberResult", params0)});
     };
+    _appletHandlerApis["getGrayExtension"] = (params) async {
+      return handler.getGrayExtension(params["appletId"]);
+    };
     _channel.invokeMethod("registerAppletHandler");
   }
 

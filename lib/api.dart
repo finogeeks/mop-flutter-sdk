@@ -51,4 +51,11 @@ abstract class AppletHandler {
 
   ///getMobileNumber
   Future<void> getMobileNumber(Function(dynamic params) param0);
+
+  /// 获取灰度扩展参数
+  /// [appletId] 小程序ID
+  /// 返回灰度配置Map
+  Future<Map<String, dynamic>?> getGrayExtension(String appletId) {
+    return Future.value(null);
+  }
 }

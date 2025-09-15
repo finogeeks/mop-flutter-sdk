@@ -44,10 +44,7 @@ public class FilePathModule extends BaseApi {
 
         try {
             String absolutePath;
-            if (appId == null) {
-                // 获取当前小程序的ID，如果没有传入
-                appId = FinAppClient.getAppletApiManager().getCurrentAppletId();
-            }
+            // 如果没有传入appId，则使用当前小程序的ID（如果有的话）
 
             if (needFileExist == null || needFileExist) {
                 // 需要文件存在
