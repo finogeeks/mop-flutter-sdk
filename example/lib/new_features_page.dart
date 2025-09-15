@@ -1,0 +1,339 @@
+import 'package:flutter/material.dart';
+import 'package:mop/mop.dart';
+
+class NewFeaturesPage extends StatefulWidget {
+  @override
+  _NewFeaturesPageState createState() => _NewFeaturesPageState();
+}
+
+class _NewFeaturesPageState extends State<NewFeaturesPage> {
+  final TextEditingController _searchController = TextEditingController();
+  final TextEditingController _fileNameController = TextEditingController(text: 'test.txt');
+  final TextEditingController _finFileController = TextEditingController(text: 'finfile://tmp_test.txt');
+
+  String _resultText = '';
+  List<Map<String, dynamic>> _usedApplets = [];
+  List<Map<String, dynamic>> _searchResults = [];
+
+  void _showResult(String result) {
+    setState(() {
+      _resultText = result;
+    });
+  }
+
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('新功能测试'),
+      ),
+      body: ListView(
+        padding: EdgeInsets.all(16),
+        children: [
+          _buildSectionTitle('1. 小程序预加载'),
+          ElevatedButton(
+            onPressed: () async {
+              try {
+                List<Map<String, dynamic>> results = await Mop.instance.downloadApplets(
+                  ['5f72e3559a6a7900019b5baa', '5f17f457297b540001e06ebb'],
+                  'https://api.finclip.com',
+                );
+                _showResult('预加载结果：\n${results.map((e) =>
+                  'appId: ${e['appId']}, success: ${e['success']}, needUpdate: ${e['needUpdate']}'
+                ).join('\n')}');
+              } catch (e) {
+                _showResult('预加载失败：$e');
+              }
+            },
+            child: Text('批量预加载小程序'),
+          ),
+
+          Divider(),
+          _buildSectionTitle('2. 搜索小程序'),
+          TextField(
+            controller: _searchController,
+            decoration: InputDecoration(
+              labelText: '搜索关键词',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          SizedBox(height: 8),
+          ElevatedButton(
+            onPressed: () async {
+              if (_searchController.text.isEmpty) {
+                _showSnackBar('请输入搜索关键词');
+                return;
+              }
+              try {
+                Map<String, dynamic> result = await Mop.instance.searchApplets(
+                  _searchController.text,
+                  'https://api.finclip.com',
+                );
+                setState(() {
+                  _searchResults = List<Map<String, dynamic>>.from(result['list'] ?? []);
+                });
+                _showResult('搜索到 ${result['total']} 个小程序');
+              } catch (e) {
+                _showResult('搜索失败：$e');
+              }
+            },
+            child: Text('搜索'),
+          ),
+          if (_searchResults.isNotEmpty)
+            Container(
+              height: 200,
+              child: ListView.builder(
+                itemCount: _searchResults.length,
+                itemBuilder: (context, index) {
+                  final applet = _searchResults[index];
+                  return ListTile(
+                    title: Text(applet['appName'] ?? ''),
+                    subtitle: Text(applet['desc'] ?? ''),
+                    leading: applet['logo'] != null
+                      ? Image.network(applet['logo'], width: 40, height: 40)
+                      : Icon(Icons.apps),
+                    onTap: () {
+                      _showSnackBar('点击了：${applet['appName']}');
+                    },
+                  );
+                },
+              ),
+            ),
+
+          Divider(),
+          _buildSectionTitle('3. 最近使用的小程序'),
+          ElevatedButton(
+            onPressed: () async {
+              try {
+                List<Map<String, dynamic>> applets = await Mop.instance.getUsedApplets();
+                setState(() {
+                  _usedApplets = applets;
+                });
+                _showResult('获取到 ${applets.length} 个最近使用的小程序');
+              } catch (e) {
+                _showResult('获取失败：$e');
+              }
+            },
+            child: Text('获取最近使用的小程序'),
+          ),
+          if (_usedApplets.isNotEmpty)
+            Container(
+              height: 150,
+              child: ListView.builder(
+                itemCount: _usedApplets.length,
+                itemBuilder: (context, index) {
+                  final applet = _usedApplets[index];
+                  return ListTile(
+                    title: Text(applet['name'] ?? ''),
+                    subtitle: Text('ID: ${applet['appId']}'),
+                    trailing: Text('v${applet['version']}'),
+                  );
+                },
+              ),
+            ),
+
+          Divider(),
+          _buildSectionTitle('4. 文件路径转换'),
+          TextField(
+            controller: _finFileController,
+            decoration: InputDecoration(
+              labelText: 'finfile路径',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          SizedBox(height: 8),
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () async {
+                    try {
+                      String? path = await Mop.instance.getFinFileAbsolutePath(
+                        _finFileController.text,
+                        needFileExist: false,
+                      );
+                      _showResult('绝对路径：\n$path');
+                    } catch (e) {
+                      _showResult('转换失败：$e');
+                    }
+                  },
+                  child: Text('转换为绝对路径'),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 16),
+          TextField(
+            controller: _fileNameController,
+            decoration: InputDecoration(
+              labelText: '文件名',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          SizedBox(height: 8),
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () async {
+                    try {
+                      String? path = await Mop.instance.generateFinFilePath(
+                        _fileNameController.text,
+                        FinFilePathType.TMP,
+                      );
+                      _showResult('生成的TMP路径：\n$path');
+                    } catch (e) {
+                      _showResult('生成失败：$e');
+                    }
+                  },
+                  child: Text('生成TMP路径'),
+                ),
+              ),
+              SizedBox(width: 8),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () async {
+                    try {
+                      String? path = await Mop.instance.generateFinFilePath(
+                        _fileNameController.text,
+                        FinFilePathType.USR,
+                      );
+                      _showResult('生成的USR路径：\n$path');
+                    } catch (e) {
+                      _showResult('生成失败：$e');
+                    }
+                  },
+                  child: Text('生成USR路径'),
+                ),
+              ),
+            ],
+          ),
+
+          Divider(),
+          _buildSectionTitle('5. 小程序收藏'),
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () async {
+                    try {
+                      await Mop.instance.updateAppletFavorite(
+                        '5f72e3559a6a7900019b5baa',
+                        true,
+                      );
+                      _showResult('已添加到收藏');
+                    } catch (e) {
+                      _showResult('收藏失败：$e');
+                    }
+                  },
+                  child: Text('添加收藏'),
+                ),
+              ),
+              SizedBox(width: 8),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () async {
+                    try {
+                      await Mop.instance.updateAppletFavorite(
+                        '5f72e3559a6a7900019b5baa',
+                        false,
+                      );
+                      _showResult('已取消收藏');
+                    } catch (e) {
+                      _showResult('取消收藏失败：$e');
+                    }
+                  },
+                  child: Text('取消收藏'),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 8),
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () async {
+                    try {
+                      bool? isFavorite = await Mop.instance.isAppletFavorite(
+                        '5f72e3559a6a7900019b5baa',
+                      );
+                      _showResult('是否已收藏：$isFavorite');
+                    } catch (e) {
+                      _showResult('查询失败：$e');
+                    }
+                  },
+                  child: Text('查询收藏状态'),
+                ),
+              ),
+              SizedBox(width: 8),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () async {
+                    try {
+                      Map<String, dynamic> result = await Mop.instance.getFavoriteApplets(
+                        'https://api.finclip.com',
+                      );
+                      _showResult('收藏列表：\n总数：${result['total']}\n列表：${result['list']}');
+                    } catch (e) {
+                      _showResult('获取收藏列表失败：$e');
+                    }
+                  },
+                  child: Text('获取收藏列表'),
+                ),
+              ),
+            ],
+          ),
+
+          Divider(),
+          _buildSectionTitle('6. 移动小程序到前台（仅Android）'),
+          ElevatedButton(
+            onPressed: () async {
+              try {
+                await Mop.instance.moveAppletToFront();
+                _showResult('已移动到前台');
+              } catch (e) {
+                _showResult('移动失败：$e');
+              }
+            },
+            child: Text('移动到前台'),
+          ),
+
+          Divider(),
+          _buildSectionTitle('执行结果'),
+          Container(
+            padding: EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              _resultText.isEmpty ? '暂无结果' : _resultText,
+              style: TextStyle(fontSize: 12),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSectionTitle(String title) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 8),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+          color: Colors.blue,
+        ),
+      ),
+    );
+  }
+}

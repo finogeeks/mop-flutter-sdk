@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:mop/api.dart';
+export 'package:mop/api.dart' show FinFilePathType;
 
 typedef MopEventCallback = void Function(dynamic event);
 typedef MopEventErrorCallback = void Function(dynamic event);
@@ -1348,5 +1349,129 @@ class Mop {
   /// 将当前正在运行的最后一个打开的小程序移至任务栈前台，仅Android生效
   void moveCurrentAppletToFront() async {
     return await _channel.invokeMethod("moveCurrentAppletToFront");
+  }
+
+  /// 批量下载/预加载小程序
+  /// [appIds] 小程序ID列表
+  /// [apiServer] 服务器地址
+  /// [isBatchDownload] 是否批量下载小程序（默认true）
+  /// 返回下载结果列表
+  Future<List<Map<String, dynamic>>> downloadApplets(
+    List<String> appIds,
+    String apiServer,
+    {bool isBatchDownload = true}
+  ) async {
+    Map<String, Object> params = {
+      'appIds': appIds,
+      'apiServer': apiServer,
+      'isBatchDownload': isBatchDownload,
+    };
+    final Map ret = await _channel.invokeMethod('downloadApplets', params);
+    return List<Map<String, dynamic>>.from(ret['data'] ?? []);
+  }
+
+  /// 搜索小程序
+  /// [text] 搜索内容
+  /// [apiServer] 服务器地址
+  /// 返回搜索结果
+  Future<Map<String, dynamic>> searchApplets(
+    String text,
+    String apiServer
+  ) async {
+    Map<String, Object> params = {
+      'text': text,
+      'apiServer': apiServer,
+    };
+    final Map ret = await _channel.invokeMethod('searchApplets', params);
+    return Map<String, dynamic>.from(ret);
+  }
+
+  /// 获取最近使用的小程序列表
+  /// 返回小程序信息列表
+  Future<List<Map<String, dynamic>>> getUsedApplets() async {
+    final Map ret = await _channel.invokeMethod('getUsedApplets');
+    return List<Map<String, dynamic>>.from(ret['data'] ?? []);
+  }
+
+  /// 将finfile路径转换为绝对路径
+  /// [appId] 小程序ID（可选）
+  /// [finFilePath] finfile路径
+  /// [needFileExist] 是否需要文件存在（默认true）
+  /// 返回绝对路径
+  Future<String?> getFinFileAbsolutePath(
+    String finFilePath,
+    {String? appId, bool needFileExist = true}
+  ) async {
+    Map<String, Object> params = {
+      'finFilePath': finFilePath,
+      'needFileExist': needFileExist,
+    };
+    if (appId != null) {
+      params['appId'] = appId;
+    }
+    final Map ret = await _channel.invokeMethod('getFinFileAbsolutePath', params);
+    return ret['path'];
+  }
+
+  /// 生成finfile协议路径
+  /// [fileName] 文件名
+  /// [pathType] 路径类型
+  /// 返回finfile路径
+  Future<String?> generateFinFilePath(
+    String fileName,
+    FinFilePathType pathType
+  ) async {
+    Map<String, Object> params = {
+      'fileName': fileName,
+      'pathType': pathType.index,
+    };
+    final Map ret = await _channel.invokeMethod('generateFinFilePath', params);
+    return ret['path'];
+  }
+
+  /// 更新小程序收藏状态
+  /// [appletId] 小程序ID
+  /// [favorite] 是否收藏
+  Future<void> updateAppletFavorite(
+    String appletId,
+    bool favorite
+  ) async {
+    Map<String, Object> params = {
+      'appletId': appletId,
+      'favorite': favorite,
+    };
+    await _channel.invokeMethod('updateAppletFavorite', params);
+  }
+
+  /// 获取小程序是否已收藏
+  /// [appletId] 小程序ID
+  /// 返回收藏状态
+  Future<bool?> isAppletFavorite(String appletId) async {
+    Map<String, Object> params = {'appletId': appletId};
+    final Map ret = await _channel.invokeMethod('isAppletFavorite', params);
+    return ret['favorite'];
+  }
+
+  /// 获取收藏的小程序列表
+  /// [apiServer] 服务器地址
+  /// [pageNo] 页码（传0获取全部）
+  /// [pageSize] 页大小（传0获取全部）
+  /// 返回收藏列表
+  Future<Map<String, dynamic>> getFavoriteApplets(
+    String apiServer,
+    {int pageNo = 0, int pageSize = 0}
+  ) async {
+    Map<String, Object> params = {
+      'apiServer': apiServer,
+      'pageNo': pageNo,
+      'pageSize': pageSize,
+    };
+    final Map ret = await _channel.invokeMethod('getFavoriteApplets', params);
+    return Map<String, dynamic>.from(ret);
+  }
+
+  /// 将小程序移动到前台（仅Android支持）
+  Future<void> moveAppletToFront() async {
+    await _channel.invokeMethod('moveAppletToFront');
   }
 }

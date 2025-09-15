@@ -6,6 +6,7 @@ import 'package:mop/api.dart';
 import 'dart:async';
 import 'package:mop/mop.dart';
 import 'package:mop_example/test_page.dart';
+import 'package:mop_example/new_features_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -226,6 +227,20 @@ class _MyAppState extends State<MyApp> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => TestPage()),
+                    );
+                  },
+                );
+              },
+            ),
+            Builder(
+              builder: (context) {
+                return IconButton(
+                  icon: Icon(Icons.new_releases),
+                  tooltip: 'New Features',
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => NewFeaturesPage()),
                     );
                   },
                 );

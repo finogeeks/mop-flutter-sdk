@@ -1,3 +1,10 @@
+/// finfile路径类型
+enum FinFilePathType {
+  USR,   // 用户目录 - 持久化，可自定义路径
+  TMP,   // 临时目录 - 冷启动时清除
+  STORE  // 存储目录 - 持久化
+}
+
 class CustomMenu {
   String menuId;
   String image;
