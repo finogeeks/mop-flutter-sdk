@@ -41,12 +41,12 @@ public class FavoriteModule extends BaseApi {
     }
 
     private void updateAppletFavorite(Map param, ICallback callback) {
-        String appletId = (String) param.get("appletId");
+        // Android SDK只能操作当前小程序的收藏状态，不需要appletId
         Boolean favorite = (Boolean) param.get("favorite");
 
-        if (appletId == null || favorite == null) {
+        if (favorite == null) {
             callback.onFail(new HashMap<String, Object>() {{
-                put("error", "Missing required parameters");
+                put("error", "Missing favorite parameter");
             }});
             return;
         }
@@ -77,15 +77,7 @@ public class FavoriteModule extends BaseApi {
     }
 
     private void isAppletFavorite(Map param, ICallback callback) {
-        String appletId = (String) param.get("appletId");
-
-        if (appletId == null) {
-            callback.onFail(new HashMap<String, Object>() {{
-                put("error", "Missing appletId parameter");
-            }});
-            return;
-        }
-
+        // Android SDK只能查询当前小程序的收藏状态，appletId参数仅用于保持接口一致性
         try {
             Boolean isFavorite = MoreMenuHelper.isAppletFavorite(getContext());
 
