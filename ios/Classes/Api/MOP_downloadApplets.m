@@ -28,13 +28,21 @@
         } else {
             NSMutableArray *list = [NSMutableArray array];
             for (NSDictionary *info in results) {
+                
+                NSString *appId = info[@"appId"];
+                NSNumber *success = info[@"success"];
+                NSNumber *needUpdate = info[@"needUpdate"];
+                
                 NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-                dict[@"appId"] = info[@"appId"] ?: @"";
-                dict[@"success"] = info[@"success"] ?: @NO;
-                if ([info[@"success"] boolValue]) {
-                    dict[@"needUpdate"] = info[@"needUpdate"] ?: @NO;
-                } else {
-                    dict[@"needUpdate"] = [NSNull null];
+
+                if ([appId isKindOfClass:NSString.class]) {
+                    dict[@"appId"] = appId;
+                }
+                if ([success isKindOfClass:NSNumber.class]) {
+                    dict[@"success"] = success;
+                }
+                if ([needUpdate isKindOfClass:NSNumber.class]) {
+                    dict[@"needUpdate"] = needUpdate;
                 }
                 [list addObject:dict];
             }
