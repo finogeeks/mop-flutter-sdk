@@ -81,15 +81,16 @@ public class FilePathModule extends BaseApi {
 
         try {
             FinFilePathType pathType;
+            // 根据Flutter枚举顺序匹配：TMP=0, STORE=1, USR=2
             switch (pathTypeIndex) {
-                case 0:
-                    pathType = FinFilePathType.USR;
-                    break;
-                case 1:
+                case 0:  // TMP
                     pathType = FinFilePathType.TMP;
                     break;
-                case 2:
+                case 1:  // STORE
                     pathType = FinFilePathType.STORE;
+                    break;
+                case 2:  // USR
+                    pathType = FinFilePathType.USR;
                     break;
                 default:
                     throw new IllegalArgumentException("Invalid pathType: " + pathTypeIndex);
