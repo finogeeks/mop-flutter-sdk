@@ -20,13 +20,13 @@
     FATFinFilePathType finPathType;
     switch (self.pathType) {
         case 0:  // TMP
-            finPathType = FATFinFilePathTypeTmp;
+            finPathType = FATFinFilePathTmp;
             break;
         case 1:  // STORE
-            finPathType = FATFinFilePathTypeStore;
+            finPathType = FATFinFilePathStore;
             break;
         case 2:  // USR
-            finPathType = FATFinFilePathTypeUsr;
+            finPathType = FATFinFilePathUsr;
             break;
         default:
             failure(@"Invalid pathType");
