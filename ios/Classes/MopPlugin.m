@@ -160,7 +160,7 @@ static MopPlugin *_instance;
                   result(@{@"retMsg": error ,@"success":@(NO)});
               }
           } cancel:^{
-              
+
           }];
       } else {
           result(FlutterMethodNotImplemented);
