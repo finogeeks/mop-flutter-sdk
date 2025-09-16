@@ -223,11 +223,15 @@ class _NewFeaturesPageState extends State<NewFeaturesPage> {
                 child: ElevatedButton(
                   onPressed: () async {
                     try {
-                      await Mop.instance.updateAppletFavorite(
+                      Map<String, dynamic> result = await Mop.instance.updateAppletFavorite(
                         '5f72e3559a6a7900019b5baa',
                         true,
                       );
-                      _showResult('已添加到收藏');
+                      if (result['success'] == true) {
+                        _showResult('已添加到收藏');
+                      } else {
+                        _showResult('收藏失败：${result['retMsg'] ?? '未知错误'}');
+                      }
                     } catch (e) {
                       _showResult('收藏失败：$e');
                     }
@@ -240,11 +244,15 @@ class _NewFeaturesPageState extends State<NewFeaturesPage> {
                 child: ElevatedButton(
                   onPressed: () async {
                     try {
-                      await Mop.instance.updateAppletFavorite(
+                      Map<String, dynamic> result = await Mop.instance.updateAppletFavorite(
                         '5f72e3559a6a7900019b5baa',
                         false,
                       );
-                      _showResult('已取消收藏');
+                      if (result['success'] == true) {
+                        _showResult('已取消收藏');
+                      } else {
+                        _showResult('取消收藏失败：${result['retMsg'] ?? '未知错误'}');
+                      }
                     } catch (e) {
                       _showResult('取消收藏失败：$e');
                     }

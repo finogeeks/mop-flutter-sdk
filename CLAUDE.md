@@ -374,3 +374,4 @@ Mop.instance.registerExtensionApi('myCustomApi', (params) async {
 3. **UI 定制**：通过 UIConfig 和 CapsuleConfig 进行界面定制
 4. **自定义 API 不生效**：iOS 需要在小程序根目录创建 FinChatConf.js 配置文件
 5. **性能优化**：合理设置 `appletIntervalUpdateLimit` 和 `backgroundFetchPeriod`
+- iOS最终返回的数据会经过 MopPlugin 里面进行加工封装

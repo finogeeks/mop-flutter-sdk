@@ -1458,7 +1458,11 @@ class Mop {
   /// 更新小程序收藏状态
   /// [appletId] 小程序ID
   /// [favorite] 是否收藏
-  Future<void> updateAppletFavorite(
+  /// 返回 Map，包含以下字段：
+  /// - success: bool 操作是否成功
+  /// - retMsg: String 返回消息，成功时为"ok"，失败时为错误信息
+  /// - data: Map 额外数据（可能为空Map）
+  Future<Map<String, dynamic>> updateAppletFavorite(
     String appletId,
     bool favorite
   ) async {
@@ -1466,7 +1470,12 @@ class Mop {
       'appletId': appletId,
       'favorite': favorite,
     };
-    await _channel.invokeMethod('updateAppletFavorite', params);
+
+    final Map result = await _channel.invokeMethod('updateAppletFavorite', params);
+
+    // 返回完整的响应信息
+    // iOS/Android 都会返回格式：{retMsg: "ok", success: true/false, data: {}}
+    return Map<String, dynamic>.from(result);
   }
 
   /// 获取小程序是否已收藏
