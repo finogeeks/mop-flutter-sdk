@@ -1369,8 +1369,30 @@ class Mop {
       'apiServer': apiServer,
       'isBatchDownload': isBatchDownload,
     };
+    // invokeMethod 返回的是 _Map<Object?, Object?>
     final Map ret = await _channel.invokeMethod('downloadApplets', params);
-    return List<Map<String, dynamic>>.from(ret['data'] ?? []);
+
+    // 取值时 Dart 会自动处理类型，不需要显式转换
+    // ret['data'] 会返回 Object?，可以是 Map 或 List
+    final retData = ret['data'];
+
+    // 判断数据结构并获取实际数据
+    dynamic data;
+    if (retData is Map && retData['data'] != null) {
+      // iOS 格式：两层 data 结构
+      data = retData['data'];
+    } else if (retData is List) {
+      // 直接是列表的情况
+      data = retData;
+    }
+
+    if (data == null || data is! List) return [];
+
+    // 将 List<Object?> 中的每个 _Map<Object?, Object?> 转换为 Map<String, dynamic>
+    return data.map<Map<String, dynamic>>((item) {
+      // item 是 _Map<Object?, Object?>，需要转换
+      return Map<String, dynamic>.from(item as Map);
+    }).toList();
   }
 
   /// 搜索小程序
