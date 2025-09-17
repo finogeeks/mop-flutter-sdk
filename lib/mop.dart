@@ -1398,9 +1398,11 @@ class Mop {
       'apiServer': apiServer,
     };
     final Map ret = await _channel.invokeMethod('searchApplets', params);
-    // iOS端返回的数据在 data 字段中
-    final data = ret['data'];
-    if (data is Map) {
+
+    // 取出 data
+    final data = (ret['data'] as Map?);
+
+    if (data != null) {
       return Map<String, dynamic>.from(data);
     } else {
       return {'total': 0, 'list': []};
@@ -1413,17 +1415,11 @@ class Mop {
     // invokeMethod 返回的是 _Map<Object?, Object?>
     final Map ret = await _channel.invokeMethod('getUsedApplets');
 
-    // iOS端返回的数据在 data.data 字段中
-    final data = ret['data'];
-    if (data is Map && data['data'] is List) {
-      // iOS端返回格式：{data: [...]}
-      final results = data['data'] as List;
+    // 取出 data.data
+    final results = (ret['data'] as Map?)?['data'];
+
+    if (results is List) {
       return results
-          .map((e) => Map<String, dynamic>.from(e as Map))
-          .toList();
-    } else if (data is List) {
-      // 兼容直接返回列表的情况
-      return data
           .map((e) => Map<String, dynamic>.from(e as Map))
           .toList();
     } else {
@@ -1514,12 +1510,14 @@ class Mop {
       'pageSize': pageSize,
     };
     final Map ret = await _channel.invokeMethod('getFavoriteApplets', params);
-    // iOS端返回的数据在 data 字段中
-    final data = ret['data'];
-    if (data is Map) {
+
+    // 取出 data
+    final data = (ret['data'] as Map?);
+
+    if (data != null) {
       return Map<String, dynamic>.from(data);
     } else {
-      return {'total': 0, 'list': [], 'pageNo': pageNo, 'pageSize': pageSize};
+      return {'total': 0, 'list': []};
     }
   }
 
