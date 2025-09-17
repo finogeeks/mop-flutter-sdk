@@ -41,7 +41,7 @@ class _NewFeaturesPageState extends State<NewFeaturesPage> {
             onPressed: () async {
               try {
                 List<Map<String, dynamic>> results = await Mop.instance.downloadApplets(
-                  ['5f72e3559a6a7900019b5baa', '5f17f457297b540001e06ebb'],
+                  ['5f72e3559a6a7900019b5baa', '5facb3a52dcbff00017469bd'],
                   'https://api.finclip.com',
                 );
                 _showResult('预加载结果：\n${results.map((e) =>

@@ -1398,7 +1398,13 @@ class Mop {
       'apiServer': apiServer,
     };
     final Map ret = await _channel.invokeMethod('searchApplets', params);
-    return Map<String, dynamic>.from(ret);
+    // iOS端返回的数据在 data 字段中
+    final data = ret['data'];
+    if (data is Map) {
+      return Map<String, dynamic>.from(data);
+    } else {
+      return {'total': 0, 'list': []};
+    }
   }
 
   /// 获取最近使用的小程序列表
@@ -1407,11 +1413,17 @@ class Mop {
     // invokeMethod 返回的是 _Map<Object?, Object?>
     final Map ret = await _channel.invokeMethod('getUsedApplets');
 
-    // 取出 data.data
-    final results = (ret['data'] as Map?)?['data'];
-
-    if (results is List) {
+    // iOS端返回的数据在 data.data 字段中
+    final data = ret['data'];
+    if (data is Map && data['data'] is List) {
+      // iOS端返回格式：{data: [...]}
+      final results = data['data'] as List;
       return results
+          .map((e) => Map<String, dynamic>.from(e as Map))
+          .toList();
+    } else if (data is List) {
+      // 兼容直接返回列表的情况
+      return data
           .map((e) => Map<String, dynamic>.from(e as Map))
           .toList();
     } else {
@@ -1502,7 +1514,13 @@ class Mop {
       'pageSize': pageSize,
     };
     final Map ret = await _channel.invokeMethod('getFavoriteApplets', params);
-    return Map<String, dynamic>.from(ret);
+    // iOS端返回的数据在 data 字段中
+    final data = ret['data'];
+    if (data is Map) {
+      return Map<String, dynamic>.from(data);
+    } else {
+      return {'total': 0, 'list': [], 'pageNo': pageNo, 'pageSize': pageSize};
+    }
   }
 
   /// 将小程序移动到前台（仅Android支持）
