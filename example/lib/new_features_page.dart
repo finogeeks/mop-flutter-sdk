@@ -7,7 +7,7 @@ class NewFeaturesPage extends StatefulWidget {
 }
 
 class _NewFeaturesPageState extends State<NewFeaturesPage> {
-  final TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController(text: '绘图小程序');
   final TextEditingController _fileNameController = TextEditingController(text: 'test.txt');
   final TextEditingController _finFileController = TextEditingController(text: 'finfile://tmp_test.txt');
 

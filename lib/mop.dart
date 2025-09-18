@@ -1373,7 +1373,7 @@ class Mop {
     final Map ret = await _channel.invokeMethod('downloadApplets', params);
 
     // 取出 data.data
-    final results = (ret['data'] as Map?)?['data'];
+    final results = (ret['data'] as Map?)?['list'];
 
     if (results is List) {
       return results
@@ -1416,7 +1416,7 @@ class Mop {
     final Map ret = await _channel.invokeMethod('getUsedApplets');
 
     // 取出 data.data
-    final results = (ret['list'] as Map?)?['data'];
+    final results = (ret['data'] as Map?)?['list'];
 
     if (results is List) {
       return results
