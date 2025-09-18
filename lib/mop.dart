@@ -1424,7 +1424,7 @@ class Mop {
   ///   "retMsg": "ok",
   ///   "success": true,
   ///   "data": {
-  ///     "list": [            // 小程序数组<FATAppletInfo>
+  ///     "list": [            // 小程序数组
   ///       {
   ///       }
   ///     ]

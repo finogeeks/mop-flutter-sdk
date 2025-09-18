@@ -40,13 +40,23 @@ class _NewFeaturesPageState extends State<NewFeaturesPage> {
           ElevatedButton(
             onPressed: () async {
               try {
-                List<Map<String, dynamic>> results = await Mop.instance.downloadApplets(
+                Map<String, dynamic> result = await Mop.instance.downloadApplets(
                   ['5f72e3559a6a7900019b5baa', '5facb3a52dcbff00017469bd'],
                   'https://api.finclip.com',
                 );
-                _showResult('预加载结果：\n${results.map((e) =>
-                  'appId: ${e['appId']}, success: ${e['success']}, needUpdate: ${e['needUpdate']}'
-                ).join('\n')}');
+                if (result['success'] == true) {
+                  final data = result['data'] as Map?;
+                  final list = data?['list'] as List?;
+                  if (list != null && list.isNotEmpty) {
+                    _showResult('预加载结果：\n${list.map((e) =>
+                      'appId: ${e['appId']}, success: ${e['success']}, needUpdate: ${e['needUpdate']}'
+                    ).join('\n')}');
+                  } else {
+                    _showResult('预加载完成，但没有返回数据');
+                  }
+                } else {
+                  _showResult('预加载失败：${result['retMsg']}');
+                }
               } catch (e) {
                 _showResult('预加载失败：$e');
               }
@@ -111,11 +121,21 @@ class _NewFeaturesPageState extends State<NewFeaturesPage> {
           ElevatedButton(
             onPressed: () async {
               try {
-                List<Map<String, dynamic>> applets = await Mop.instance.getUsedApplets();
-                setState(() {
-                  _usedApplets = applets;
-                });
-                _showResult('获取到 ${applets.length} 个最近使用的小程序');
+                Map<String, dynamic> result = await Mop.instance.getUsedApplets();
+                if (result['success'] == true) {
+                  final data = result['data'] as Map?;
+                  final list = data?['list'] as List?;
+                  if (list != null) {
+                    setState(() {
+                      _usedApplets = list.map((e) => Map<String, dynamic>.from(e as Map)).toList();
+                    });
+                    _showResult('获取到 ${list.length} 个最近使用的小程序');
+                  } else {
+                    _showResult('没有最近使用的小程序');
+                  }
+                } else {
+                  _showResult('获取失败：${result['retMsg']}');
+                }
               } catch (e) {
                 _showResult('获取失败：$e');
               }
@@ -154,11 +174,17 @@ class _NewFeaturesPageState extends State<NewFeaturesPage> {
                 child: ElevatedButton(
                   onPressed: () async {
                     try {
-                      String? path = await Mop.instance.getFinFileAbsolutePath(
+                      Map<String, dynamic> result = await Mop.instance.getFinFileAbsolutePath(
                         _finFileController.text,
                         needFileExist: false,
                       );
-                      _showResult('绝对路径：\n$path');
+                      if (result['success'] == true) {
+                        final data = result['data'] as Map?;
+                        final path = data?['path'];
+                        _showResult('绝对路径：\n$path');
+                      } else {
+                        _showResult('转换失败：${result['retMsg']}');
+                      }
                     } catch (e) {
                       _showResult('转换失败：$e');
                     }
@@ -183,11 +209,17 @@ class _NewFeaturesPageState extends State<NewFeaturesPage> {
                 child: ElevatedButton(
                   onPressed: () async {
                     try {
-                      String? path = await Mop.instance.generateFinFilePath(
+                      Map<String, dynamic> result = await Mop.instance.generateFinFilePath(
                         _fileNameController.text,
                         FinFilePathType.TMP,
                       );
-                      _showResult('生成的TMP路径：\n$path');
+                      if (result['success'] == true) {
+                        final data = result['data'] as Map?;
+                        final path = data?['path'];
+                        _showResult('生成的TMP路径：\n$path');
+                      } else {
+                        _showResult('生成失败：${result['retMsg']}');
+                      }
                     } catch (e) {
                       _showResult('生成失败：$e');
                     }
@@ -200,11 +232,17 @@ class _NewFeaturesPageState extends State<NewFeaturesPage> {
                 child: ElevatedButton(
                   onPressed: () async {
                     try {
-                      String? path = await Mop.instance.generateFinFilePath(
+                      Map<String, dynamic> result = await Mop.instance.generateFinFilePath(
                         _fileNameController.text,
                         FinFilePathType.USR,
                       );
-                      _showResult('生成的USR路径：\n$path');
+                      if (result['success'] == true) {
+                        final data = result['data'] as Map?;
+                        final path = data?['path'];
+                        _showResult('生成的USR路径：\n$path');
+                      } else {
+                        _showResult('生成失败：${result['retMsg']}');
+                      }
                     } catch (e) {
                       _showResult('生成失败：$e');
                     }
@@ -269,10 +307,16 @@ class _NewFeaturesPageState extends State<NewFeaturesPage> {
                 child: ElevatedButton(
                   onPressed: () async {
                     try {
-                      bool? isFavorite = await Mop.instance.isAppletFavorite(
+                      Map<String, dynamic> result = await Mop.instance.isAppletFavorite(
                         '5f72e3559a6a7900019b5baa',
                       );
-                      _showResult('是否已收藏：$isFavorite');
+                      if (result['success'] == true) {
+                        final data = result['data'] as Map?;
+                        final isFavorite = data?['favorite'];
+                        _showResult('是否已收藏：$isFavorite');
+                      } else {
+                        _showResult('查询失败：${result['retMsg']}');
+                      }
                     } catch (e) {
                       _showResult('查询失败：$e');
                     }
