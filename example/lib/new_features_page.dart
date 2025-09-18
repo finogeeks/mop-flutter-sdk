@@ -274,52 +274,52 @@ class _NewFeaturesPageState extends State<NewFeaturesPage> {
 
           Divider(),
           _buildSectionTitle('5. 小程序收藏'),
-          Row(
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () async {
-                    try {
-                      Map<String, dynamic> result = await Mop.instance.updateAppletFavorite(
-                        '5f72e3559a6a7900019b5baa',
-                        true,
-                      );
-                      if (result['success'] == true) {
-                        _showResult('已添加到收藏');
-                      } else {
-                        _showResult('收藏失败：${result['retMsg'] ?? '未知错误'}');
-                      }
-                    } catch (e) {
-                      _showResult('收藏失败：$e');
-                    }
-                  },
-                  child: Text('添加收藏'),
-                ),
-              ),
-              SizedBox(width: 8),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () async {
-                    try {
-                      Map<String, dynamic> result = await Mop.instance.updateAppletFavorite(
-                        '5f72e3559a6a7900019b5baa',
-                        false,
-                      );
-                      if (result['success'] == true) {
-                        _showResult('已取消收藏');
-                      } else {
-                        _showResult('取消收藏失败：${result['retMsg'] ?? '未知错误'}');
-                      }
-                    } catch (e) {
-                      _showResult('取消收藏失败：$e');
-                    }
-                  },
-                  child: Text('取消收藏'),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 8),
+          // Row(
+          //   children: [
+          //     Expanded(
+          //       child: ElevatedButton(
+          //         onPressed: () async {
+          //           try {
+          //             Map<String, dynamic> result = await Mop.instance.updateAppletFavorite(
+          //               '5f72e3559a6a7900019b5baa',
+          //               true,
+          //             );
+          //             if (result['success'] == true) {
+          //               _showResult('已添加到收藏');
+          //             } else {
+          //               _showResult('收藏失败：${result['retMsg'] ?? '未知错误'}');
+          //             }
+          //           } catch (e) {
+          //             _showResult('收藏失败：$e');
+          //           }
+          //         },
+          //         child: Text('添加收藏'),
+          //       ),
+          //     ),
+          //     SizedBox(width: 8),
+          //     Expanded(
+          //       child: ElevatedButton(
+          //         onPressed: () async {
+          //           try {
+          //             Map<String, dynamic> result = await Mop.instance.updateAppletFavorite(
+          //               '5f72e3559a6a7900019b5baa',
+          //               false,
+          //             );
+          //             if (result['success'] == true) {
+          //               _showResult('已取消收藏');
+          //             } else {
+          //               _showResult('取消收藏失败：${result['retMsg'] ?? '未知错误'}');
+          //             }
+          //           } catch (e) {
+          //             _showResult('取消收藏失败：$e');
+          //           }
+          //         },
+          //         child: Text('取消收藏'),
+          //       ),
+          //     ),
+          //   ],
+          // ),
+          // SizedBox(height: 8),
           Row(
             children: [
               Expanded(
