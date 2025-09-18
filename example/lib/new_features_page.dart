@@ -170,9 +170,8 @@ class _NewFeaturesPageState extends State<NewFeaturesPage> {
                 itemBuilder: (context, index) {
                   final applet = _usedApplets[index];
                   return ListTile(
-                    title: Text(applet['name'] ?? ''),
-                    subtitle: Text('ID: ${applet['appId']}'),
-                    trailing: Text('v${applet['version']}'),
+                    title: Text(applet['name'] ?? applet['appTitle'] ?? ''),
+                    subtitle: Text('ID: ${applet['appId'] ?? ''}'),
                   );
                 },
               ),
