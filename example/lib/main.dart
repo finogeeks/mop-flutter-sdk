@@ -53,6 +53,7 @@ class _MyAppState extends State<MyApp> {
     config.appletDebugMode = BOOLState.BOOLStateTrue;
     
     UIConfig uiconfig = UIConfig();
+    uiconfig.isHideFavoriteMenu = false;
     uiconfig.isAlwaysShowBackInDefaultNavigationBar = false;
     uiconfig.isClearNavigationBarNavButtonBackground = false;
     uiconfig.isHideFeedbackAndComplaints = true;

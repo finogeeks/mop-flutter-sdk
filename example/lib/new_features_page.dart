@@ -351,7 +351,27 @@ class _NewFeaturesPageState extends State<NewFeaturesPage> {
                       Map<String, dynamic> result = await Mop.instance.getFavoriteApplets(
                         'https://api.finclip.com',
                       );
-                      _showResult('收藏列表：\n总数：${result['total']}\n列表：${result['list']}');
+                      if (result['success'] == true) {
+                        final data = result['data'] as Map?;
+                        if (data != null && data['data'] != null) {
+                          final innerData = data['data'] as Map;
+                          final total = innerData['total'] ?? 0;
+                          final list = innerData['list'] as List? ?? [];
+
+                          String listInfo = '';
+                          for (var item in list) {
+                            if (item is Map) {
+                              listInfo += '\n  - ${item['name'] ?? '未知'} (${item['appId'] ?? ''})';
+                            }
+                          }
+
+                          _showResult('收藏列表：\n总数：$total$listInfo');
+                        } else {
+                          _showResult('获取收藏列表成功，但没有数据');
+                        }
+                      } else {
+                        _showResult('获取收藏列表失败：${result['retMsg'] ?? '未知错误'}');
+                      }
                     } catch (e) {
                       _showResult('获取收藏列表失败：$e');
                     }
