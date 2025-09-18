@@ -1367,6 +1367,10 @@ class Mop {
   ///   "data": {
   ///     "list": [
   ///       {
+  ///         "appId": "5f72e3559a6a7900019b5baa",
+  ///         "success": true,  // 下载是否成功
+  ///         "needUpdate": false,  // 是否需要更新
+  ///         "errMsg": ""  // 错误信息，成功时为空
   ///       }
   ///     ]
   ///   }
@@ -1400,7 +1404,9 @@ class Mop {
   ///     "list": [            // 搜索到的小程序集合
   ///       {
   ///       }
-  ///     ]
+  ///     ],
+  ///     "pageNo": 0,  // 当前页码
+  ///     "pageSize": 10  // 每页数量
   ///   }
   /// }
   /// ```
@@ -1438,7 +1444,7 @@ class Mop {
 
   /// 将finfile路径转换为绝对路径
   /// [appId] 小程序ID（可选）
-  /// [finFilePath] finfile路径
+  /// [finFilePath] finfile路径，如 "finfile://tmp_test.txt"
   /// [needFileExist] 是否需要文件存在（默认true）
   ///
   /// 返回值格式：
@@ -1447,7 +1453,7 @@ class Mop {
   ///   "retMsg": "ok",
   ///   "success": true,
   ///   "data": {
-  ///     "path": "/path/to/file"  // 绝对路径
+  ///     "path": "/var/mobile/Containers/Data/Application/.../tmp/test.txt"  // 实际的绝对路径
   ///   }
   /// }
   /// ```
@@ -1467,8 +1473,10 @@ class Mop {
   }
 
   /// 生成finfile协议路径
-  /// [fileName] 文件名
-  /// [pathType] 路径类型
+  /// [fileName] 文件名，如 "test.txt"
+  /// [pathType] 路径类型：
+  ///   - FinFilePathType.TMP: 临时目录
+  ///   - FinFilePathType.USR: 用户目录
   ///
   /// 返回值格式：
   /// ```
@@ -1476,7 +1484,7 @@ class Mop {
   ///   "retMsg": "ok",
   ///   "success": true,
   ///   "data": {
-  ///     "path": "finfile://tmp_xxx.txt"  // finfile协议路径
+  ///     "path": "finfile://usr/test.txt"
   ///   }
   /// }
   /// ```
@@ -1494,11 +1502,16 @@ class Mop {
 
   /// 更新小程序收藏状态
   /// [appletId] 小程序ID
-  /// [favorite] 是否收藏
-  /// 返回 Map，包含以下字段：
-  /// - success: bool 操作是否成功
-  /// - retMsg: String 返回消息，成功时为"ok"，失败时为错误信息
-  /// - data: Map 额外数据（可能为空Map）
+  /// [favorite] true表示添加收藏，false表示取消收藏
+  ///
+  /// 返回值格式：
+  /// ```
+  /// {
+  ///   "retMsg": "ok",  // 成功时为"ok"，失败时为错误信息
+  ///   "success": true,  // 操作是否成功
+  ///   "data": {}  // 额外数据（通常为空对象）
+  /// }
+  /// ```
   Future<Map<String, dynamic>> updateAppletFavorite(
     String appletId,
     bool favorite
@@ -1524,7 +1537,7 @@ class Mop {
   ///   "retMsg": "ok",
   ///   "success": true,
   ///   "data": {
-  ///     "favorite": true/false  // 收藏状态
+  ///     "favorite": true  // true表示已收藏，false表示未收藏
   ///   }
   /// }
   /// ```
@@ -1545,13 +1558,23 @@ class Mop {
   ///   "retMsg": "ok",
   ///   "success": true,
   ///   "data": {
-  ///     "total": 10,          // 收藏的小程序总数
-  ///     "pageNo": 1,          // 当前页码
-  ///     "pageSize": 10,       // 页大小
-  ///     "list": [            // 收藏的小程序列表
-  ///       {
-  ///       }
-  ///     ]
+  ///     "data": {
+  ///       "total": 3,              // 收藏的小程序总数
+  ///       "list": [                // 收藏的小程序列表
+  ///         {
+  ///           "appId": "5f72e3559a6a7900019b5baa",
+  ///           "name": "小程序名称",
+  ///           "logo": "/api/v1/mop/runtime/download/xxx",  // 图标路径，需要拼接baseUrl
+  ///           "createTime": 1758178260152,  // 收藏时间戳
+  ///           "currentUserId": "18607180143",
+  ///           "encryptedUserId": ""
+  ///         }
+  ///       ],
+  ///       "apiServer": "https://www.finclip.com"
+  ///     },
+  ///     "errcode": "OK",
+  ///     "error": "",
+  ///     "traceid": "4aaf26a68c484a31aa9c37859f75d2cd"
   ///   }
   /// }
   /// ```
