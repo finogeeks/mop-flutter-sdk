@@ -1358,8 +1358,21 @@ class Mop {
   /// [appIds] 小程序ID列表
   /// [apiServer] 服务器地址
   /// [isBatchDownload] 是否批量下载小程序（默认true）
-  /// 返回下载结果列表
-  Future<List<Map<String, dynamic>>> downloadApplets(
+  ///
+  /// 返回值格式：
+  /// ```
+  /// {
+  ///   "retMsg": "ok",
+  ///   "success": true,
+  ///   "data": {
+  ///     "list": [
+  ///       {
+  ///       }
+  ///     ]
+  ///   }
+  /// }
+  /// ```
+  Future<Map<String, dynamic>> downloadApplets(
     List<String> appIds,
     String apiServer,
     {bool isBatchDownload = true}
@@ -1369,26 +1382,28 @@ class Mop {
       'apiServer': apiServer,
       'isBatchDownload': isBatchDownload,
     };
-    // invokeMethod 返回的是 _Map<Object?, Object?>
     final Map ret = await _channel.invokeMethod('downloadApplets', params);
-
-    // 取出 data.data
-    final results = (ret['data'] as Map?)?['list'];
-
-    if (results is List) {
-      return results
-          .map((e) => Map<String, dynamic>.from(e as Map))
-          .toList();
-    } else {
-      return [];
-    }
-
+    return Map<String, dynamic>.from(ret);
   }
 
   /// 搜索小程序
   /// [text] 搜索内容
   /// [apiServer] 服务器地址
-  /// 返回搜索结果
+  ///
+  /// 返回值格式：
+  /// ```
+  /// {
+  ///   "retMsg": "ok",
+  ///   "success": true,
+  ///   "data": {
+  ///     "total": 10,          // 搜索到的小程序数量
+  ///     "list": [            // 搜索到的小程序集合
+  ///       {
+  ///       }
+  ///     ]
+  ///   }
+  /// }
+  /// ```
   Future<Map<String, dynamic>> searchApplets(
     String text,
     String apiServer
@@ -1398,41 +1413,45 @@ class Mop {
       'apiServer': apiServer,
     };
     final Map ret = await _channel.invokeMethod('searchApplets', params);
-
-    // 取出 data
-    final data = (ret['data'] as Map?);
-
-    if (data != null) {
-      return Map<String, dynamic>.from(data);
-    } else {
-      return {'total': 0, 'list': []};
-    }
+    return Map<String, dynamic>.from(ret);
   }
 
   /// 获取最近使用的小程序列表
-  /// 返回小程序信息列表
-  Future<List<Map<String, dynamic>>> getUsedApplets() async {
-    // invokeMethod 返回的是 _Map<Object?, Object?>
+  ///
+  /// 返回值格式：
+  /// ```
+  /// {
+  ///   "retMsg": "ok",
+  ///   "success": true,
+  ///   "data": {
+  ///     "list": [            // 小程序数组<FATAppletInfo>
+  ///       {
+  ///       }
+  ///     ]
+  ///   }
+  /// }
+  /// ```
+  Future<Map<String, dynamic>> getUsedApplets() async {
     final Map ret = await _channel.invokeMethod('getUsedApplets');
-
-    // 取出 data.data
-    final results = (ret['data'] as Map?)?['list'];
-
-    if (results is List) {
-      return results
-          .map((e) => Map<String, dynamic>.from(e as Map))
-          .toList();
-    } else {
-      return [];
-    }
+    return Map<String, dynamic>.from(ret);
   }
 
   /// 将finfile路径转换为绝对路径
   /// [appId] 小程序ID（可选）
   /// [finFilePath] finfile路径
   /// [needFileExist] 是否需要文件存在（默认true）
-  /// 返回绝对路径
-  Future<String?> getFinFileAbsolutePath(
+  ///
+  /// 返回值格式：
+  /// ```
+  /// {
+  ///   "retMsg": "ok",
+  ///   "success": true,
+  ///   "data": {
+  ///     "path": "/path/to/file"  // 绝对路径
+  ///   }
+  /// }
+  /// ```
+  Future<Map<String, dynamic>> getFinFileAbsolutePath(
     String finFilePath,
     {String? appId, bool needFileExist = true}
   ) async {
@@ -1444,14 +1463,24 @@ class Mop {
       params['appId'] = appId;
     }
     final Map ret = await _channel.invokeMethod('getFinFileAbsolutePath', params);
-    return ret['path'];
+    return Map<String, dynamic>.from(ret);
   }
 
   /// 生成finfile协议路径
   /// [fileName] 文件名
   /// [pathType] 路径类型
-  /// 返回finfile路径
-  Future<String?> generateFinFilePath(
+  ///
+  /// 返回值格式：
+  /// ```
+  /// {
+  ///   "retMsg": "ok",
+  ///   "success": true,
+  ///   "data": {
+  ///     "path": "finfile://tmp_xxx.txt"  // finfile协议路径
+  ///   }
+  /// }
+  /// ```
+  Future<Map<String, dynamic>> generateFinFilePath(
     String fileName,
     FinFilePathType pathType
   ) async {
@@ -1460,7 +1489,7 @@ class Mop {
       'pathType': pathType.index,
     };
     final Map ret = await _channel.invokeMethod('generateFinFilePath', params);
-    return ret['path'];
+    return Map<String, dynamic>.from(ret);
   }
 
   /// 更新小程序收藏状态
@@ -1488,18 +1517,44 @@ class Mop {
 
   /// 获取小程序是否已收藏
   /// [appletId] 小程序ID
-  /// 返回收藏状态
-  Future<bool?> isAppletFavorite(String appletId) async {
+  ///
+  /// 返回值格式：
+  /// ```
+  /// {
+  ///   "retMsg": "ok",
+  ///   "success": true,
+  ///   "data": {
+  ///     "favorite": true/false  // 收藏状态
+  ///   }
+  /// }
+  /// ```
+  Future<Map<String, dynamic>> isAppletFavorite(String appletId) async {
     Map<String, Object> params = {'appletId': appletId};
     final Map ret = await _channel.invokeMethod('isAppletFavorite', params);
-    return ret['favorite'];
+    return Map<String, dynamic>.from(ret);
   }
 
   /// 获取收藏的小程序列表
   /// [apiServer] 服务器地址
   /// [pageNo] 页码（传0获取全部）
   /// [pageSize] 页大小（传0获取全部）
-  /// 返回收藏列表
+  ///
+  /// 返回值格式：
+  /// ```
+  /// {
+  ///   "retMsg": "ok",
+  ///   "success": true,
+  ///   "data": {
+  ///     "total": 10,          // 收藏的小程序总数
+  ///     "pageNo": 1,          // 当前页码
+  ///     "pageSize": 10,       // 页大小
+  ///     "list": [            // 收藏的小程序列表
+  ///       {
+  ///       }
+  ///     ]
+  ///   }
+  /// }
+  /// ```
   Future<Map<String, dynamic>> getFavoriteApplets(
     String apiServer,
     {int pageNo = 0, int pageSize = 0}
@@ -1510,15 +1565,7 @@ class Mop {
       'pageSize': pageSize,
     };
     final Map ret = await _channel.invokeMethod('getFavoriteApplets', params);
-
-    // 取出 data
-    final data = (ret['data'] as Map?);
-
-    if (data != null) {
-      return Map<String, dynamic>.from(data);
-    } else {
-      return {'total': 0, 'list': []};
-    }
+    return Map<String, dynamic>.from(ret);
   }
 
   /// 将小程序移动到前台（仅Android支持）
