@@ -27,44 +27,8 @@
         if (error) {
             failure(error.localizedDescription);
         } else {
-            NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-            dict[@"total"] = resultDict[@"total"] ?: @0;
-            dict[@"pageNo"] = resultDict[@"pageNo"] ?: @(pageNo);
-            dict[@"pageSize"] = resultDict[@"pageSize"] ?: @(pageSize);
-
-            NSMutableArray *list = [NSMutableArray array];
-            NSArray *applets = resultDict[@"list"];
-            if (applets && [applets isKindOfClass:[NSArray class]]) {
-                for (NSDictionary *appletInfo in applets) {
-                    NSMutableDictionary *appletDict = [NSMutableDictionary dictionary];
-                    appletDict[@"appId"] = appletInfo[@"appId"] ?: @"";
-                    appletDict[@"appName"] = appletInfo[@"appName"] ?: @"";
-                    appletDict[@"desc"] = appletInfo[@"desc"] ?: @"";
-                    appletDict[@"logo"] = appletInfo[@"logo"] ?: @"";
-                    appletDict[@"organName"] = appletInfo[@"organName"] ?: @"";
-                    appletDict[@"pageUrl"] = appletInfo[@"pageUrl"] ?: @"";
-                    appletDict[@"showText"] = appletInfo[@"showText"] ?: @"";
-
-                    // 处理高亮信息
-                    NSMutableArray *highLights = [NSMutableArray array];
-                    NSArray *hlArray = appletInfo[@"highLights"];
-                    if (hlArray && [hlArray isKindOfClass:[NSArray class]]) {
-                        for (NSDictionary *hl in hlArray) {
-                            NSDictionary *hlDict = @{
-                                @"key": hl[@"key"] ?: @"",
-                                @"value": hl[@"value"] ?: @""
-                            };
-                            [highLights addObject:hlDict];
-                        }
-                    }
-                    appletDict[@"highLights"] = highLights;
-
-                    [list addObject:appletDict];
-                }
-            }
-            dict[@"list"] = list;
-
-            success(dict);
+            // 直接返回原始数据
+            success(resultDict ?: @{});
         }
     }];
 }

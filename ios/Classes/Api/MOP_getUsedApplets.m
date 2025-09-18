@@ -22,7 +22,7 @@
         }
     }
 
-    success(@{@"data": list});
+    success(@{@"list": list});
 }
 
 @end
