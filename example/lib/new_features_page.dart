@@ -85,10 +85,19 @@ class _NewFeaturesPageState extends State<NewFeaturesPage> {
                   _searchController.text,
                   'https://api.finclip.com',
                 );
-                setState(() {
-                  _searchResults = List<Map<String, dynamic>>.from(result['list'] ?? []);
-                });
-                _showResult('搜索到 ${result['total']} 个小程序');
+                if (result['success'] == true) {
+                  final data = result['data'] as Map?;
+                  if (data != null) {
+                    setState(() {
+                      _searchResults = List<Map<String, dynamic>>.from(data['list'] ?? []);
+                    });
+                    _showResult('搜索到 ${data['total'] ?? 0} 个小程序');
+                  } else {
+                    _showResult('搜索成功但没有数据');
+                  }
+                } else {
+                  _showResult('搜索失败：${result['retMsg']}');
+                }
               } catch (e) {
                 _showResult('搜索失败：$e');
               }
