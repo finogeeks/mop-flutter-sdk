@@ -88,11 +88,24 @@ class _NewFeaturesPageState extends State<NewFeaturesPage> {
                 if (result['success'] == true) {
                   final data = result['data'] as Map?;
                   if (data != null) {
+                    final list = data['list'] as List?;
                     setState(() {
-                      _searchResults = List<Map<String, dynamic>>.from(data['list'] ?? []);
+                      if (list != null && list.isNotEmpty) {
+                        _searchResults = list.map((item) {
+                          if (item is Map) {
+                            return Map<String, dynamic>.from(item);
+                          }
+                          return <String, dynamic>{};
+                        }).toList();
+                      } else {
+                        _searchResults = [];
+                      }
                     });
                     _showResult('搜索到 ${data['total'] ?? 0} 个小程序');
                   } else {
+                    setState(() {
+                      _searchResults = [];
+                    });
                     _showResult('搜索成功但没有数据');
                   }
                 } else {
@@ -114,9 +127,7 @@ class _NewFeaturesPageState extends State<NewFeaturesPage> {
                   return ListTile(
                     title: Text(applet['appName'] ?? ''),
                     subtitle: Text(applet['desc'] ?? ''),
-                    leading: applet['logo'] != null
-                      ? Image.network(applet['logo'], width: 40, height: 40)
-                      : Icon(Icons.apps),
+                    leading: _buildAppletLogo(applet['logo']),
                     onTap: () {
                       _showSnackBar('点击了：${applet['appName']}');
                     },
@@ -395,6 +406,37 @@ class _NewFeaturesPageState extends State<NewFeaturesPage> {
           color: Colors.blue,
         ),
       ),
+    );
+  }
+
+  Widget _buildAppletLogo(String? logoUrl) {
+    if (logoUrl == null || logoUrl.isEmpty) {
+      return Icon(Icons.apps);
+    }
+
+    // 检查是否是完整的URL
+    if (!logoUrl.startsWith('http://') && !logoUrl.startsWith('https://')) {
+      // 如果不是完整URL，添加基础URL
+      logoUrl = 'https://api.finclip.com$logoUrl';
+    }
+
+    return Image.network(
+      logoUrl,
+      width: 40,
+      height: 40,
+      errorBuilder: (context, error, stackTrace) {
+        return Icon(Icons.apps);
+      },
+      loadingBuilder: (context, child, loadingProgress) {
+        if (loadingProgress == null) return child;
+        return SizedBox(
+          width: 40,
+          height: 40,
+          child: CircularProgressIndicator(
+            strokeWidth: 2,
+          ),
+        );
+      },
     );
   }
 }
