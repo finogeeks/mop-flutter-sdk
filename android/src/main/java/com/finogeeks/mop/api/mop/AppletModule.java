@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import com.finogeeks.lib.applet.client.FinAppClient;
 import com.finogeeks.lib.applet.client.FinAppInfo;
 import com.finogeeks.lib.applet.interfaces.FinCallback;
+import com.finogeeks.lib.applet.sdk.api.IAppletApiManager;
 import com.finogeeks.lib.applet.sdk.api.request.IFinAppletRequest;
 import com.finogeeks.lib.applet.sdk.model.StartAppletDecryptRequest;
 import com.finogeeks.mop.api.BaseApi;
@@ -32,7 +33,7 @@ public class AppletModule extends BaseApi {
 
     @Override
     public String[] apis() {
-        return new String[]{"openApplet", "scanOpenApplet","qrcodeOpenApplet", "changeUserId", "startApplet", "moveAppletToFront"};
+        return new String[]{"openApplet", "scanOpenApplet","qrcodeOpenApplet", "changeUserId", "startApplet"};
     }
 
     @Override
@@ -47,8 +48,6 @@ public class AppletModule extends BaseApi {
             changeUserId(param, callback);
         } else if ("startApplet".equals(event)) {
             startApplet(param, callback);
-        } else if ("moveAppletToFront".equals(event)) {
-            moveAppletToFront(callback);
         }
     }
 
@@ -310,20 +309,6 @@ public class AppletModule extends BaseApi {
             callback.onFail(new HashMap(){
                 {
                     put("info", "sdk not initilized");
-                }
-            });
-        }
-    }
-
-    private void moveAppletToFront(ICallback callback) {
-        try {
-            // 调用SDK提供的moveCurrentAppletToFront方法
-            FinAppClient.getAppletApiManager().moveCurrentAppletToFront(mContext);
-            callback.onSuccess(new HashMap());
-        } catch (Exception e) {
-            callback.onFail(new HashMap(){
-                {
-                    put("error", e.getMessage());
                 }
             });
         }
