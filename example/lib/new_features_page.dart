@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:mop/mop.dart';
 
@@ -48,9 +50,7 @@ class _NewFeaturesPageState extends State<NewFeaturesPage> {
                   final data = result['data'] as Map?;
                   final list = data?['list'] as List?;
                   if (list != null && list.isNotEmpty) {
-                    _showResult('预加载结果：\n${list.map((e) =>
-                      'appId: ${e['appId']}, success: ${e['success']}, needUpdate: ${e['needUpdate']}'
-                    ).join('\n')}');
+                    _showResult('预加载结果：\n${list.map((e) => e.toString()).join('\n')}');
                   } else {
                     _showResult('预加载完成，但没有返回数据');
                   }
@@ -101,7 +101,7 @@ class _NewFeaturesPageState extends State<NewFeaturesPage> {
                         _searchResults = [];
                       }
                     });
-                    _showResult('搜索到 ${data['total'] ?? 0} 个小程序');
+                    _showResult('搜索到 ${data['total'] ?? 0} 个小程序'"\n"'数据格式结构示例:\n' + const JsonEncoder.withIndent('  ').convert(_searchResults[0]));
                   } else {
                     setState(() {
                       _searchResults = [];
@@ -126,7 +126,6 @@ class _NewFeaturesPageState extends State<NewFeaturesPage> {
                   final applet = _searchResults[index];
                   return ListTile(
                     title: Text(applet['appName'] ?? ''),
-                    subtitle: Text(applet['desc'] ?? ''),
                     leading: _buildAppletLogo(applet['logo']),
                     onTap: () {
                       _showSnackBar('点击了：${applet['appName']}');
@@ -149,7 +148,7 @@ class _NewFeaturesPageState extends State<NewFeaturesPage> {
                     setState(() {
                       _usedApplets = list.map((e) => Map<String, dynamic>.from(e as Map)).toList();
                     });
-                    _showResult('获取到 ${list.length} 个最近使用的小程序');
+                    _showResult('获取到 ${list.length} 个最近使用的小程序'"\n"'数据格式结构示例:\n' + const JsonEncoder.withIndent('  ').convert(list[0]));
                   } else {
                     _showResult('没有最近使用的小程序');
                   }
@@ -358,14 +357,15 @@ class _NewFeaturesPageState extends State<NewFeaturesPage> {
                           final total = innerData['total'] ?? 0;
                           final list = innerData['list'] as List? ?? [];
 
-                          String listInfo = '';
+                        /*  String listInfo = '';
                           for (var item in list) {
                             if (item is Map) {
                               listInfo += '\n  - ${item['name'] ?? '未知'} (${item['appId'] ?? ''})';
                             }
-                          }
+                          }*/
 
-                          _showResult('收藏列表：\n总数：$total$listInfo');
+                          // _showResult('收藏列表：\n总数：$total$listInfo');
+                          _showResult('收藏列表：\n总数：$total'"\n"'数据格式结构示例:\n' + const JsonEncoder.withIndent('  ').convert(list[0]));
                         } else {
                           _showResult('获取收藏列表成功，但没有数据');
                         }
