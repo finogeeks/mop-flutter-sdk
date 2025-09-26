@@ -1,11 +1,14 @@
 package com.finogeeks.mop.api.mop;
 
 import android.content.Context;
+import android.util.Log;
+
 import com.finogeeks.lib.applet.client.FinAppClient;
-import com.finogeeks.lib.applet.sdk.model.AppletDownLoadInfo;
-import com.finogeeks.lib.applet.interfaces.FinSimpleCallback;
+import com.finogeeks.lib.applet.model.AppletDownLoadInfo;
+import com.finogeeks.lib.applet.modules.callback.FinSimpleCallback;
 import com.finogeeks.mop.api.BaseApi;
 import com.finogeeks.mop.interfaces.ICallback;
+import com.finogeeks.mop.utils.GsonUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,7 +48,7 @@ public class AppletDownloadModule extends BaseApi {
 
         boolean batchDownload = isBatchDownload != null ? isBatchDownload : true;
 
-        FinAppClient.getAppletApiManager().downloadApplets(
+        FinAppClient.INSTANCE.getAppletApiManager().downloadApplets(
             getContext(),
             apiServer,
             appIds,
@@ -54,19 +57,14 @@ public class AppletDownloadModule extends BaseApi {
                 @Override
                 public void onSuccess(List<AppletDownLoadInfo> results) {
                     List<Map<String, Object>> list = new ArrayList<>();
-                    if (results != null) {
+                    if (results != null && !results.isEmpty()) {
                         for (AppletDownLoadInfo info : results) {
-                            Map<String, Object> map = new HashMap<>();
-                            map.put("appId", info.getAppId());
-                            map.put("success", info.isSuccess());
-                            map.put("needUpdate", info.isNeedUpdate());
-                            list.add(map);
+                            list.add(GsonUtil.toMap(info));
                         }
                     }
-
-                    Map<String, Object> result = new HashMap<>();
-                    result.put("data", list);
-                    callback.onSuccess(result);
+                    HashMap<String, Object> res = new HashMap<>();
+                    res.put("list", list);
+                    callback.onSuccess(res);
                 }
 
                 @Override
