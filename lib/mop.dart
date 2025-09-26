@@ -1591,9 +1591,4 @@ class Mop {
     final Map ret = await _channel.invokeMethod('getFavoriteApplets', params);
     return Map<String, dynamic>.from(ret);
   }
-
-  /// 将小程序移动到前台（仅Android支持）
-  Future<void> moveAppletToFront() async {
-    await _channel.invokeMethod('moveAppletToFront');
-  }
 }
