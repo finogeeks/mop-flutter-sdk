@@ -9,6 +9,7 @@ import com.finogeeks.lib.applet.sdk.model.HighLight;
 import com.finogeeks.lib.applet.interfaces.FinCallback;
 import com.finogeeks.mop.api.BaseApi;
 import com.finogeeks.mop.interfaces.ICallback;
+import com.finogeeks.mop.utils.GsonUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,46 +48,23 @@ public class AppletSearchModule extends BaseApi {
 
         SearchAppletRequest request = new SearchAppletRequest(apiServer, text);
 
-        FinAppClient.getAppletApiManager().searchApplet(
+        FinAppClient.INSTANCE.getAppletApiManager().searchApplet(
             request,
             new FinCallback<SearchAppletResponse>() {
                 @Override
                 public void onSuccess(SearchAppletResponse result) {
                     Map<String, Object> map = new HashMap<>();
                     map.put("total", result != null ? result.getTotal() : 0);
-
                     List<Map<String, Object>> list = new ArrayList<>();
                     if (result != null && result.getList() != null) {
                         for (AppletInfo info : result.getList()) {
-                            Map<String, Object> appletMap = new HashMap<>();
-                            appletMap.put("appId", info.getAppId());
-                            appletMap.put("appName", info.getAppName());
-                            appletMap.put("desc", info.getDesc());
-                            appletMap.put("logo", info.getLogo());
-                            appletMap.put("organName", info.getOrganName());
-                            appletMap.put("pageUrl", info.getPageUrl());
-                            appletMap.put("showText", info.getShowText());
-
-                            // 处理高亮信息
-                            List<Map<String, String>> highLights = new ArrayList<>();
-                            if (info.getHighLights() != null) {
-                                for (HighLight hl : info.getHighLights()) {
-                                    Map<String, String> hlMap = new HashMap<>();
-                                    hlMap.put("key", hl.getKey());
-                                    hlMap.put("value", hl.getValue());
-                                    highLights.add(hlMap);
-                                }
-                            }
-                            appletMap.put("highLights", highLights);
-
+                            Map<String, Object> appletMap = GsonUtil.toMap(info);
                             list.add(appletMap);
                         }
                     }
                     map.put("list", list);
-
                     callback.onSuccess(map);
                 }
-
                 @Override
                 public void onError(int code, String error) {
                     callback.onFail(new HashMap<String, Object>() {{
