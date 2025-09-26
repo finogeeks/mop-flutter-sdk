@@ -128,6 +128,10 @@ public class InitSDKModule extends BaseApi {
         if (header != null) {
             configBuilder.setHeader(header);
         }
+        Map<String,Object> grayAppletVersionConfigs = (Map<String, Object>) configMap.get("grayAppletVersionConfigs");
+        if(grayAppletVersionConfigs != null){
+            MopPluginService.getInstance().setGrayAppletVersionConfigs(grayAppletVersionConfigs);
+        }
         int headerPriorityIndex = (Integer) configMap.get("headerPriority");
         if (headerPriorityIndex == 0) {
             configBuilder.setHeaderPriority(FinAppConfigPriority.GLOBAL);
