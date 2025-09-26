@@ -206,19 +206,15 @@ static NSString *scheme = @"fatae55433be2f62915";//App对应的scheme
 }
 
 - (NSDictionary *)grayExtensionWithAppletId:(NSString *)appletId {
-    __block NSDictionary *grayExtension = nil;
-    FlutterMethodChannel *channel = [[MopPlugin instance] methodChannel];
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-
-    [channel invokeMethod:@"extensionApi:getGrayExtension" arguments:@{@"appletId": appletId} result:^(id _Nullable result) {
-        if (result && [result isKindOfClass:[NSDictionary class]]) {
-            grayExtension = result;
-        }
-        dispatch_semaphore_signal(semaphore);
-    }];
-
-    dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, 3 * NSEC_PER_SEC));
-    return grayExtension;
+    NSDictionary *grayParams;
+    NSDictionary<NSString *, NSDictionary *> *grayAppletVersionConfigs = [MopPlugin instance].grayAppletVersionConfigs;
+    if (appletId.length) {
+        grayParams = grayAppletVersionConfigs[appletId];
+    }
+    if (!grayParams) {
+        grayParams = grayAppletVersionConfigs[@"Other"];
+    }
+    return grayParams ?: @{};
 }
 
 

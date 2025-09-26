@@ -17,7 +17,14 @@
     NSMutableArray *list = [NSMutableArray array];
     if (usedApplets && [usedApplets isKindOfClass:[NSArray class]]) {
         for (FATAppletInfo *appletInfo in usedApplets) {
-            NSDictionary *dict = [appletInfo convertToDictionary];
+            NSDictionary *dict = @{
+                @"appId": appletInfo.appId ?: @"",
+                @"appName": appletInfo.appTitle ?: @"",
+                @"apiServer": appletInfo.apiServer ?: @"",
+                @"frameworkVersion": appletInfo.libraryInfo.version ?: @"",
+                @"logo": appletInfo.appAvatar,
+                @"version": appletInfo.appVersion
+            };
             [list addObject:dict];
         }
     }
