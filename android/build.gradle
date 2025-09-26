@@ -10,6 +10,8 @@ version '1.0'
 
 buildscript {
     repositories {
+        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
         google()
         jcenter()
         maven {
@@ -39,6 +41,8 @@ buildscript {
 
 rootProject.allprojects {
     repositories {
+        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
         google()
         jcenter()
         maven {
@@ -91,6 +95,6 @@ kapt {
 }
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.finogeeks.lib:finapplet:2.49.9'
-    implementation 'com.finogeeks.mop:plugins:2.49.9'
+    implementation 'com.finogeeks.lib:finapplet:2.49.11'
+    implementation 'com.finogeeks.mop:plugins:2.49.11'
 }
