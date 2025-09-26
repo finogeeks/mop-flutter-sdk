@@ -1,8 +1,10 @@
 package com.finogeeks.mop.api.mop;
 
 import android.content.Context;
+import android.text.TextUtils;
+
 import com.finogeeks.lib.applet.client.FinAppClient;
-import com.finogeeks.lib.applet.sdk.api.IAppletApiManager.FinFilePathType;
+import com.finogeeks.lib.applet.sdk.api.FinFilePathType;
 import com.finogeeks.mop.api.BaseApi;
 import com.finogeeks.mop.interfaces.ICallback;
 
@@ -42,19 +44,29 @@ public class FilePathModule extends BaseApi {
             return;
         }
 
+        if (TextUtils.isEmpty(appId)) {
+            // 如果没有传入appId，则使用当前小程序的ID（如果有的话）
+            appId = FinAppClient.INSTANCE.getAppletApiManager().getCurrentAppletId();
+            if(TextUtils.isEmpty(appId)){
+                callback.onFail(new HashMap<String, Object>() {{
+                    put("error", "Missing appId parameter");
+                }});
+                return;
+            }
+        }
+
         try {
             String absolutePath;
-            // 如果没有传入appId，则使用当前小程序的ID（如果有的话）
 
             if (needFileExist == null || needFileExist) {
                 // 需要文件存在
-                absolutePath = FinAppClient.getAppletApiManager().getFinFileAbsolutePath(
-                    getContext(), appId, finFilePath
+                absolutePath = FinAppClient.INSTANCE.getAppletApiManager().getFinFileAbsolutePath(
+                        getContext(), appId, finFilePath
                 );
             } else {
                 // 不需要文件存在
-                absolutePath = FinAppClient.getAppletApiManager().getFinFileAbsolutePathCanNoExist(
-                    getContext(), appId, finFilePath
+                absolutePath = FinAppClient.INSTANCE.getAppletApiManager().getFinFileAbsolutePathCanNoExist(
+                        getContext(), appId, finFilePath
                 );
             }
 
@@ -96,8 +108,8 @@ public class FilePathModule extends BaseApi {
                     throw new IllegalArgumentException("Invalid pathType: " + pathTypeIndex);
             }
 
-            String finFilePath = FinAppClient.getAppletApiManager().generateFinFilePath(
-                fileName, pathType
+            String finFilePath = FinAppClient.INSTANCE.getAppletApiManager().generateFinFilePath(
+                    fileName, pathType
             );
 
             Map<String, Object> result = new HashMap<>();
