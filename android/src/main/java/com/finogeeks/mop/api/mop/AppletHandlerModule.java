@@ -10,7 +10,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.finogeeks.lib.applet.client.FinAppProcessClient;
 import com.finogeeks.lib.applet.client.FinAppClient;
 import com.finogeeks.lib.applet.modules.log.FLog;
 import com.finogeeks.lib.applet.interfaces.FinCallback;
@@ -144,12 +143,6 @@ public class AppletHandlerModule extends BaseApi {
 
             }
 
-            @Nullable
-            @Override
-            public List<GrayAppletVersionConfig> getGrayAppletVersionConfigs(@NotNull String s) {
-                return null;
-            }
-
             @Override
             public void shareAppMessage(@NotNull String s, @Nullable Bitmap bitmap, @NotNull IAppletCallback iAppletCallback) {
                 Log.d("MopPlugin", "shareAppMessage:" + s + " bitmap:" + bitmap);
@@ -181,6 +174,20 @@ public class AppletHandlerModule extends BaseApi {
                     });
                 });
             }
+
+            // 配置灰度扩展参数
+            // 这里没有具体逻辑的原因是因为，这个配置
+            @Nullable
+            @Override
+            public List<GrayAppletVersionConfig> getGrayAppletVersionConfigs(@NotNull String appId) {
+                Log.d("AppletHandlerModule", "getGrayApplet");
+                // 使用这种方式的原因是因为，原生调用 Flutter层的方法都是异步的。
+                // 而这个接口是数据是需要同步返回的。本来可以参考 getUserInfo 的方式来做，但是这样会导致卡顿(因为本方法在主线程执行的，调用latch.await() 会死锁)。
+                // 所以只能通过这种方式（提前传递数据，在用的时候再取）来实现。
+                return MopPluginService.getInstance().getGrayAppletVersionConfigsById(appId);
+            }
+
+
 
             @Nullable
             @Override
