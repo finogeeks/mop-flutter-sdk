@@ -2,15 +2,16 @@ package com.finogeeks.mop.api.mop;
 
 import android.content.Context;
 import com.finogeeks.lib.applet.client.FinAppClient;
+import com.finogeeks.lib.applet.modules.favorite.resp.FavoriteAppletListResp;
+import com.finogeeks.lib.applet.page.view.moremenu.MoreMenuHelper;
 import com.finogeeks.lib.applet.sdk.api.IAppletApiManager;
-import com.finogeeks.lib.applet.sdk.model.FavoriteAppletListRequest;
-import com.finogeeks.lib.applet.sdk.model.FavoriteAppletListResp;
 import com.finogeeks.lib.applet.sdk.model.AppletInfo;
+import com.finogeeks.lib.applet.sdk.model.FavoriteAppletListRequest;
 import com.finogeeks.lib.applet.sdk.model.HighLight;
-import com.finogeeks.lib.applet.helper.MoreMenuHelper;
 import com.finogeeks.lib.applet.interfaces.FinCallback;
 import com.finogeeks.mop.api.BaseApi;
 import com.finogeeks.mop.interfaces.ICallback;
+import com.finogeeks.mop.utils.GsonUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -108,51 +109,23 @@ public class FavoriteModule extends BaseApi {
 
         FavoriteAppletListRequest request = new FavoriteAppletListRequest(apiServer, page, size);
 
-        FinAppClient.getAppletApiManager().getFavoriteApplets(
+        FinAppClient.INSTANCE.getAppletApiManager().getFavoriteApplets(
             request,
             new FinCallback<FavoriteAppletListResp>() {
                 @Override
                 public void onSuccess(FavoriteAppletListResp result) {
-                    Map<String, Object> map = new HashMap<>();
-
-                    if (result != null) {
-                        map.put("total", result.getTotal());
-                        map.put("pageNo", result.getPageNo());
-                        map.put("pageSize", result.getPageSize());
-
-                        List<Map<String, Object>> list = new ArrayList<>();
-                        if (result.getList() != null) {
-                            for (AppletInfo info : result.getList()) {
-                                Map<String, Object> appletMap = new HashMap<>();
-                                appletMap.put("appId", info.getAppId());
-                                appletMap.put("appName", info.getAppName());
-                                appletMap.put("desc", info.getDesc());
-                                appletMap.put("logo", info.getLogo());
-                                appletMap.put("organName", info.getOrganName());
-                                appletMap.put("pageUrl", info.getPageUrl());
-                                appletMap.put("showText", info.getShowText());
-
-                                // 处理高亮信息
-                                List<Map<String, String>> highLights = new ArrayList<>();
-                                if (info.getHighLights() != null) {
-                                    for (HighLight hl : info.getHighLights()) {
-                                        Map<String, String> hlMap = new HashMap<>();
-                                        hlMap.put("key", hl.getKey());
-                                        hlMap.put("value", hl.getValue());
-                                        highLights.add(hlMap);
-                                    }
-                                }
-                                appletMap.put("highLights", highLights);
-
-                                list.add(appletMap);
-                            }
+                    HashMap<String, Object> map = new HashMap<>();
+                    HashMap<String, Object> data = new HashMap<>();
+                    data.put("total", result != null ? result.getTotal() : 0);
+                    data.put("apiServer", result.getApiServer());
+                    List<Map<String, Object>> list = new ArrayList<>();
+                    if (result != null && result.getList() != null) {
+                        for (FavoriteAppletListResp.Data info : result.getList()) {
+                            list.add(GsonUtil.toMap(info));
                         }
-                        map.put("list", list);
-                    } else {
-                        map.put("total", 0);
-                        map.put("list", new ArrayList<>());
+                        data.put("list", list);
                     }
-
+                    map.put("data", data);
                     callback.onSuccess(map);
                 }
 
