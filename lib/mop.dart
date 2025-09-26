@@ -242,6 +242,9 @@ class Config {
   /// 周期性更新的时间间隔(小时), 设置为0不会发起周期性更新请求，接收设置范围为3-12小时
   int backgroundFetchPeriod = 12;
 
+  /// Flutter专用配置项，用于传递灰度扩展参数配置到原生端
+  Map<String, dynamic>? grayAppletVersionConfigs;
+
   Config(this.finStoreConfigs);
 
   Map<String, dynamic> toMap() {
@@ -292,6 +295,7 @@ class Config {
       "customLanguagePath": customLanguagePath,
       "backgroundFetchPeriod": backgroundFetchPeriod,
       "localeLanguage": localeLanguage,
+      "grayAppletVersionConfigs": grayAppletVersionConfigs,
     };
   }
 }
@@ -1268,9 +1272,6 @@ class Mop {
     _appletHandlerApis["getPhoneNumber"] = (params) async {
       return handler.getMobileNumber((params0) =>
           {_channel.invokeMethod("getPhoneNumberResult", params0)});
-    };
-    _appletHandlerApis["getGrayExtension"] = (params) async {
-      return handler.getGrayExtension(params["appletId"]);
     };
     _channel.invokeMethod("registerAppletHandler");
   }
