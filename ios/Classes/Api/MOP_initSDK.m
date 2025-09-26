@@ -7,6 +7,7 @@
 
 #import "Mop_initSDK.h"
 #import "MOPTools.h"
+#import "MopPlugin.h"
 
 @implementation MOP_initSDK
 
@@ -41,6 +42,8 @@
         failure(@"storeConfigs不能为空");
         return;
     }
+    
+    [MopPlugin instance].grayAppletVersionConfigs = self.config[@"grayAppletVersionConfigs"];
     
     config.currentUserId = self.config[@"userId"];
     config.channel = self.config[@"channel"];
