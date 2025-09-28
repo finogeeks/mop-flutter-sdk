@@ -1529,7 +1529,7 @@ class Mop {
   //   return Map<String, dynamic>.from(result);
   // }
 
-  /// 获取小程序是否已收藏
+  /// 获取小程序是否已收藏 （Android 不支持）
   /// [appletId] 小程序ID
   ///
   /// 返回值格式：
