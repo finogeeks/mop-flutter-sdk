@@ -387,7 +387,7 @@ class _NewFeaturesPageState extends State<NewFeaturesPage> {
           ElevatedButton(
             onPressed: () async {
               try {
-                await Mop.instance.moveAppletToFront();
+                  Mop.instance.moveCurrentAppletToFront();
                 _showResult('已移动到前台');
               } catch (e) {
                 _showResult('移动失败：$e');
