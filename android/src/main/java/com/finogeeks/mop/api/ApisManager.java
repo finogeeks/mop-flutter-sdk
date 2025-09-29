@@ -12,6 +12,11 @@ import com.finogeeks.mop.api.mop.InitSDKModule;
 import com.finogeeks.mop.api.mop.VersionModule;
 import com.finogeeks.mop.api.mop.SmSignModule;
 import com.finogeeks.mop.api.mop.WXQrCodeModule;
+import com.finogeeks.mop.api.mop.AppletDownloadModule;
+import com.finogeeks.mop.api.mop.AppletSearchModule;
+import com.finogeeks.mop.api.mop.AppletCacheModule;
+import com.finogeeks.mop.api.mop.FilePathModule;
+import com.finogeeks.mop.api.mop.FavoriteModule;
 import com.finogeeks.mop.interfaces.Event;
 import com.finogeeks.mop.interfaces.IApi;
 
@@ -75,6 +80,12 @@ public class ApisManager {
         add(new VersionModule(activity));
         add(new SmSignModule(activity));
         add(new WXQrCodeModule(activity));
+        // 添加新的模块
+        add(new AppletDownloadModule(activity));
+        add(new AppletSearchModule(activity));
+        add(new AppletCacheModule(activity));
+        add(new FilePathModule(activity));
+        add(new FavoriteModule(activity));
     }
 
     private void add(IApi api) {

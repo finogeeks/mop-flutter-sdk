@@ -11,5 +11,8 @@
 @property FlutterMethodChannel *shareAppletMethodChannel;
 @property FlutterMethodChannel *appletMethodChannel;
 
+/** 灰度参数 */
+@property (nonatomic, strong) NSDictionary<NSString *, NSDictionary *> *grayAppletVersionConfigs;
+
 + (instancetype) instance;
 @end

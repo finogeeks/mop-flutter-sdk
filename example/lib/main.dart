@@ -6,6 +6,7 @@ import 'package:mop/api.dart';
 import 'dart:async';
 import 'package:mop/mop.dart';
 import 'package:mop_example/test_page.dart';
+import 'package:mop_example/new_features_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -50,8 +51,19 @@ class _MyAppState extends State<MyApp> {
     config.channel = "finclip";
     config.phone = "1234567890";
     config.appletDebugMode = BOOLState.BOOLStateTrue;
-    
+    config.debug = true;
+    config.logLevel =  LogLevel.LEVEL_VERBOSE;
+    // 根据 AppId配置对应的灰度扩展参数
+    // 优先按照 AppId 精准匹配，如果是 null或者没有配置 会取 Other
+    // 特殊{}空对象，表示不要任何扩展参数
+    config.grayAppletVersionConfigs = {
+      "5f72e3559a6a7900019b5baa": {"a": "11", "b": "22"}, //官方小程序 2
+      "5facb3a52dcbff00017469bd": {"a": "1", "b": "2"}, // 画图小程序 1
+      "Other": {"a": "100", "b": "200"}
+    };
+
     UIConfig uiconfig = UIConfig();
+    uiconfig.isHideFavoriteMenu = false;
     uiconfig.isAlwaysShowBackInDefaultNavigationBar = false;
     uiconfig.isClearNavigationBarNavButtonBackground = false;
     uiconfig.isHideFeedbackAndComplaints = true;
@@ -226,6 +238,20 @@ class _MyAppState extends State<MyApp> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => TestPage()),
+                    );
+                  },
+                );
+              },
+            ),
+            Builder(
+              builder: (context) {
+                return IconButton(
+                  icon: Icon(Icons.new_releases),
+                  tooltip: 'New Features',
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => NewFeaturesPage()),
                     );
                   },
                 );

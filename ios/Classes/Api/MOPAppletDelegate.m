@@ -205,7 +205,17 @@ static NSString *scheme = @"fatae55433be2f62915";//App对应的scheme
     [topVC presentViewController:alertController animated:YES completion:nil];
 }
 
-
+- (NSDictionary *)grayExtensionWithAppletId:(NSString *)appletId {
+    NSDictionary *grayParams;
+    NSDictionary<NSString *, NSDictionary *> *grayAppletVersionConfigs = [MopPlugin instance].grayAppletVersionConfigs;
+    if (appletId.length) {
+        grayParams = grayAppletVersionConfigs[appletId];
+    }
+    if (!grayParams) {
+        grayParams = grayAppletVersionConfigs[@"Other"];
+    }
+    return grayParams ?: @{};
+}
 
 
 @end

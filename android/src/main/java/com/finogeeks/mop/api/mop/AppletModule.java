@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import com.finogeeks.lib.applet.client.FinAppClient;
 import com.finogeeks.lib.applet.client.FinAppInfo;
 import com.finogeeks.lib.applet.interfaces.FinCallback;
+import com.finogeeks.lib.applet.sdk.api.IAppletApiManager;
 import com.finogeeks.lib.applet.sdk.api.request.IFinAppletRequest;
 import com.finogeeks.lib.applet.sdk.model.StartAppletDecryptRequest;
 import com.finogeeks.mop.api.BaseApi;

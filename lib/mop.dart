@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:mop/api.dart';
+export 'package:mop/api.dart' show FinFilePathType;
 
 typedef MopEventCallback = void Function(dynamic event);
 typedef MopEventErrorCallback = void Function(dynamic event);
@@ -241,6 +242,9 @@ class Config {
   /// 周期性更新的时间间隔(小时), 设置为0不会发起周期性更新请求，接收设置范围为3-12小时
   int backgroundFetchPeriod = 12;
 
+  /// Flutter专用配置项，用于传递灰度扩展参数配置到原生端
+  Map<String, dynamic>? grayAppletVersionConfigs;
+
   Config(this.finStoreConfigs);
 
   Map<String, dynamic> toMap() {
@@ -291,6 +295,7 @@ class Config {
       "customLanguagePath": customLanguagePath,
       "backgroundFetchPeriod": backgroundFetchPeriod,
       "localeLanguage": localeLanguage,
+      "grayAppletVersionConfigs": grayAppletVersionConfigs,
     };
   }
 }
@@ -1348,5 +1353,195 @@ class Mop {
   /// 将当前正在运行的最后一个打开的小程序移至任务栈前台，仅Android生效
   void moveCurrentAppletToFront() async {
     return await _channel.invokeMethod("moveCurrentAppletToFront");
+  }
+
+  /// 批量下载/预加载小程序
+  /// [appIds] 小程序ID列表
+  /// [apiServer] 服务器地址
+  /// [isBatchDownload] 是否批量下载小程序（默认true）
+  ///
+  /// 返回值格式：
+  /// ```
+  /// {
+  ///   "retMsg": "ok",
+  ///   "success": true,
+  ///   "data": {
+  ///     "list": [
+  ///       {
+  ///         "appId": "5f72e3559a6a7900019b5baa",
+  ///         "success": true,  // 下载是否成功
+  ///         "needUpdate": false,  // 是否需要更新
+  ///         "errMsg": ""  // 错误信息，成功时为空
+  ///       }
+  ///     ]
+  ///   }
+  /// }
+  /// ```
+  Future<Map<String, dynamic>> downloadApplets(
+    List<String> appIds,
+    String apiServer,
+    {bool isBatchDownload = true}
+  ) async {
+    Map<String, Object> params = {
+      'appIds': appIds,
+      'apiServer': apiServer,
+      'isBatchDownload': isBatchDownload,
+    };
+    final Map ret = await _channel.invokeMethod('downloadApplets', params);
+    return Map<String, dynamic>.from(ret);
+  }
+
+  /// 搜索小程序
+  /// [text] 搜索内容
+  /// [apiServer] 服务器地址
+  ///
+  /// 返回值格式：
+  /// ```
+  /// {
+  ///   "retMsg": "ok",
+  ///   "success": true,
+  ///   "data": {
+  ///     "total": 10,          // 搜索到的小程序数量
+  ///     "list": [            // 搜索到的小程序集合
+  ///       {
+  ///       }
+  ///     ],
+  ///     "pageNo": 0,  // 当前页码
+  ///     "pageSize": 10  // 每页数量
+  ///   }
+  /// }
+  /// ```
+  Future<Map<String, dynamic>> searchApplets(
+    String text,
+    String apiServer
+  ) async {
+    Map<String, Object> params = {
+      'text': text,
+      'apiServer': apiServer,
+    };
+    final Map ret = await _channel.invokeMethod('searchApplets', params);
+    return Map<String, dynamic>.from(ret);
+  }
+
+  /// 获取最近使用的小程序列表
+  ///
+  /// 返回值格式：
+  /// ```
+  /// {
+  ///   "retMsg": "ok",
+  ///   "success": true,
+  ///   "data": {
+  ///     "list": [            // 小程序数组
+  ///       {
+  ///       }
+  ///     ]
+  ///   }
+  /// }
+  /// ```
+  Future<Map<String, dynamic>> getUsedApplets() async {
+    final Map ret = await _channel.invokeMethod('getUsedApplets');
+    return Map<String, dynamic>.from(ret);
+  }
+
+  /// 将finfile路径转换为绝对路径
+  /// [appId] 小程序ID（可选）
+  /// [finFilePath] finfile路径，如 "finfile://tmp_test.txt"
+  /// [needFileExist] 是否需要文件存在（默认true）
+  ///
+  /// 返回值格式：
+  /// ```
+  /// {
+  ///   "retMsg": "ok",
+  ///   "success": true,
+  ///   "data": {
+  ///     "path": "/var/mobile/Containers/Data/Application/.../tmp/test.txt"  // 实际的绝对路径
+  ///   }
+  /// }
+  /// ```
+  Future<Map<String, dynamic>> getFinFileAbsolutePath(
+    String finFilePath,
+    {String? appId, bool needFileExist = true}
+  ) async {
+    Map<String, Object> params = {
+      'finFilePath': finFilePath,
+      'needFileExist': needFileExist,
+    };
+    if (appId != null) {
+      params['appId'] = appId;
+    }
+    final Map ret = await _channel.invokeMethod('getFinFileAbsolutePath', params);
+    return Map<String, dynamic>.from(ret);
+  }
+
+  /// 生成finfile协议路径
+  /// [fileName] 文件名，如 "test.txt"
+  /// [pathType] 路径类型：
+  ///   - FinFilePathType.TMP: 临时目录
+  ///   - FinFilePathType.USR: 用户目录
+  ///
+  /// 返回值格式：
+  /// ```
+  /// {
+  ///   "retMsg": "ok",
+  ///   "success": true,
+  ///   "data": {
+  ///     "path": "finfile://usr/test.txt"
+  ///   }
+  /// }
+  /// ```
+  Future<Map<String, dynamic>> generateFinFilePath(
+    String fileName,
+    FinFilePathType pathType
+  ) async {
+    Map<String, Object> params = {
+      'fileName': fileName,
+      'pathType': pathType.index,
+    };
+    final Map ret = await _channel.invokeMethod('generateFinFilePath', params);
+    return Map<String, dynamic>.from(ret);
+  }
+
+  /// 获取收藏的小程序列表
+  /// [apiServer] 服务器地址
+  /// [pageNo] 页码（传0获取全部）
+  /// [pageSize] 页大小（传0获取全部）
+  ///
+  /// 返回值格式：
+  /// ```
+  /// {
+  ///   "retMsg": "ok",
+  ///   "success": true,
+  ///   "data": {
+  ///     "data": {
+  ///       "total": 3,              // 收藏的小程序总数
+  ///       "list": [                // 收藏的小程序列表
+  ///         {
+  ///           "appId": "5f72e3559a6a7900019b5baa",
+  ///           "name": "小程序名称",
+  ///           "logo": "/api/v1/mop/runtime/download/xxx",  // 图标路径，需要拼接baseUrl
+  ///           "createTime": 1758178260152,  // 收藏时间戳
+  ///           "currentUserId": "18607180143",
+  ///           "encryptedUserId": ""
+  ///         }
+  ///       ],
+  ///       "apiServer": "https://www.finclip.com"
+  ///     },
+  ///     "errcode": "OK",
+  ///     "error": "",
+  ///     "traceid": "4aaf26a68c484a31aa9c37859f75d2cd"
+  ///   }
+  /// }
+  /// ```
+  Future<Map<String, dynamic>> getFavoriteApplets(
+    String apiServer,
+    {int pageNo = 0, int pageSize = 0}
+  ) async {
+    Map<String, Object> params = {
+      'apiServer': apiServer,
+      'pageNo': pageNo,
+      'pageSize': pageSize,
+    };
+    final Map ret = await _channel.invokeMethod('getFavoriteApplets', params);
+    return Map<String, dynamic>.from(ret);
   }
 }

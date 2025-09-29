@@ -147,7 +147,12 @@ static MopPlugin *_instance;
       NSLog(@"method:%@, param:%@", request.command, request.param);
       if (api) {
           [api setupApiWithSuccess:^(NSDictionary<NSString *,id> * _Nonnull data) {
-              result(@{@"retMsg":@"ok",@"success":@(YES),@"data": data ? : @{}});
+              NSDictionary *dict = @{
+                  @"retMsg": @"ok",
+                  @"success":@(YES),
+                  @"data": data ? : @{}
+              };
+              result(dict);
           } failure:^(id _Nullable error) {
               if ([error isKindOfClass:[NSDictionary class]]) {
                   NSDictionary* dict = (NSDictionary*)error;
@@ -160,7 +165,7 @@ static MopPlugin *_instance;
                   result(@{@"retMsg": error ,@"success":@(NO)});
               }
           } cancel:^{
-              
+
           }];
       } else {
           result(FlutterMethodNotImplemented);
