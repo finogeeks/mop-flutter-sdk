@@ -3,7 +3,6 @@ apply plugin: 'com.android.library'
 
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'kotlin-android-extensions'
 
 group 'com.finogeeks.mop'
 version '1.0'
@@ -81,6 +80,9 @@ android {
     }
     lintOptions {
         disable 'InvalidPackage'
+    }
+    buildFeatures {
+        viewBinding true
     }
 }
 
