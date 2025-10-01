@@ -23,7 +23,7 @@ import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry;
-import io.flutter.plugin.common.PluginRegistry.Registrar;
+// import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 /**
  * MopPlugin
@@ -48,18 +48,18 @@ public class MopPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwar
    * Plugin registration.
    */
   @SuppressWarnings("deprecation")
-  public static void registerWith(Registrar registrar) {
-    MethodChannel channel = new MethodChannel(registrar.messenger(), CHANNEL);
-    MopPluginDelegate delegate = new MopPluginDelegate();
-    final MopPlugin plugin = new MopPlugin();
-    channel.setMethodCallHandler(plugin);
-    registrar.addActivityResultListener(delegate);
+  // public static void registerWith(Registrar registrar) {
+  //   MethodChannel channel = new MethodChannel(registrar.messenger(), CHANNEL);
+  //   MopPluginDelegate delegate = new MopPluginDelegate();
+  //   final MopPlugin plugin = new MopPlugin();
+  //   channel.setMethodCallHandler(plugin);
+  //   registrar.addActivityResultListener(delegate);
 
-    EventChannel eventChannel = new EventChannel(registrar.messenger(), EVENT_CHANNEL);
-    final MopEventStream mopEventStream = new MopEventStream();
-    eventChannel.setStreamHandler(mopEventStream);
-    MopPluginService.getInstance().initialize(registrar.activity(), mopEventStream, channel);
-  }
+  //   EventChannel eventChannel = new EventChannel(registrar.messenger(), EVENT_CHANNEL);
+  //   final MopEventStream mopEventStream = new MopEventStream();
+  //   eventChannel.setStreamHandler(mopEventStream);
+  //   MopPluginService.getInstance().initialize(registrar.activity(), mopEventStream, channel);
+  // }
 
   @Override
   public void onMethodCall(MethodCall call, final Result result) {
