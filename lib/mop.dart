@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:mop/api.dart';
 export 'package:mop/api.dart' show FinFilePathType;
+export 'platform_view.dart' show MopPlatformView;
 
 typedef MopEventCallback = void Function(dynamic event);
 typedef MopEventErrorCallback = void Function(dynamic event);

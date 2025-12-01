@@ -5,6 +5,7 @@
 #import "MOPAppletDelegate.h"
 #import <mop/MOPTools.h>
 #import "MopShareView.h"
+#import "MopWidgetPlatformViewFactory.h"
 #import <UIView+MOPFATToast.h>
 
 @implementation MopEventStream {
@@ -67,6 +68,10 @@ static MopPlugin *_instance;
     [registrar addMethodCallDelegate:_instance channel:appletShareChannel];
     _instance.shareAppletMethodChannel = appletShareChannel;
     
+    // Register unified PlatformView factory for iOS
+    MopWidgetPlatformViewFactory *factory = [[MopWidgetPlatformViewFactory alloc] initWithMessenger:[registrar messenger]];
+    [registrar registerViewFactory:factory withId:@"com.finogeeks.mop/platform_view"];
+    NSLog(@"finclip widget 000");
 
 }
 
