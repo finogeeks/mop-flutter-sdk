@@ -168,6 +168,48 @@ class _MyAppState extends State<MyApp> {
 }
 ```
 
+## 🧩 MopPlatformView 使用说明
+
+`MopPlatformView` 提供统一的平台视图接入方式，便于在 Flutter 页面中嵌入原生组件或 FinClip 提供的原生能力组件。
+
+- 统一注册的 `viewType` 为：`com.finogeeks.mop/platform_view`
+- 实际的原生视图类型通过 `creationParams` 中的 `viewType` 传递，由各平台原生侧进行分发创建
+
+### 使用示例（Flutter）
+
+```dart
+import 'package:mop/mop.dart';
+
+Widget build(BuildContext context) {
+  return SizedBox(
+    width: double.infinity,
+    height: 500,
+    child: MopPlatformView(
+      // 这里的 viewType 是“实际原生视图类型”，由原生侧根据该值创建对应视图
+      viewType: 'native-widget',
+      creationParams: {
+        'appId': 'your_app_id',
+        // 其他业务参数...
+      },
+      // 默认使用 StandardMessageCodec，如需自定义可传入 creationParamsCodec
+    ),
+  );
+}
+```
+
+### 参数说明（Flutter）
+- `viewType`：实际原生视图类型标识（例如 `native-widget`）。
+- `creationParams`：传递给原生视图的初始化参数，Map 结构。
+- `creationParamsCodec`：参数编解码器（默认 `StandardMessageCodec`）。
+
+### 平台侧说明（原生）
+- 插件已在 Android 与 iOS 侧统一注册 `com.finogeeks.mop/platform_view` 工厂。
+  - Android：`MopPlugin` 中通过 `PlatformViewRegistry` 注册，并在工厂内根据 `params.viewType` 创建对应原生视图。
+  - iOS：`MopPlugin` 中通过 `registerViewFactory` 注册，并在工厂内根据 `params.viewType` 创建对应原生视图。
+- 如需新增原生视图类型，请在各自平台的 `PlatformViewFactory` 中扩展分发逻辑，并约定一个新的 `creationParams.viewType` 值。
+
+> 提示：若运行平台暂不支持平台视图，将显示“当前平台不支持原生视图”的占位文案。
+
 ## 📋  接口文档
 
 ### 1. 初始化小程序
