@@ -26,13 +26,19 @@
             id vt = dict[@"viewType"]; if ([vt isKindOfClass:[NSString class]]) { _externalViewType = vt; }
             id p = dict[@"params"]; if ([p isKindOfClass:[NSDictionary class]]) { _params = p; }
             
-            NSString *appId = p[@"appId"];
-            NSString *apiServer;
-            if (p[@"apiServer"] != NULL) {
-                apiServer = p[@"apiServer"];
+            if (p[@"appId"]) {
+                
+                NSString *apiServer = p[@"apiServer"] != NULL ? p[@"apiServer"] : @"";
+                
+                [self openWidget:p[@"appId"] apiServer:apiServer];
+                
+            } else if (p[@"qrCode"]) {
+                
+                [self openWidgetWithQR:p[@"qrCode"]];
+            } else {
+                
+                NSLog(@"你需要传入小组件的 appId 或着小组件的二维码");
             }
-            
-            [self openWidget:appId apiServer:apiServer];
         }
     }
     return self;
@@ -56,7 +62,23 @@
                 [self showWidgetView:widgetView];
             }
         }else {
-            NSLog(@"fincli 打开小组件报错：");
+            NSLog(@"fincli 打开小组件报错：%@", error);
+        }
+    }];
+}
+
+- (void)openWidgetWithQR:(NSString *)qrCode {
+    FATWidgetQRCodeRequest *qrCodeRequest = [[FATWidgetQRCodeRequest alloc]init];
+    qrCodeRequest.qrCode = qrCode;
+    
+  
+    [[FATClient sharedClient].widgetManager createWidgetWithQRCode:qrCodeRequest parentViewController:[[UIApplication sharedApplication] fat_topViewController] completion:^(FATWidgetView * _Nullable widgetView, FATError *error) {
+        if (!error) {
+            if (widgetView) {
+                [self showWidgetView:widgetView];
+            }
+        } else {
+            NSLog(@"fincli 打开小组件报错：%@", error);
         }
     }];
 }
