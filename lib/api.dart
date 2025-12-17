@@ -52,3 +52,14 @@ abstract class AppletHandler {
   ///getMobileNumber
   Future<void> getMobileNumber(Function(dynamic params) param0);
 }
+
+abstract class WidgetHandler {
+  /// Widget内容尺寸变化回调
+  void onContentSizeChanged(int viewId, double width, double height);
+
+  /// 当小组件加载完成时调用
+  void onContentLoaded(int viewId);
+  
+  /// 当小组件发生错误时调用
+  void onError(int viewId, String error);
+}

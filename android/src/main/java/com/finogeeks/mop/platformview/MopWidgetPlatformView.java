@@ -6,12 +6,12 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import io.flutter.plugin.platform.PlatformView;
@@ -20,6 +20,7 @@ import com.finogeeks.lib.applet.client.FinAppClient;
 import com.finogeeks.lib.applet.sdk.api.request.IFinAppletRequest;
 import com.finogeeks.lib.applet.sdk.component.ComponentCallback;
 import com.finogeeks.lib.applet.sdk.component.ComponentHolder;
+import com.finogeeks.mop.service.MopPluginService;
 
 /**
  * A simple unified PlatformView which can branch by external viewType.
@@ -32,9 +33,6 @@ public class MopWidgetPlatformView implements PlatformView {
     private final Activity activity;
     private final int viewId;
 
-    private final String externalViewType;
-    @Nullable
-    private final Map<String, Object> creationParams;
     private static final String TAG = "MOP-PlatformView";
 
     private ComponentHolder holder;
@@ -46,8 +44,6 @@ public class MopWidgetPlatformView implements PlatformView {
                                  @Nullable Activity activity) {
         this.viewId = viewId;
 
-        this.externalViewType = externalViewType;
-        this.creationParams = creationParams;
         this.activity = activity;
         this.container = new FrameLayout(context);
         if ( creationParams != null ) {
@@ -55,21 +51,29 @@ public class MopWidgetPlatformView implements PlatformView {
            if (creationParams.get("appId") != null) {
                String appId = (String) creationParams.get("appId");
                boolean enableMultiComponent = creationParams.get("enableMultiComponent") != null;
-               buildContent(context, appId,enableMultiComponent);
+               boolean forceUpdate = creationParams.get("forceUpdate") != null;
+               buildContent(context, appId,enableMultiComponent, forceUpdate);
            } else if (creationParams.get("qrCode") != null) {
                String qrCode = (String) creationParams.get("qrCode");
+               boolean forceUpdate = creationParams.get("forceUpdate") != null;
                boolean enableMultiComponent = creationParams.get("enableMultiComponent") != null;
-               buildContentWithQR(context, qrCode, enableMultiComponent);
+               buildContentWithQR(context, qrCode, enableMultiComponent, forceUpdate);
            } else {
 
-               TextView textView = new TextView(context);
-               textView.setText("需要传入小组件的 appId 或者小组件的二维码");
-               container.addView(
-                       textView,
-                       new ViewGroup.LayoutParams(
-                               FrameLayout.LayoutParams.WRAP_CONTENT,
-                               FrameLayout.LayoutParams.WRAP_CONTENT)
-               );
+                try {
+                    Map<String, Object> eventData = new HashMap<>();
+                    eventData.put("viewId", viewId);
+                    eventData.put("errorMessage", "MopWidgetPlatformView: no appId or qrCode found");
+                    eventData.put("eventType", "onLoadError");
+
+                    MopPluginService.getInstance().getMopEventStream().send(
+                            "platform_view_events",
+                            "onLoadError",
+                            eventData
+                    );
+                } catch (Exception e) {
+                    Log.e(TAG, "Failed to send onError event", e);
+                }
 
                Log.d(TAG, "MopWidgetPlatformView: no appId or qrCode found");
            }
@@ -77,11 +81,12 @@ public class MopWidgetPlatformView implements PlatformView {
         }
     }
 
-    private void buildContent(Context context, String appId, boolean enableMultiComponent) {
-        // TODO: Replace with real native view creation based on externalViewType
+    private void buildContent(Context context, String appId, boolean enableMultiComponent, boolean forceUpdate) {
 
-        IFinAppletRequest request = IFinAppletRequest.Companion.fromAppId(appId);
+        IFinAppletRequest request = IFinAppletRequest.Companion.fromAppId(appId)
+                .setForceUpdate(forceUpdate);
         request.setEnableMultiComponent(enableMultiComponent);
+
         FinAppClient.INSTANCE.getAppletApiManager().startComponent((FragmentActivity) activity, request, new ComponentCallback() {
             @Override
             public void onSuccess(@Nullable String s) {
@@ -89,16 +94,24 @@ public class MopWidgetPlatformView implements PlatformView {
             }
 
             @Override
-            public void onError(int i, @Nullable String s) {
-                Log.d(TAG, "onError: code=$code, error=$error");
-                TextView textView = new TextView(context);
-                textView.setText("出错啦：" + s);
-                container.addView(
-                        textView,
-                        new ViewGroup.LayoutParams(
-                                FrameLayout.LayoutParams.WRAP_CONTENT,
-                                FrameLayout.LayoutParams.WRAP_CONTENT)
-                );
+            public void onError(int code, @Nullable String error) {
+                Log.d(TAG, "onError: " + error);
+                
+                 // 发送加载失败事件
+                 try {
+                    Map<String, Object> eventData = new HashMap<>();
+                    eventData.put("viewId", viewId);
+                    eventData.put("errorMessage", "onError: " + error);
+                    eventData.put("eventType", "onLoadError");
+                    
+                    MopPluginService.getInstance().getMopEventStream().send(
+                        "platform_view_events", 
+                        "onLoadError", 
+                        eventData
+                    );
+                } catch (Exception e) {
+                    Log.e(TAG, "Failed to send onLoadError event", e);
+                }
             }
 
             @Override
@@ -117,24 +130,56 @@ public class MopWidgetPlatformView implements PlatformView {
             }
 
             @Override
-            public void onContentSizeChanged(int i, int i1) {
+            public void onContentSizeChanged(int width, int height) {
                 Log.d(TAG, "onContentSizeChanged:");
+                // 发送内容尺寸变化事件
+                try {
+                    Map<String, Object> eventData = new HashMap<>();
+                    eventData.put("viewId", viewId);
+                    eventData.put("width", width);
+                    eventData.put("height", height);
+                    eventData.put("eventType", "contentSizeChanged");
+                    
+                    MopPluginService.getInstance().getMopEventStream().send(
+                        "platform_view_events", 
+                        "contentSizeChanged", 
+                        eventData
+                    );
+                } catch (Exception e) {
+                    Log.e(TAG, "Failed to send contentSizeChanged event", e);
+                }
             }
 
             @Override
             public void onContentLoaded() {
                 Log.d(TAG, "onLoad:");
+                // 发送内容加载完成事件
+                try {
+                    Map<String, Object> eventData = new HashMap<>();
+                    eventData.put("viewId", viewId);
+                    eventData.put("message", "widget loaded successfully");
+                    eventData.put("eventType", "onContentLoaded");
+
+                    MopPluginService.getInstance().getMopEventStream().send(
+                            "platform_view_events",
+                            "onContentLoaded",
+                            eventData
+                    );
+                } catch (Exception e) {
+                    Log.e(TAG, "Failed to send onContentLoaded event", e);
+                }
             }
         });
 
     }
 
 
-    private void buildContentWithQR( Context context, String qrCode, boolean enableMultiComponent) {
-        // TODO: Replace with real native view creation based on externalViewType
+    private void buildContentWithQR( Context context, String qrCode, boolean enableMultiComponent, boolean forceUpdate) {
 
-        IFinAppletRequest request = IFinAppletRequest.Companion.fromQrCode(qrCode);
+        IFinAppletRequest request = IFinAppletRequest.Companion.fromQrCode(qrCode)
+                .setForceUpdate(forceUpdate);
         request.setEnableMultiComponent(enableMultiComponent);
+
         FinAppClient.INSTANCE.getAppletApiManager().startComponent((FragmentActivity) activity, request, new ComponentCallback() {
             @Override
             public void onSuccess(@Nullable String s) {
@@ -142,16 +187,23 @@ public class MopWidgetPlatformView implements PlatformView {
             }
 
             @Override
-            public void onError(int i, @Nullable String s) {
-                Log.d(TAG, "onError: code=$code, error=$error");
-                TextView textView = new TextView(context);
-                textView.setText("出错啦：" + s);
-                container.addView(
-                        textView,
-                        new ViewGroup.LayoutParams(
-                                FrameLayout.LayoutParams.WRAP_CONTENT,
-                                FrameLayout.LayoutParams.WRAP_CONTENT)
-                );
+            public void onError(int code, @Nullable String error) {
+                Log.d(TAG, "onError: " + error);
+                // 发送加载失败事件
+                try {
+                    Map<String, Object> eventData = new HashMap<>();
+                    eventData.put("viewId", viewId);
+                    eventData.put("errorMessage", "onError: " + error);
+                    eventData.put("eventType", "onError");
+
+                    MopPluginService.getInstance().getMopEventStream().send(
+                            "platform_view_events",
+                            "onLoadError",
+                            eventData
+                    );
+                } catch (Exception e) {
+                    Log.e(TAG, "Failed to send onLoadError event", e);
+                }
             }
 
             @Override
@@ -170,13 +222,44 @@ public class MopWidgetPlatformView implements PlatformView {
             }
 
             @Override
-            public void onContentSizeChanged(int i, int i1) {
+            public void onContentSizeChanged(int width, int height) {
                 Log.d(TAG, "onContentSizeChanged:");
+                try {
+                    Map<String, Object> eventData = new HashMap<>();
+                    eventData.put("viewId", viewId);
+                    eventData.put("width", width);
+                    eventData.put("height", height);
+                    eventData.put("eventType", "contentSizeChanged");
+
+                    MopPluginService.getInstance().getMopEventStream().send(
+                            "platform_view_events",
+                            "contentSizeChanged",
+                            eventData
+                    );
+                } catch (Exception e) {
+                    Log.e(TAG, "Failed to send contentSizeChanged event", e);
+                }
             }
 
             @Override
             public void onContentLoaded() {
                 Log.d(TAG, "onLoad:");
+
+                // 发送内容加载完成事件
+                try {
+                    Map<String, Object> eventData = new HashMap<>();
+                    eventData.put("viewId", viewId);
+                    eventData.put("message", "widget loaded successfully");
+                    eventData.put("eventType", "onContentLoaded");
+
+                    MopPluginService.getInstance().getMopEventStream().send(
+                            "platform_view_events",
+                            "onContentLoaded",
+                            eventData
+                    );
+                } catch (Exception e) {
+                    Log.e(TAG, "Failed to send onContentLoaded event", e);
+                }
             }
         });
 
